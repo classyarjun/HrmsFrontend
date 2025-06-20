@@ -1,0 +1,62 @@
+<div class="container mt-5">
+  <h2 class="mb-4 text-center"> Performance Review</h2>
+
+<form (ngSubmit)="submitReview()" class="p-4 border rounded bg-white shadow-sm">
+  <h5 class="mb-4 text-center text-primary">{{ editing ? 'Update Review' : 'Submit Review' }}</h5>
+
+  <div class="mb-3">
+    <label class="form-label">Employee ID</label>
+    <input type="number" [(ngModel)]="review.employee.id" name="employeeId" class="form-control" required />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Review Date</label>
+    <input type="date" [(ngModel)]="review.reviewDate" name="reviewDate" class="form-control" required />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Task Name</label>
+    <input type="text" [(ngModel)]="review.taskName" name="taskName" class="form-control" required />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Manager Review</label>
+    <textarea [(ngModel)]="review.managerReview" name="managerReview" class="form-control" rows="3" required></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100">
+    {{ editing ? 'Update Review' : 'Submit Review' }}
+  </button>
+</form>
+
+<div *ngIf="message" class="alert alert-info mt-3 text-center">{{ message }}</div>
+
+
+  <table class="table mt-4 table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Task</th>
+        <th>Manager Review</th>
+        <th>Review Date</th>
+        <th>Employee ID</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of reviews">
+        <td>{{ r.taskName }}</td>
+        <td>{{ r.managerReview }}</td>
+        <td>{{ r.reviewDate }}</td>
+        <td>{{ r.employeeId }}</td>
+        <td>
+          <button (click)="editReview(r)" class="btn btn-sm btn-primary m-1">Edit</button>
+          <button (click)="confirmDelete(r.id)" class="btn btn-sm btn-danger m-1">Delete</button>
+        </td>
+      </tr>
+
+
+  <div *ngIf="reviews.length === 0" class="text-center text-muted mt-5">
+    No reviews found.
+  </div>
+
+

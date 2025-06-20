@@ -1,0 +1,32 @@
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Performance Reviews</h2>
+
+    <table class="table mt-4 table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>Task</th>
+          <th>Manager Review</th>
+          <th>Review Date</th>
+          <th>Employee ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of reviews">
+          <td>{{ r.taskName }}</td>
+          <td>{{ r.managerReview }}</td>
+          <td>{{ r.reviewDate }}</td>
+          <td>{{ r.employeeId }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="reviews.length === 0" class="text-center text-muted mt-5">
+      No reviews found.
+    </div>
+
+    <div *ngIf="message" class="alert alert-danger mt-3 text-center">
+      {{ message }}
+    </div>
+  </div>
+
