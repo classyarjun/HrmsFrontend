@@ -1,3 +1,4 @@
+import { AddEmployeeService } from './../../services/add-employee.service';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   FormBuilder,
@@ -10,34 +11,48 @@ import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, ReactiveFormsModule],
+  imports: [FormsModule, HttpClientModule, ReactiveFormsModule,CommonModule ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
+
   selectedFile: File | null = null;
   passwordForm: FormGroup;
   userId: number = JSON.parse(localStorage.getItem('userData') || '{}').id || 0;
+  profileImageUrl: SafeUrl | null = null;
 
   @ViewChild('updatePasswordModal') updatePasswordModal!: ElementRef;
   @ViewChild('updateProfileModal') updateProfileModal!: ElementRef;
+
+  ngOnInit(): void {
+    this.loadProfilePicture();
+  }
 
   constructor(
     private router: Router,
     private toastr: ToastrService,
     private fb: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private addEmployeeService: AddEmployeeService,
+    private sanitizer: DomSanitizer
   ) {
     this.passwordForm = this.fb.group({
       newPassword: ['', Validators.required],
     });
   }
+
+
+
+
 
   //! ==>> password update ==========================>>
 
@@ -102,7 +117,38 @@ export class NavbarComponent {
       });
   }
 
-  //! ==>> logout method ===================================>>
+
+
+  //! ==>> get profile picture  ================================>>
+
+  loadProfilePicture(): void {
+    this.userService.getProfilePicture(this.userId).subscribe({
+      next: (blob) => {
+        const objectURL = URL.createObjectURL(blob);
+        this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+      },
+      error: (err) => {
+        console.error('Error loading profile picture', err);
+      },
+    });
+  }
+
+
+  //! ==>> get user dat by id  ===================>>
+
+
+// getUserName() {
+//     this.userService.getUserData(this.userId).subscribe({
+//       next: (res) => {
+//         this.userData = res;
+//       },
+//       error: (err) => {
+//         console.error('❌ Error fetching employees:', err);
+//       },
+//     });
+//   }
+
+   //! ==>> logout method ===================================>>
 
   logout() {
     localStorage.clear();

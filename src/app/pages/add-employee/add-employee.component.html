@@ -207,30 +207,39 @@
       <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
         <div class="modal-header">
           <h5 class="modal-title" id="registerModalLabel">Register Employee</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeRegisterModalBtn" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeRegisterModalBtn"
+            aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
+
+          <!-- ! baad me add liya tha -->
+
+          <div class="mb-3">
+            <label for="firstName">First Name</label>
+            <input id="firstName" formControlName="firstName" class="form-control"
+              [class.is-invalid]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched" />
+          </div>
+
+          <div class="mb-3">
+            <label for="lastName">Last Name</label> <!-- ✅ Yeh sahi id -->
+            <input id="lastName" formControlName="lastName" class="form-control"
+              [class.is-invalid]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched" />
+          </div>
+
           <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="email" formControlName="email" class="form-control" [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"/>
+            <input type="email" formControlName="email" class="form-control"
+              [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" />
           </div>
 
           <div class="mb-3 position-relative">
             <label class="form-label">Password</label>
-            <input
-              [type]="showPassword ? 'text' : 'password'"
-              placeholder="Example@123"
-              formControlName="password"
+            <input [type]="showPassword ? 'text' : 'password'" placeholder="Example@123" formControlName="password"
               class="form-control pe-5"
-              [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-            />
-            <i
-              class="fa"
-              [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
-              (click)="togglePassword()"
-              style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"
-            ></i>
+              [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" />
+            <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"
+              style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
           </div>
 
           <div class="mb-3">
@@ -246,7 +255,7 @@
 
           <div class="mb-3">
             <label class="form-label">Profile Picture</label>
-            <input type="file" (change)="onFileChange($event)" accept="image/*" class="form-control"/>
+            <input type="file" (change)="onFileChange($event)" accept="image/*" class="form-control" />
           </div>
         </div>
 

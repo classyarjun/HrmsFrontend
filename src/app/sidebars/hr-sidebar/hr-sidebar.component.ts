@@ -1,21 +1,34 @@
+import { UserService } from './../../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { Component ,signal} from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-hr-sidebar',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule,RouterModule,],
   templateUrl: './hr-sidebar.component.html',
   styleUrl: './hr-sidebar.component.css'
 })
-export class HrSidebarComponent {
+export class HrSidebarComponent  {
 
+
+  userId: number = JSON.parse(localStorage.getItem('userData') || '{}').id || 0;
+  profileImageUrl: SafeUrl | null = null;
   // Signal for sidebar expanded/collapsed
   isExpanded = signal(true);
-
+  fullName : string = ''  ;
   // Submenu tracker
   expandedMenus: Set<string> = new Set();
 
+  constructor(private userService: UserService,
+      private sanitizer: DomSanitizer
+  ) {}
+
+  ngOnInit(): void {
+    this.loadProfilePicture();
+    this.loadUserInfo();
+  }
   // Toggle Sidebar
   toggleSidebar(): void {
     this.isExpanded.set(!this.isExpanded());
@@ -33,4 +46,34 @@ export class HrSidebarComponent {
     return this.expandedMenus.has(label);
   }
 
+
+//! ==>> get profile picture  ================================>>
+
+  loadProfilePicture(): void {
+    this.userService.getProfilePicture(this.userId).subscribe({
+      next: (blob) => {
+        const objectURL = URL.createObjectURL(blob);
+        this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        console.log(" profileImageUrl from tsss",this.profileImageUrl);
+
+      },
+      error: (err) => {
+        console.error('Error loading profile picture', err);
+      },
+    });
+  }
+
+  // load user info
+ loadUserInfo(): void {
+  this.userService.getUserById(this.userId).subscribe({
+        next: (res) => {
+          this.fullName = `${res.firstName} ${res.lastName}`;
+
+          // console.log('User data loaded:', res);
+        },
+        error: (err) => {
+          console.error('Failed to fetch user data', err);
+        }
+      });
+ }
 }

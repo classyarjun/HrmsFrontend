@@ -66,9 +66,19 @@ export class AddEmployeeComponent implements OnInit {
       exitDate: [''],
     });
 
+    // this.registerForm = this.fb.group({
+    //   firstName: ['', Validators.required],
+    //   lastName: ['', Validators.required],
+    //   email: ['', [Validators.required, Validators.email]],
+    //   password: ['', [Validators.required, Validators.minLength(6)]],
+    //   role: ['', Validators.required],
+    // });
+
     this.registerForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       role: ['', Validators.required],
     });
 
@@ -173,13 +183,22 @@ export class AddEmployeeComponent implements OnInit {
 
   openRegisterModal(emp: any) {
     if (!emp) return;
-
     this.selectedEmployeeId = emp.id;
 
-    this.registerForm.reset({
+    // this.registerForm.reset({
+    //   email: emp.email || '',
+    //   password: '',
+    //   role: emp.role || '',
+    //   firstName:emp.firstName|| '',
+    //   lastName:emp.lastName|| '',
+    // });
+
+    this.registerForm.patchValue({
+      firstName: emp.firstName || '',
+      lastName: emp.lastName || '',
       email: emp.email || '',
-      password: '',
       role: emp.role || '',
+      password: '',
     });
 
     const modalEl = document.getElementById('registerModal');
@@ -199,11 +218,14 @@ export class AddEmployeeComponent implements OnInit {
       email: registerFormValue.email,
       password: registerFormValue.password,
       role: registerFormValue.role,
+      firstName: registerFormValue.firstName,
+      lastName: registerFormValue.lastName,
       employee: { id: this.selectedEmployeeId },
     };
 
     const formData = new FormData();
     formData.append('userData', JSON.stringify(userData));
+
     if (this.selectedImage) {
       formData.append('profilePicture', this.selectedImage);
     }
