@@ -9,12 +9,12 @@
   <!-- Sidebar Header -->
   <div class="sidebar-header">
 
-    <div class="logo-container">
-      <!-- <img
+    <!-- <div class="logo-container">
+      <img
         src="../../../assets/OpenFuture.jpeg"
-        alt="OpenFuture Logo" class="logo" /> -->
-      <!-- <span class="logo-text" *ngIf="isExpanded()">OpenFuture</span> -->
-    </div>
+        alt="OpenFuture Logo" class="logo" />
+      <span class="logo-text" *ngIf="isExpanded()">OpenFuture</span>
+    </div> -->
 
   </div>
 
@@ -34,7 +34,9 @@
   </div>
 
   <div class="user-icon" *ngIf="!isExpanded()">
-    <i class="material-icons">account_circle</i>
+    <img [src]="profileImageUrl" alt="Profile Picture" class="rounded-circle border-5 shadow-sm" width="50" height="50">
+
+    <!-- <i class="material-icons">account_circle</i> -->
   </div>
 
   <!-- Static Menu -->

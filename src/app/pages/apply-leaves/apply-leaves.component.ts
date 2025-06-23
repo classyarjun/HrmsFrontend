@@ -61,7 +61,20 @@ export class ApplyLeavesComponent {
       ccTo: formVal.ccTo ? formVal.ccTo.split(',').map((s: string) => s.trim()) : []
     };
  
-    this.applyLeavesService.applyLeave(leaveRequest, this.selectedFile || undefined).subscribe({
+    // Prepare FormData as required by the service
+    const formData = new FormData();
+    Object.entries(leaveRequest).forEach(([key, value]) => {
+      if (key === 'ccTo' && Array.isArray(value)) {
+        value.forEach((email, idx) => formData.append(`ccTo[${idx}]`, email));
+      } else {
+        formData.append(key, value as string | Blob);
+      }
+    });
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
+    }
+
+    this.applyLeavesService.applyLeave(formData).subscribe({
       next: () => {
         alert('Leave applied successfully.');
         this.leaveForm.reset();

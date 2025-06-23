@@ -39,12 +39,7 @@ export class ApplyLeavesService {
   }
 
   // 📤 Apply for leave (with optional file attachment)
-  applyLeave(leaveRequest: LeaveRequest, file?: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('request', new Blob([JSON.stringify(leaveRequest)], { type: 'application/json' }));
-    if (file) {
-      formData.append('file', file);
-    }
+ applyLeave(formData: FormData): Observable<any> {
     return this.http.post(`${this.baseUrl}/createLeave`, formData, {
       headers: this.getAuthHeaders()
     });
@@ -92,3 +87,5 @@ export class ApplyLeavesService {
     });
   }
 }
+
+ 

@@ -1,9 +1,13 @@
-import { Component, OnInit, inject } from '@angular/core';
+
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { PerformanceReview, PerformanceReviewService } from '../../../services/performance-review.service';
- 
+import { ToastrService } from 'ngx-toastr';
+
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-manager-review',
   standalone: true,
@@ -12,124 +16,100 @@ import { PerformanceReview, PerformanceReviewService } from '../../../services/p
   styleUrls: ['./manager-review.component.css']
 })
 export class ManagerReviewComponent implements OnInit {
-  private reviewService = inject(PerformanceReviewService);
- 
+  reviews: PerformanceReview[] = [];
   review: PerformanceReview = {
+    reviewId: 0,
     taskName: '',
     managerReview: '',
     reviewDate: '',
-    employee: { id: 0 },
-    employeeId: 0
+    employee: { id: 0 } // ✅ ensures employee is defined
   };
- 
-  reviews: PerformanceReview[] = [];
-  message = '';
-  editing = false;
-  currentReviewId: number | null = null;
- 
+
+  isEdit = false;
+  constructor(
+    private reviewService: PerformanceReviewService,
+    private toastr: ToastrService
+  ) {}
+
   ngOnInit() {
-    this.fetchAllReviews();
+    this.loadReviews();
   }
- 
+
+  loadReviews() {
+    this.reviewService.getAllReviews().subscribe(data => {
+      this.reviews = data;
+    });
+  }
+
   submitReview() {
-    if (!this.review.employee?.id) {
-      this.message = 'Employee ID is required!';
-      return;
-    }
- 
-    this.review.employeeId = this.review.employee.id;
- 
-    if (this.editing && this.currentReviewId !== null) {
-      this.reviewService.updateReview(this.currentReviewId, this.review).subscribe({
-        next: () => {
-          this.message = 'Review updated successfully!';
-          this.resetForm();
-          this.fetchAllReviews();
-        },
-        error: () => this.message = 'Error updating review.'
+    const payload: PerformanceReview = {
+      ...this.review,
+      employee: { id: this.review.employee?.id ?? this.review.employeeId ?? 0 }
+    };
+
+    if (this.isEdit && this.review.reviewId) {
+      this.reviewService.updateReview(this.review.reviewId, payload).subscribe(() => {
+        this.loadReviews();
+        this.toastr.success('Update Review successfully!', 'Success');
+
+        this.resetForm();
+        this.closeModal();
       });
     } else {
-      this.reviewService.createReview(this.review).subscribe({
-        next: () => {
-          this.message = 'Review submitted successfully!';
-          this.resetForm();
-          this.fetchAllReviews();
-        },
-        error: () => this.message = 'Error submitting review.'
+      this.reviewService.createReview(payload).subscribe(() => {
+        this.loadReviews();
+        this.toastr.success('Review Add successfully!', 'Success');
+
+        this.resetForm();
+        this.closeModal();
       });
     }
   }
-  fetchAllReviews() {
-    this.reviewService.getAllReviews().subscribe({
-      next: (res: any) => {
-        this.reviews = res.map((r: any) => ({
-          id: r.id,  // Must be present!
-          taskName: r.taskName,
-          managerReview: r.managerReview,
-          reviewDate: r.reviewDate,
-          employeeId: r.employeeId,
-          employee: { id: r.employeeId }
-        }));
-      },
-      error: () => this.message = 'Error fetching all reviews.'
-    });
-  }
- 
- 
- 
-  editReview(review: PerformanceReview) {
+
+  editReview(r: PerformanceReview) {
     this.review = {
-      id: review.id,
-      taskName: review.taskName,
-      managerReview: review.managerReview,
-      reviewDate: review.reviewDate,
-      employee: { id: review.employeeId },
-      employeeId: review.employeeId
+      reviewId: r.reviewId,
+      taskName: r.taskName,
+      managerReview: r.managerReview,
+      reviewDate: r.reviewDate,
+      employee: { id: r.employeeId ?? 0 }  // ✅ safely set employee object
     };
-    this.currentReviewId = review.id ?? null;
-    this.editing = true;
+    this.isEdit = true;
+    const modal = new bootstrap.Modal(document.getElementById('reviewModal'));
+    modal.show();
   }
- 
-  confirmDelete(id: number | undefined) {
-    if (!id || id === 0) {
-      this.message = 'Invalid review ID.';  // ID must be non-zero
-      return;
-    }
- 
-    if (confirm('Are you sure you want to delete this review?')) {
-      this.deleteReview(id);
-    }
-  }
- 
+
   deleteReview(id: number) {
-    if (!id || id === 0) {
-      this.message = 'Invalid ID, cannot delete.';
-      return;
+    if (confirm('Are you sure to delete this review?')) {
+      this.reviewService.deleteReview(id).subscribe({
+        next: () => this.loadReviews(),
+        complete: () => this.toastr.success('Review deleted successfully!', 'Success'),
+        error: (err) => console.error("Delete failed", err)
+      });
     }
- 
-    this.reviewService.deleteReview(id).subscribe({
-      next: () => {
-        this.message = 'Review deleted successfully!';
-        this.fetchAllReviews();
-      },
-      error: (err) => {
-        console.error('Error deleting review:', err);
-        this.message = 'Error deleting review.';
-      }
-    });
   }
- 
- 
+
+
   resetForm() {
     this.review = {
+      reviewId: 0,
       taskName: '',
       managerReview: '',
       reviewDate: '',
-      employee: { id: 0 },
-      employeeId: 0
+      employee: { id: 0 }  // ✅ ensure employee is not undefined
     };
-    this.editing = false;
-    this.currentReviewId = null;
+    this.isEdit = false;
+  }
+
+
+
+
+  closeModal() {
+    const modalEl = document.getElementById('reviewModal');
+    if (modalEl) {
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      modal?.hide();
+    }
   }
 }
- 
+
