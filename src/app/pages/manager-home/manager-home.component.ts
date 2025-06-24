@@ -4,6 +4,7 @@ import { AttendanceService } from './../../../services/attendance.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-manager-home',
@@ -16,8 +17,9 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
   [x: string]: any;
   remarks: any;
   timeString: string = '';
-  isSignedIn: boolean = false;
   holidays: any[] = []; // without interface
+
+  isSignedIn: boolean = false;
 
   attendanceData = {
     employeeId:
@@ -30,6 +32,7 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private http: HttpClient,
+    private toastr: ToastrService,
     private AttendanceService: AttendanceService,
     private holidayService: HolidayService
   ) {}
@@ -38,6 +41,7 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 1000);
     this.getHolidays();
+    this.getStatus();
   }
 
   ngOnDestroy(): void {
@@ -57,10 +61,10 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
 
     this.AttendanceService.signIn(this.attendanceData).subscribe({
       next: (res) => {
-        console.log('Sign-in successful:', res);
         this.isSignedIn = true;
+        this.toastr.success('Sign-in successful!', 'Success');
+        // console.log('Sign-in successful:', res);
 
-        // Close modal manually
         const modalElement = document.getElementById('workLocationModal');
         if (modalElement) {
           // @ts-ignore
@@ -94,6 +98,25 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error during sign-out:', err);
+      },
+    });
+  }
+
+  getStatus() {
+    this.AttendanceService.getStatus(this.attendanceData.employeeId).subscribe({
+      next: (res: any[]) => {
+        if (res && res.length > 0) {
+          // Check if any record has issingin === "TRUE"
+          const signedInRecord = res.find((a) => a.issingin === 'TRUE');
+          this.isSignedIn = signedInRecord ? true : false;
+        } else {
+          this.isSignedIn = false;
+        }
+        // console.log('Sign-in status:', this.isSignedIn);
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        this.isSignedIn = false;
       },
     });
   }

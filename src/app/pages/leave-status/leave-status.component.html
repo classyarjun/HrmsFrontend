@@ -1,0 +1,53 @@
+<div class="container mt-5">
+  <h4 class="text-center">Leave Summary</h4>
+
+  <!-- ✅ Latest Leave Status -->
+  <div *ngIf="latestLeaveStatus" class="alert mt-3"
+       [ngClass]="{
+         'alert-success': latestLeaveStatus === 'APPROVED',
+         'alert-danger': latestLeaveStatus === 'REJECTED',
+         'alert-warning': latestLeaveStatus === 'PENDING'
+       }">
+    <strong>Status:</strong> Your last leave ({{ latestLeaveDate }}) was <strong>{{ latestLeaveStatus }}</strong>.
+  </div>
+
+  <!-- 🧾 Total Approved Leaves -->
+  <div class="alert alert-info text-center">
+    <strong>Total Approved Leaves:</strong> {{ totalApprovedLeaves }}
+  </div>
+
+  <!-- 📊 Leave Breakdown -->
+  <div class="row text-center">
+    <div class="col-md-4" >
+      <div class="card">
+        <div class="card-header bg-primary text-white">Sick Leave</div>
+        <div class="card-body">
+          Used: {{ leaveBalance.sickLeaveUsed || 0 }} / 3<br>
+          Remaining: {{ 3 - (leaveBalance.sickLeaveUsed || 0) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" >
+      <div class="card">
+        <div class="card-header bg-success text-white">Casual Leave</div>
+        <div class="card-body">
+          Used: {{ leaveBalance.casualLeaveUsed || 0 }} / 3<br>
+          Remaining: {{ 3 - (leaveBalance.casualLeaveUsed || 0) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" >
+      <div class="card">
+        <div class="card-header bg-warning text-dark">Sample Leave</div>
+        <div class="card-body">
+          Used: {{ leaveBalance.sampleLeaveUsed || 0 }} / 3<br>
+          Remaining: {{ 3 - (leaveBalance.sampleLeaveUsed || 0) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 

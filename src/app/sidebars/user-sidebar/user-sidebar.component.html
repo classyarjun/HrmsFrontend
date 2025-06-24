@@ -6,31 +6,34 @@
 <button (click)="toggleSidebar()" class="toggle-btn">
       <i class="material-icons">{{ isExpanded() ? 'chevron_left' : 'chevron_right' }}</i>
     </button>
+
   <!-- Sidebar Header -->
+   <!-- Sidebar Header -->
   <div class="sidebar-header">
-
     <div class="logo-container">
-      <img
-        src="https://static.vecteezy.com/system/resources/previews/047/656/219/non_2x/abstract-logo-design-for-any-corporate-brand-business-company-vector.jpg"
-        alt="OpenFuture Logo" class="logo" />
-      <span class="logo-text" *ngIf="isExpanded()">OpenFuture</span>
+      <span class="logo-text" *ngIf="isExpanded()"><img src="../../../assets/OpenFuture.jpeg" alt="OpenFuture Logo"
+          class="logo" /></span>
     </div>
-
   </div>
 
   <!-- User Info -->
   <div class="user-info" *ngIf="isExpanded()">
     <div class="avatar">
-      <i class="material-icons">account_circle</i>
+      <div class="">
+        <img [src]="profileImageUrl" alt="Profile Picture" class="rounded-circle border-5 shadow-sm" width="50"
+          height="50">
+      </div>
     </div>
     <div class="user-details">
-      <p class="user-greeting">Hi AK47</p>
+      <p class="user-greeting">{{fullName}}</p>
       <p class="user-time">Online 5h 11m</p>
     </div>
   </div>
 
   <div class="user-icon" *ngIf="!isExpanded()">
-    <i class="material-icons">account_circle</i>
+    <img [src]="profileImageUrl" alt="Profile Picture" class="rounded-circle border-5 shadow-sm" width="50" height="50">
+
+    <!-- <i class="material-icons">account_circle</i> -->
   </div>
 
   <!-- Static Menu -->

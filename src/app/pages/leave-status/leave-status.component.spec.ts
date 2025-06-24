@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HolidayComponent } from './holiday.component';
+import { LeaveStatusComponent } from './leave-status.component';
 
-describe('HolidayComponent', () => {
-  let component: HolidayComponent;
-  let fixture: ComponentFixture<HolidayComponent>;
+describe('LeaveStatusComponent', () => {
+  let component: LeaveStatusComponent;
+  let fixture: ComponentFixture<LeaveStatusComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HolidayComponent]
+      imports: [LeaveStatusComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(HolidayComponent);
+    fixture = TestBed.createComponent(LeaveStatusComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -21,10 +21,6 @@ export class AttendanceService {
     return new HttpHeaders(headersConfig);
   }
 
-  // signIn(data: any): Observable<any> {
-  //   return this.http.post(this.apiUrl, data,  {
-  //     headers: this.getHeaders(''),});
-  // }
 
   signIn(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/signIn`, data,  {
@@ -35,6 +31,17 @@ export class AttendanceService {
     return this.http.post(`${this.apiUrl}/signOut`, { employeeId },{
       headers: this.getHeaders(''),});
   }
+
+  //  getStatus(employeeId: string): Observable<{ isSignedIn: boolean }> {
+  //   return this.http.get<{ isSignedIn: boolean }>(`/getByEmployeeId/${employeeId}`);
+  // }
+
+
+ getStatus(employeeId: string): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/getByEmployeeId/${employeeId}`, {
+    headers: this.getHeaders(''),
+  });
+}
 
 
 }

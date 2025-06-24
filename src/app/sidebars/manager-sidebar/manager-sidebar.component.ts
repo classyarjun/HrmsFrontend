@@ -12,6 +12,7 @@ import { UserService } from '../../../services/user.service';
   styleUrl: './manager-sidebar.component.css'
 })
 export class ManagerSidebarComponent {
+
   userId: number = JSON.parse(localStorage.getItem('userData') || '{}').id || 0;
   profileImageUrl: SafeUrl | null = null;
   // Signal for sidebar expanded/collapsed
@@ -59,7 +60,6 @@ export class ManagerSidebarComponent {
       next: (blob) => {
         const objectURL = URL.createObjectURL(blob);
         this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        console.log(" profileImageUrl from tsss",this.profileImageUrl);
 
       },
       error: (err) => {

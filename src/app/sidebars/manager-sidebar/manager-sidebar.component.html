@@ -1,21 +1,18 @@
 
 
 <div class="sidebar" [class.collapsed]="!isExpanded()">
-  <!-- Toggle Button -->
 
-<button (click)="toggleSidebar()" class="toggle-btn">
-      <i class="material-icons">{{ isExpanded() ? 'chevron_left' : 'chevron_right' }}</i>
-    </button>
+  <!-- Toggle Button -->
+  <button (click)="toggleSidebar()" class="toggle-btn">
+    <i class="material-icons">{{ isExpanded() ? 'chevron_left' : 'chevron_right' }}</i>
+  </button>
+
   <!-- Sidebar Header -->
   <div class="sidebar-header">
-
-    <!-- <div class="logo-container">
-      <img
-        src="../../../assets/OpenFuture.jpeg"
-        alt="OpenFuture Logo" class="logo" />
-      <span class="logo-text" *ngIf="isExpanded()">OpenFuture</span>
-    </div> -->
-
+    <div class="logo-container">
+      <span class="logo-text" *ngIf="isExpanded()"><img src="../../../assets/OpenFuture.jpeg" alt="OpenFuture Logo"
+          class="logo" /></span>
+    </div>
   </div>
 
   <!-- User Info -->
@@ -25,11 +22,10 @@
         <img [src]="profileImageUrl" alt="Profile Picture" class="rounded-circle border-5 shadow-sm" width="50"
           height="50">
       </div>
-      <!-- <i class="material-icons">account_circle</i> -->
     </div>
     <div class="user-details">
       <p class="user-greeting">{{fullName}}</p>
-      <!-- <p class="user-time">Online 5h 11m</p> -->
+      <p class="user-time">Online 5h 11m</p>
     </div>
   </div>
 
@@ -44,9 +40,7 @@
     <ul>
 
       <li>
-        <a class="menu-item"
-          routerLink="/manager-home"
-          routerLinkActive="active"
+        <a class="menu-item" routerLink="/manager-home" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">
           <i class="material-icons">home</i>
           <span class="menu-label" *ngIf="isExpanded()">Home</span>
@@ -54,9 +48,7 @@
       </li>
 
       <li>
-        <a class="menu-item"
-          routerLink="/manager-add-employee"
-          routerLinkActive="active"
+        <a class="menu-item" routerLink="/manager-add-employee" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">
           <i class="material-icons">manage_accounts</i>
           <span class="menu-label" *ngIf="isExpanded()"> Register Employee</span>
@@ -64,9 +56,7 @@
       </li>
 
       <li>
-        <a class="menu-item"
-          routerLink="/manager-all-user"
-          routerLinkActive="active"
+        <a class="menu-item" routerLink="/manager-all-user" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">
           <i class="material-icons">group_add</i>
           <span class="menu-label" *ngIf="isExpanded()">All Employee</span>
@@ -74,7 +64,8 @@
       </li>
 
       <li>
-        <a class="menu-item" routerLink="manager/engage" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="menu-item" routerLink="manager/engage" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
           <i class="material-icons">chat</i>
           <span class="menu-label" *ngIf="isExpanded()">Engage</span>
         </a>
@@ -82,7 +73,7 @@
       <li>
 
 
-       <li>
+      <li>
         <div class="menu-item has-submenu" (click)="toggleSubmenu('Leave')">
           <i class="material-icons">work</i>
           <span class="menu-label" *ngIf="isExpanded()">Leave</span>
@@ -131,8 +122,10 @@
             [class.rotated]="isSubmenuExpanded('To Do')">expand_more</i>
         </div>
         <ul class="submenu" *ngIf="isSubmenuExpanded('To Do') && isExpanded()">
-          <li><a class="submenu-label mx-4 px-4" routerLink="manager/todo/tasks" routerLinkActive="active">Tasks</a></li>
-          <li><a class="submenu-label mx-4 px-4" routerLink="manager/todo/review" routerLinkActive="active">Review</a></li>
+          <li><a class="submenu-label mx-4 px-4" routerLink="manager/todo/tasks" routerLinkActive="active">Tasks</a>
+          </li>
+          <li><a class="submenu-label mx-4 px-4" routerLink="manager/todo/review" routerLinkActive="active">Review</a>
+          </li>
         </ul>
       </li>
 
@@ -174,5 +167,3 @@
     </ul>
   </nav>
 </div>
-
-

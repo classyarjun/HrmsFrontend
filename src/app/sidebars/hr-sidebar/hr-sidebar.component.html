@@ -2,29 +2,31 @@
   <!-- Toggle Button -->
 
   <button (click)="toggleSidebar()" class="toggle-btn">
-
     <i class="material-icons">{{
       isExpanded() ? "chevron_left" : "chevron_right"
       }}</i>
-
   </button>
+
   <!-- Sidebar Header -->
   <div class="sidebar-header">
+    <div class="logo-container">
+      <span class="logo-text" *ngIf="isExpanded()"><img src="../../../assets/OpenFuture.jpeg" alt="OpenFuture Logo"
+          class="logo" /></span>
+    </div>
   </div>
+
 
   <!-- User Info -->
   <div class="user-info" *ngIf="isExpanded()">
     <div class="avatar">
-
       <div class="">
         <img [src]="profileImageUrl" alt="Profile Picture" class="rounded-circle border-5 shadow-sm" width="50"
           height="50">
       </div>
-      <!-- <i class="material-icons">account_circle</i> -->
     </div>
     <div class="user-details">
       <p class="user-greeting">{{fullName}}</p>
-      <!-- <p class="user-time">Online 5h 11m</p> -->
+      <p class="user-time">Online 5h 11m</p>
     </div>
   </div>
 

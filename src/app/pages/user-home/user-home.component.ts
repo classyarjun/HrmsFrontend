@@ -4,8 +4,9 @@ import { AttendanceService } from './../../../services/attendance.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-declare var bootstrap: any;
+import { HolidayService } from './../../../services/holidays.service';
 
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-user-home',
@@ -17,8 +18,9 @@ declare var bootstrap: any;
 export class UserHomeComponent implements OnInit, OnDestroy {
   [x: string]: any;
   remarks: any;
+  holidays: any[] = []; // without interface
 
-  isSignedIn: boolean = false;
+  isSignedIn = JSON.parse(localStorage.getItem("isSignedIn") || 'false');
 
   attendanceData = {
     employeeId:
@@ -32,11 +34,14 @@ export class UserHomeComponent implements OnInit, OnDestroy {
 
   constructor( private fb: FormBuilder,
     private AttendanceService: AttendanceService,
+        private holidayService: HolidayService
   ) {}
 
   ngOnInit(): void {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 1000);
+    this.getHolidays();
+
   }
 
   ngOnDestroy(): void {
@@ -58,6 +63,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       next: (res) => {
         console.log('Sign-in successful:', res);
         this.isSignedIn = true;
+        localStorage.setItem('isSignedIn', 'true'); // Store sign-in status
 
         // Close modal manually
         const modalElement = document.getElementById('workLocationModal');
@@ -98,6 +104,27 @@ export class UserHomeComponent implements OnInit, OnDestroy {
   }
 
 
+//! getholidays method for manager home component
+
+  getHolidays() {
+    this.holidayService.getHolidays().subscribe({
+      next: (data) => {
+        this.holidays = data;
+      },
+      error: (err) => {
+        console.error('Error fetching holidays', err);
+      },
+    });
+  }
 
 
+ getDayName(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { weekday: 'long' });
+  }
+
+  getDayMonth(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+  }
 }
