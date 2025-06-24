@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './manager-home.component.css',
 })
 export class ManagerHomeComponent implements OnInit, OnDestroy {
+
   [x: string]: any;
   remarks: any;
   timeString: string = '';
@@ -76,6 +77,19 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error during sign-in:', err);
+        let errorMessage = 'An error occurred';
+
+        if (err.error) {
+          if (typeof err.error === 'string') {
+            // If backend sent plain string response
+            errorMessage = err.error;
+          } else if (err.error.message) {
+            // If backend sent object with message property
+            errorMessage = err.error.message;
+          }
+        }
+
+        this.toastr.error(errorMessage, 'Error');
       },
     });
   }
@@ -83,7 +97,9 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
   signOut() {
     this.AttendanceService.signOut(this.attendanceData.employeeId).subscribe({
       next: (res) => {
-        console.log('Sign-out successful:', res);
+        console.log('Sign-out successful!:', res);
+        this.toastr.success('Sign-out successful!', 'Success');
+
         this.isSignedIn = false;
 
         // Close modal manually
@@ -98,6 +114,7 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error during sign-out:', err);
+        this.toastr.error(err.error);
       },
     });
   }
@@ -133,4 +150,16 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
       },
     });
   }
+
+getDayName(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { weekday: 'long' });
+  }
+
+  getDayMonth(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+  }
+
+
 }

@@ -14,6 +14,7 @@ import { UserService } from '../../../services/user.service';
 export class ManagerSidebarComponent {
 
   userId: number = JSON.parse(localStorage.getItem('userData') || '{}').id || 0;
+  
   profileImageUrl: SafeUrl | null = null;
   // Signal for sidebar expanded/collapsed
   isExpanded = signal(true);

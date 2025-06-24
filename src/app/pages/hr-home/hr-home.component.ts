@@ -1,9 +1,10 @@
 import { HolidayService } from './../../../services/holidays.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AttendanceService } from './../../../services/attendance.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-hr-home',
@@ -14,33 +15,35 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './hr-home.component.css'
 })
 export class HrHomeComponent implements OnInit, OnDestroy {
-[x: string]: any;
+
+  [x: string]: any;
   remarks: any;
-  holidays: any[] = [];
+  timeString: string = '';
+  holidays: any[] = []; // without interface
 
   isSignedIn: boolean = false;
 
-   attendanceData = {
+  attendanceData = {
     employeeId:
       JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '',
     location: '',
     remarks: '',
   };
 
-  timeString: string = '';
   private intervalId: any;
 
-
- constructor( private fb: FormBuilder,
-     private AttendanceService: AttendanceService,
-         private holidayService: HolidayService
-   ) {}
-
+  constructor(
+    private http: HttpClient,
+    private toastr: ToastrService,
+    private AttendanceService: AttendanceService,
+    private holidayService: HolidayService
+  ) {}
 
   ngOnInit(): void {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 1000);
-    this.loadHolidays();
+    this.getHolidays();
+    this.getStatus();
   }
 
   ngOnDestroy(): void {
@@ -55,15 +58,15 @@ export class HrHomeComponent implements OnInit, OnDestroy {
     this.timeString = `${hours} : ${minutes} : ${seconds}`;
   }
 
-signIn() {
+  signIn() {
     if (!this.attendanceData.location) return;
 
     this.AttendanceService.signIn(this.attendanceData).subscribe({
       next: (res) => {
-        console.log('Sign-in successful:', res);
         this.isSignedIn = true;
+        this.toastr.success('Sign-in successful!', 'Success');
+        // console.log('Sign-in successful:', res);
 
-        // Close modal manually
         const modalElement = document.getElementById('workLocationModal');
         if (modalElement) {
           // @ts-ignore
@@ -75,6 +78,19 @@ signIn() {
       },
       error: (err) => {
         console.error('Error during sign-in:', err);
+        let errorMessage = 'An error occurred';
+
+        if (err.error) {
+          if (typeof err.error === 'string') {
+            // If backend sent plain string response
+            errorMessage = err.error;
+          } else if (err.error.message) {
+            // If backend sent object with message property
+            errorMessage = err.error.message;
+          }
+        }
+
+        this.toastr.error(errorMessage, 'Error');
       },
     });
   }
@@ -82,7 +98,9 @@ signIn() {
   signOut() {
     this.AttendanceService.signOut(this.attendanceData.employeeId).subscribe({
       next: (res) => {
-        console.log('Sign-out successful:', res);
+        console.log('Sign-out successful!:', res);
+        this.toastr.success('Sign-out successful!', 'Success');
+
         this.isSignedIn = false;
 
         // Close modal manually
@@ -97,31 +115,40 @@ signIn() {
       },
       error: (err) => {
         console.error('Error during sign-out:', err);
+        this.toastr.error(err.error);
       },
     });
   }
 
+  getStatus() {
+    this.AttendanceService.getStatus(this.attendanceData.employeeId).subscribe({
+      next: (res: any[]) => {
+        if (res && res.length > 0) {
+          // Check if any record has issingin === "TRUE"
+          const signedInRecord = res.find((a) => a.issingin === 'TRUE');
+          this.isSignedIn = signedInRecord ? true : false;
+        } else {
+          this.isSignedIn = false;
+        }
+        // console.log('Sign-in status:', this.isSignedIn);
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        this.isSignedIn = false;
+      },
+    });
+  }
 
-//! getholidays method for manager home component
+  //! getholidays method for manager home component
 
-  loadHolidays(): void {
+  getHolidays() {
     this.holidayService.getHolidays().subscribe({
-      next: (res) => {
-        this.holidays = res.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      next: (data) => {
+        this.holidays = data;
       },
-      error: () => {
-        console.error('Failed to load holidays');
-      }
+      error: (err) => {
+        console.error('Error fetching holidays', err);
+      },
     });
-  }
-
-  getDayName(dateStr: string): string {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { weekday: 'long' });
-  }
-
-  getDayMonth(dateStr: string): string {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
   }
 }

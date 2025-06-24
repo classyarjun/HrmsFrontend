@@ -3,8 +3,9 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { AttendanceService } from './../../../services/attendance.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HolidayService } from './../../../services/holidays.service';
+import { ToastrService } from 'ngx-toastr';
 
 declare var bootstrap: any;
 
@@ -16,11 +17,13 @@ declare var bootstrap: any;
   styleUrl: './user-home.component.css',
 })
 export class UserHomeComponent implements OnInit, OnDestroy {
+
   [x: string]: any;
   remarks: any;
+  timeString: string = '';
   holidays: any[] = []; // without interface
 
-  isSignedIn = JSON.parse(localStorage.getItem("isSignedIn") || 'false');
+  isSignedIn: boolean = false;
 
   attendanceData = {
     employeeId:
@@ -29,19 +32,20 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     remarks: '',
   };
 
-  timeString: string = '';
   private intervalId: any;
 
-  constructor( private fb: FormBuilder,
+  constructor(
+    private http: HttpClient,
+    private toastr: ToastrService,
     private AttendanceService: AttendanceService,
-        private holidayService: HolidayService
+    private holidayService: HolidayService
   ) {}
 
   ngOnInit(): void {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 1000);
     this.getHolidays();
-
+    this.getStatus();
   }
 
   ngOnDestroy(): void {
@@ -61,11 +65,10 @@ export class UserHomeComponent implements OnInit, OnDestroy {
 
     this.AttendanceService.signIn(this.attendanceData).subscribe({
       next: (res) => {
-        console.log('Sign-in successful:', res);
         this.isSignedIn = true;
-        localStorage.setItem('isSignedIn', 'true'); // Store sign-in status
+        this.toastr.success('Sign-in successful!', 'Success');
+        // console.log('Sign-in successful:', res);
 
-        // Close modal manually
         const modalElement = document.getElementById('workLocationModal');
         if (modalElement) {
           // @ts-ignore
@@ -77,6 +80,19 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error during sign-in:', err);
+        let errorMessage = 'An error occurred';
+
+        if (err.error) {
+          if (typeof err.error === 'string') {
+            // If backend sent plain string response
+            errorMessage = err.error;
+          } else if (err.error.message) {
+            // If backend sent object with message property
+            errorMessage = err.error.message;
+          }
+        }
+
+        this.toastr.error(errorMessage, 'Error');
       },
     });
   }
@@ -84,7 +100,9 @@ export class UserHomeComponent implements OnInit, OnDestroy {
   signOut() {
     this.AttendanceService.signOut(this.attendanceData.employeeId).subscribe({
       next: (res) => {
-        console.log('Sign-out successful:', res);
+        console.log('Sign-out successful!:', res);
+        this.toastr.success('Sign-out successful!', 'Success');
+
         this.isSignedIn = false;
 
         // Close modal manually
@@ -99,12 +117,31 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error during sign-out:', err);
+        this.toastr.error(err.error);
       },
     });
   }
 
+  getStatus() {
+    this.AttendanceService.getStatus(this.attendanceData.employeeId).subscribe({
+      next: (res: any[]) => {
+        if (res && res.length > 0) {
+          // Check if any record has issingin === "TRUE"
+          const signedInRecord = res.find((a) => a.issingin === 'TRUE');
+          this.isSignedIn = signedInRecord ? true : false;
+        } else {
+          this.isSignedIn = false;
+        }
+        // console.log('Sign-in status:', this.isSignedIn);
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        this.isSignedIn = false;
+      },
+    });
+  }
 
-//! getholidays method for manager home component
+  //! getholidays method for manager home component
 
   getHolidays() {
     this.holidayService.getHolidays().subscribe({
@@ -117,8 +154,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     });
   }
 
-
- getDayName(dateStr: string): string {
+getDayName(dateStr: string): string {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { weekday: 'long' });
   }
@@ -127,4 +163,6 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
   }
+
+
 }
