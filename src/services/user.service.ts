@@ -7,8 +7,6 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
   private apiUrl = 'http://localhost:8080/Employee';
-  // private apiUrl = 'http://localhost:8080/Employee/update-password';
-  // private apiUrl2 = 'http://localhost:8080/Employee/update-profile-picture';
 
   constructor(private http: HttpClient) {}
 
@@ -20,8 +18,6 @@ export class UserService {
     });
   }
 
-
-
   updatePassword(userId: number, newPassword: string): Observable<any> {
     const headers = this.getHeaders();
 
@@ -31,6 +27,7 @@ export class UserService {
     return this.http.put(`${this.apiUrl}/update-password`, null, {
       headers,
       params,
+      responseType: 'text',
     });
   }
 
@@ -39,6 +36,7 @@ export class UserService {
     formData.append('userId', userId.toString());
     formData.append('profilePicture', profilePicture);
     return this.http.put(`${this.apiUrl}/update-profile-picture`, formData, {
+      responseType: 'text',
       headers: this.getHeaders(),
     });
   }
@@ -54,8 +52,7 @@ export class UserService {
 
   getUserById(userId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${userId}`, {
-      headers: this.getHeaders()
+      headers: this.getHeaders(),
     });
   }
-
 }

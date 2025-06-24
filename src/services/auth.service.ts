@@ -18,7 +18,8 @@ export class AuthService {
   }
 
   login(credentials: any) {
-    return this.http.post(`${this.baseUrl}/login`, credentials);
+    return this.http.post(`${this.baseUrl}/login`, credentials,
+     );
   }
 
   setToken(token: string) {

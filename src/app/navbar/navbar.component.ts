@@ -72,6 +72,16 @@ export class NavbarComponent {
             'Success'
           );
           this.passwordForm.reset();
+
+
+      // ✅ Modal ko close karo
+          const modalElement = this.updatePasswordModal.nativeElement;
+          if (modalElement) {
+            // Bootstrap modal instance le lo
+            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            modal.hide();
+          }
+
         },
         error: (err) => {
           console.error(err);
@@ -109,6 +119,16 @@ export class NavbarComponent {
             'Success'
           );
           this.selectedFile = null;
+          // ✅ Modal ko close karo
+          const modalElement = this.updateProfileModal.nativeElement;
+          if (modalElement) {
+            // Bootstrap modal instance le lo
+            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            modal.hide();
+          }
+          // Reload the profile picture
+          this.loadProfilePicture();
+
         },
         error: (err) => {
           console.error(err);
@@ -133,25 +153,11 @@ export class NavbarComponent {
     });
   }
 
-
-  //! ==>> get user dat by id  ===================>>
-
-
-// getUserName() {
-//     this.userService.getUserData(this.userId).subscribe({
-//       next: (res) => {
-//         this.userData = res;
-//       },
-//       error: (err) => {
-//         console.error('❌ Error fetching employees:', err);
-//       },
-//     });
-//   }
-
    //! ==>> logout method ===================================>>
 
   logout() {
     localStorage.clear();
+    this.toastr.success('User Log-Out successfully!','Success');
     this.router.navigate(['/login']);
   }
 }
