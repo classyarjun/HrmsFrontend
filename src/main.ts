@@ -12,7 +12,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch()), // ✅ Fix NG02801
     provideRouter(routes),
     importProvidersFrom(
       FormsModule,

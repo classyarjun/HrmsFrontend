@@ -10,8 +10,7 @@ import { LeavestatusService } from '../../../services/leavestatus.service';
   styleUrl: './leave-status.component.css',
 })
 export class LeaveStatusComponent implements OnInit {
-  employeeId =
-    JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || 0;
+  employeeId = JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || 0;
   leaveBalance: any = {};
   totalApprovedLeaves = 0;
   latestLeaveStatus: string = '';
@@ -63,4 +62,5 @@ export class LeaveStatusComponent implements OnInit {
     const sampleUsed = this.leaveBalance.sampleLeaveUsed || 0;
     this.totalApprovedLeaves = sickUsed + casualUsed + sampleUsed;
   }
+  
 }
