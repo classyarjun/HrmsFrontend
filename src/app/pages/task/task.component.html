@@ -1,0 +1,56 @@
+<!-- <div class="container mt-4">
+  <h3>Your Assigned Task</h3>
+
+  <div *ngIf="message" class="alert alert-warning">{{ message }}</div>
+
+  <div *ngIf="task">
+    <p><strong>Title:</strong> {{ task.title }}</p>
+    <p><strong>Description:</strong> {{ task.description }}</p>
+    <p><strong>Due Date:</strong> {{ task.dueDate | date }}</p>
+    <p *ngIf="task.attachmentUrl">
+      <strong>Attachment:</strong>
+      <a [href]="task.attachmentUrl" target="_blank">View</a>
+    </p>
+  </div>
+</div> -->
+
+
+<div class="container mt-4">
+  <h3 class="mb-4">Assigned Task</h3>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Due Date</th>
+        <th>Attachment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="task; else noTask">
+        <tr>
+          <td>{{ task.title }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.dueDate | date }}</td>
+          <td>
+            <a *ngIf="task.attachmentUrl" [href]="task.attachmentUrl" target="_blank" class="btn btn-sm btn-primary">
+              View
+            </a>
+            <span *ngIf="!task.attachmentUrl" class="text-muted">No Attachment</span>
+          </td>
+        </tr>
+      </ng-container>
+
+      <ng-template #noTask>
+        <tr>
+          <td colspan="4" class="text-center text-muted">No task assigned yet.</td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+
+  <div *ngIf="message && !task" class="alert alert-warning mt-3">
+    {{ message }}
+  </div>
+</div>

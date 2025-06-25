@@ -1,10 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
+  getTasksByEmployeeId(arg0: number) {
+    throw new Error('Method not implemented.');
+  }
   private baseUrl = 'http://localhost:8080/api/tasks';
 
   constructor(private http: HttpClient) {}
@@ -16,18 +20,17 @@ export class TaskService {
     });
   }
 
-  createTask(task: any, attachment?: File, employeeId?: number) {
-    const formData = new FormData();
-    formData.append('task', JSON.stringify(task)); // JSON string
-    if (attachment) {
-      formData.append('attachment', attachment);
-    }
-    formData.append('employeeId', employeeId?.toString() || '');
-
-    return this.http.post(`${this.baseUrl}`, formData, {
-      headers: this.getHeaders()
-    });
+  
+createTask(task: any, file: File, employeeId: number): Observable<any> {
+  const formData = new FormData();
+  formData.append('task', new Blob([JSON.stringify(task)], { type: 'application/json' }));
+  if (file) {
+    formData.append('attachment', file);
   }
+  formData.append('employeeId', employeeId.toString());
+
+  return this.http.post('http://localhost:8080/api/tasks', formData);
+}
 
   getTaskById(id: number) {
     return this.http.get(`${this.baseUrl}/${id}`, { headers: this.getHeaders() });
