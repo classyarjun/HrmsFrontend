@@ -3,10 +3,10 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angula
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ApplyLeavesService } from '../../../services/apply-leaves.service';
-
  
-// Type definitions inline
-type LeaveType = 'SICK' | 'CASUAL' | 'PAID' | 'UNPAID';
+ 
+
+type LeaveType = 'SICK' | 'CASUAL' | 'PAID' | 'UNPAID'|'MATERNITY';
 type LeaveStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
  
 interface LeaveRequest {
@@ -32,10 +32,10 @@ interface LeaveRequest {
 export class ApplyLeavesComponent {
   leaveForm: FormGroup;
   selectedFile: File | null = null;
-  leaveTypes: LeaveType[] = ['SICK', 'CASUAL', 'PAID', 'UNPAID'];
+  leaveTypes: LeaveType[] = ['SICK', 'CASUAL', 'PAID', 'UNPAID','MATERNITY'];
  
   constructor(private fb: FormBuilder, private applyLeavesService: ApplyLeavesService) {
-  
+ 
     this.leaveForm = this.fb.group({
       employeeId: ['', Validators.required],
       fromDate: ['', Validators.required],
@@ -53,39 +53,49 @@ export class ApplyLeavesComponent {
   }
  
   submitForm(): void {
-    if (this.leaveForm.invalid) return;
+  if (this.leaveForm.invalid) return;
  
-    const formVal = this.leaveForm.value;
-    const leaveRequest: LeaveRequest = {
-      ...formVal,
-      ccTo: formVal.ccTo ? formVal.ccTo.split(',').map((s: string) => s.trim()) : []
-    };
+  const formVal = this.leaveForm.value;
  
-    // Prepare FormData as required by the service
-    const formData = new FormData();
-    Object.entries(leaveRequest).forEach(([key, value]) => {
-      if (key === 'ccTo' && Array.isArray(value)) {
-        value.forEach((email, idx) => formData.append(`ccTo[${idx}]`, email));
-      } else {
-        formData.append(key, value as string | Blob);
-      }
-    });
-    if (this.selectedFile) {
-      formData.append('file', this.selectedFile);
-    }
-
-    this.applyLeavesService.applyLeave(formData).subscribe({
-      next: () => {
-        alert('Leave applied successfully.');
-        this.leaveForm.reset();
-        this.selectedFile = null;
-      },
-      error: (err: { message: string; }) => {
-        console.error('Error applying leave:', err);
-        alert('Error applying leave: ' + err.message);
-      }
-    });
+  
+  let userCCs = formVal.ccTo
+    ? formVal.ccTo.split(',').map((s: string) => s.trim()).filter(Boolean)
+    : [];
+ 
+ 
+  const manualCCs = ['hr@gmail.com', 'manager@gmail.com'];
+ 
+  const finalCC = Array.from(new Set([...userCCs, ...manualCCs]));
+ 
+  // ✅ 4. Build JSON part as string (because backend expects string as in curl)
+  const jsonPart = JSON.stringify({
+    employeeId: Number(formVal.employeeId),
+    fromDate: formVal.fromDate,
+    toDate: formVal.toDate,
+    reason: formVal.reason,
+    applyingTo: formVal.applyingTo,
+    ccTo: finalCC.join(','),  // ✅ Backend expects comma-separated string here
+    contactDetails: formVal.contactDetails,
+    leaveType: formVal.leaveType
+  });
+ 
+  const formData = new FormData();
+  formData.append('request', new Blob([jsonPart], { type: 'application/json' }));
+ 
+  if (this.selectedFile) {
+    formData.append('file', this.selectedFile);
   }
+ 
+  this.applyLeavesService.applyLeave(formData).subscribe({
+    next: () => {
+      alert('Leave applied successfully.');
+      this.leaveForm.reset();
+      this.selectedFile = null;
+    },
+    error: (err) => {
+      console.error('Error applying leave:', err);
+      alert('Error applying leave: ' + (err.message || 'Unknown error'));
+    }
+  });
 }
- 
- 
+}
