@@ -1,9 +1,15 @@
 <div class="container mt-4">
   <h3>Create Task</h3>
   <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+
     <div class="mb-3">
-      <label class="form-label">Title</label>
-      <input type="text" class="form-control" formControlName="title" />
+      <label class="form-label">Employee ID</label>
+      <input type="number" class="form-control" formControlName="employeeId" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">TaskName</label>
+      <input type="text" class="form-control" formControlName="taskName" />
     </div>
 
     <div class="mb-3">
@@ -16,10 +22,6 @@
       <input type="date" class="form-control" formControlName="dueDate" />
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Employee ID</label>
-      <input type="number" class="form-control" formControlName="employeeId" />
-    </div>
 
     <div class="mb-3">
       <label class="form-label">Attachment (optional)</label>
@@ -29,5 +31,5 @@
     <button type="submit" class="btn btn-primary">Create Task</button>
   </form>
 
-  <div *ngIf="message" class="mt-3 alert alert-info">{{ message }}</div>
+  <!-- <div *ngIf="message" class="mt-3 alert alert-info">{{ message }}</div> -->
 </div>
