@@ -2,10 +2,32 @@
   <h3>Create Task</h3>
   <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
 
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label class="form-label">Employee ID</label>
       <input type="number" class="form-control" formControlName="employeeId" />
-    </div>
+    </div> -->
+
+     <!-- <div class="mb-3">
+  <label class="form-label">Select Employee</label>
+  <select class="form-select" formControlName="employeeId">
+    <option *ngFor="let emp of employees" [value]="emp.id">
+      {{ emp.firstName }} {{ emp.lastName }}
+    </option>
+  </select>
+</div> -->
+
+<div class="mb-3">
+  <label class="form-label">Select Employee</label>
+  <ng-select
+    [items]="employees"
+    bindLabel="fullName"
+    bindValue="id"
+    [searchable]="true"
+    placeholder="Select employee"
+    formControlName="employeeId">
+  </ng-select>
+</div>
+
 
     <div class="mb-3">
       <label class="form-label">TaskName</label>
