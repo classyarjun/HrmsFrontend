@@ -15,6 +15,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
   styleUrl: './manager-task.component.css',
 })
 export class ManagerTaskComponent {
+
   assignee = JSON.parse(localStorage.getItem('userData') || '{}').email || '';
   taskForm: FormGroup;
   selectedFile: File | null = null;
