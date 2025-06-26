@@ -1,71 +1,54 @@
-// import { Component, OnInit } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { TaskService } from '../../../services/task.service';
-
-
-// @Component({
-//   selector: 'app-employee-task',
-//   standalone: true,
-//   imports: [CommonModule],
-//   templateUrl: './task.component.html',
-//   styleUrls: ['./task.component.css']
-// })
-// export class TaskComponent implements OnInit {
-//   task: any = null;
-//   message = '';
-
-//   constructor(private taskService: TaskService) {}
-
-//   ngOnInit(): void {
-//     const taskId = localStorage.getItem('employeeTaskId');
-
-//     if (taskId) {
-//       this.taskService.getTaskById(+taskId).subscribe({
-//         next: (res: any) => {
-//           this.task = res;
-//         },
-//         error: (err: any) => {
-//           this.message = err.error || 'Task not found';
-//         }
-//       });
-//     } else {
-//       this.message = 'No task assigned yet.';
-//     }
-//   }
-// }
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../../services/task.service';
-
-
+ 
+type TaskStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
+ 
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  dueDate: string;
+  status: TaskStatus;
+  employeeId: number;
+  assignee: string;
+  taskName: string;
+}
+ 
 @Component({
-  selector: 'app-employee-task',
+  selector: 'app-user-task',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './task.component.html',
-  styleUrls: ['./task.component.css']
+  styleUrls: ['./task.component.css'],
+  imports: [CommonModule, FormsModule, HttpClientModule],
 })
 export class TaskComponent implements OnInit {
-  task: any = null;
-  message = '';
-
+  tasks: Task[] = [];
+  employeeId: number = 0;
+ 
   constructor(private taskService: TaskService) {}
-
+ 
   ngOnInit(): void {
-    const taskId = localStorage.getItem('employeeTaskId');
-
-    if (taskId) {
-      this.taskService.getTaskById(+taskId).subscribe({
-        next: (res: any) => {
-          this.task = res;
-        },
-        error: (err: any) => {
-          this.message = err.error || 'Task not found';
-        }
-      });
-    } else {
-      this.message = 'No task assigned yet.';
-    }
+    const user = JSON.parse(localStorage.getItem('userData') || '{}');
+    this.employeeId = user.id;
+    this.loadTasks();
+  }
+ 
+  loadTasks(): void {
+    this.taskService.getTasksByEmployeeId(this.employeeId).subscribe({
+      next: (res: Task[]) => this.tasks = res,
+      error: (err: any) => console.error('Error loading tasks:', err)
+    });
+  }
+ 
+  updateStatus(task: Task, status: TaskStatus) {
+    const updated = { ...task, status };
+    this.taskService.updateTask(task.id, updated).subscribe({
+      next: () => this.loadTasks(),
+      error: (err) => console.error(err)
+    });
   }
 }
+ 
