@@ -48,14 +48,17 @@
             </button>
 
 
-            <button class="btn btn-danger px-4 mx-2" *ngIf="isSignedIn">
-              View Swipes
-            </button>
+           
+           <button class="btn btn-danger px-4" *ngIf="isSignedIn" style="margin-right: 10px;">
+  View Swipes
+</button>
 
-            <button class="btn btn-danger px-4" *ngIf="isSignedIn" (click)="signOut()">
-              <i class="bi bi-box-arrow-right me-2"></i>
-              Sign Out
-            </button>
+<button class="btn btn-danger px-4" *ngIf="isSignedIn" (click)="signOut()">
+  <i class="bi bi-box-arrow-right me-2"></i>
+  Sign Out
+</button>
+
+
 
           </div>
         </div>
