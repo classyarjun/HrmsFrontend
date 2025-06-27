@@ -1,8 +1,17 @@
 <div class="container mt-4">
-  <h3 class="mb-4">📝 Your Assigned Tasks</h3>
+  <!-- 🔷 Task Panel Heading -->
+  <div class="text-center mb-5">
+    <h2 class="fw-bold text-primary">📝 Task Panel</h2>
+    <p class="text-muted">Here you can view and update the status of your assigned tasks.</p>
+    <hr />
+  </div>
 
-  <div *ngIf="tasks.length === 0" class="alert alert-info">No tasks assigned.</div>
+  <!-- 🔹 No tasks message -->
+  <div *ngIf="tasks.length === 0" class="alert alert-info text-center">
+    No tasks assigned.
+  </div>
 
+  <!-- 🔸 Task list -->
   <div *ngFor="let task of tasks" class="card shadow-sm mb-4 border-0 rounded-4">
     <div class="card-body">
       <div class="mb-2">
@@ -17,20 +26,29 @@
 
       <div class="mb-2">
         <strong class="text-secondary">Due Date:</strong>
-        <span class="text-dark">{{ task.dueDate | date:'mediumDate' }}</span>
+        <span class="text-dark">{{ task.dueDate | date: 'mediumDate' }}</span>
       </div>
 
-      <!-- Optional Status Display -->
-      <div *ngIf="task.status" class="mt-2">
+      <!-- 🔽 Individual Dropdown -->
+      <div class="mb-2">
         <strong class="text-secondary">Status:</strong>
-        <span
-          class="badge px-3 py-2"
-          [ngClass]="{
-            'bg-success': task.status === 'COMPLETED',
-            'bg-warning text-dark': task.status === 'IN_PROGRESS',
-            'bg-secondary': task.status === 'PENDING'
-          }"
-        >
+        <select class="form-select w-auto d-inline-block ms-2"
+                [(ngModel)]="task.status"
+                (ngModelChange)="updateStatus(task.id, $event)">
+          <option value="PENDING">PENDING</option>
+          <option value="IN_PROGRESS">IN_PROGRESS</option>
+          <option value="COMPLETED">COMPLETED</option>
+        </select>
+      </div>
+
+      <!-- 🔸 Status Badge -->
+      <div class="mt-2">
+        <span class="badge px-3 py-2"
+              [ngClass]="{
+                'bg-success': task.status === 'COMPLETED',
+                'bg-warning text-dark': task.status === 'IN_PROGRESS',
+                'bg-secondary': task.status === 'PENDING'
+              }">
           {{ task.status }}
         </span>
       </div>

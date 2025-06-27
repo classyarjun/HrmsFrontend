@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LeavestatusService } from '../../../services/leavestatus.service';
-
+ 
 @Component({
   selector: 'app-leave-status',
   standalone: true,
@@ -15,14 +15,14 @@ export class LeaveStatusComponent implements OnInit {
   totalApprovedLeaves = 0;
   latestLeaveStatus: string = '';
   latestLeaveDate: string = '';
-
+ 
   constructor(private LeavestatusService: LeavestatusService) {}
-
+ 
   ngOnInit(): void {
     this.fetchLeaveBalance();
     this.fetchLatestLeaveStatus();
   }
-
+ 
   fetchLeaveBalance(): void {
     this.LeavestatusService.getLeaveBalance(this.employeeId).subscribe({
       next: (data: any) => {
@@ -34,7 +34,7 @@ export class LeaveStatusComponent implements OnInit {
       },
     });
   }
-
+ 
   fetchLatestLeaveStatus(): void {
     this.LeavestatusService.getAllLeaves().subscribe({
       next: (data: any[]) => {
@@ -44,7 +44,7 @@ export class LeaveStatusComponent implements OnInit {
             (a, b) =>
               new Date(b.fromDate).getTime() - new Date(a.fromDate).getTime()
           );
-
+ 
         if (userLeaves.length > 0) {
           this.latestLeaveStatus = userLeaves[0].status;
           this.latestLeaveDate = userLeaves[0].fromDate;
@@ -55,12 +55,13 @@ export class LeaveStatusComponent implements OnInit {
       },
     });
   }
-
+ 
   calculateTotalApproved(): void {
     const sickUsed = this.leaveBalance.sickLeaveUsed || 0;
     const casualUsed = this.leaveBalance.casualLeaveUsed || 0;
     const sampleUsed = this.leaveBalance.sampleLeaveUsed || 0;
     this.totalApprovedLeaves = sickUsed + casualUsed + sampleUsed;
   }
-  
+ 
 }
+ 
