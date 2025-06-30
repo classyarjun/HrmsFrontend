@@ -51,15 +51,7 @@
         <a class="menu-item" routerLink="/manager-add-employee" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }">
           <i class="material-icons">manage_accounts</i>
-          <span class="menu-label" *ngIf="isExpanded()"> Register Employee</span>
-        </a>
-      </li>
-
-      <li>
-        <a class="menu-item" routerLink="/manager-all-user" routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">
-          <i class="material-icons">group_add</i>
-          <span class="menu-label" *ngIf="isExpanded()">All Employee</span>
+          <span class="menu-label" *ngIf="isExpanded()">Manage Employee </span>
         </a>
       </li>
 
@@ -83,11 +75,11 @@
         <ul class="submenu" *ngIf="isSubmenuExpanded('Leave') && isExpanded()">
           <li>
             <a class="submenu-label mx-4 px-4" routerLink="manager/all-leave-request" routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"> ALL Leave request</a>
+              [routerLinkActiveOptions]="{ exact: true }">Manage Leave</a>
           </li>
           <li>
             <a class="submenu-label mx-4 px-4" routerLink="manager/create-holiday" routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }">Holiday</a>
+              [routerLinkActiveOptions]="{ exact: true }">Manage Holiday</a>
           </li>
         </ul>
       </li>
