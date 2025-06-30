@@ -5,8 +5,6 @@ import {
   Validators,
   ReactiveFormsModule,
   FormsModule,
-  AbstractControl,
-  ValidationErrors,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,13 +14,13 @@ import { ToastrService } from 'ngx-toastr';
 declare var bootstrap: any;
 
 @Component({
-  selector: 'app-add-employee',
+  selector: 'app-hr-add-employee',
   standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule],
-  templateUrl: './add-employee.component.html',
-  styleUrl: './add-employee.component.css',
+  templateUrl: './hr-add-employee.component.html',
+  styleUrl: './hr-add-employee.component.css'
 })
-export class AddEmployeeComponent implements OnInit {
+export class HrAddEmployeeComponent implements OnInit {
   employees: any[] = [];
   employeeForm!: FormGroup;
   editForm!: FormGroup;
@@ -41,12 +39,12 @@ export class AddEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.employeeForm = this.fb.group({
-      firstName: ['', [Validators.required, this.capitalizeValidator]],
-      lastName: ['', [Validators.required, this.capitalizeValidator]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.pattern(/^\d{10}$/)]],
-      department: ['', Validators.required],
-      jobTitle: ['', Validators.required],
+      phone: [''],
+      department: [''],
+      jobTitle: [''],
       role: ['', Validators.required],
       status: ['', Validators.required],
       joiningDate: ['', Validators.required],
@@ -54,36 +52,26 @@ export class AddEmployeeComponent implements OnInit {
     });
 
     this.editForm = this.fb.group({
-      firstName: ['', [Validators.required, this.capitalizeValidator]],
-      lastName: ['', [Validators.required, this.capitalizeValidator]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.pattern(/^\d{10}$/)]],
-      department: ['', Validators.required],
-      jobTitle: ['', Validators.required],
+      phone: [''],
+      department: [''],
+      jobTitle: [''],
       role: ['', Validators.required],
       status: ['', Validators.required],
       joiningDate: ['', Validators.required],
       exitDate: [''],
     });
-
     this.registerForm = this.fb.group({
-      firstName: ['', [Validators.required, this.capitalizeValidator]],
-      lastName: ['', [Validators.required, this.capitalizeValidator]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       role: ['', Validators.required],
     });
 
     this.getEmployees();
-  }
-
-  // Custom validator for capitalizing first letter
-  capitalizeValidator(control: AbstractControl): ValidationErrors | null {
-    const value = control.value;
-    if (value && value.length > 0 && value[0] !== value[0].toUpperCase()) {
-      return { notCapitalized: true };
-    }
-    return null;
   }
 
   togglePassword() {

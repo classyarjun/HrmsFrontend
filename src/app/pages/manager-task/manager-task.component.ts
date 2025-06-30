@@ -103,15 +103,6 @@ export class ManagerTaskComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-
-
-
 // import { Component } from '@angular/core';
 // import { TaskService } from '../../../services/task.service';
 // import { FormBuilder, FormGroup } from '@angular/forms';
