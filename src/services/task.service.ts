@@ -40,74 +40,55 @@ export class TaskService {
     });
   }
 
-<<<<<<< HEAD
-  getTaskById(id: number) {
-    return this.http.get(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
-  }
-
-  getAllTasks() {
-    return this.http.get(this.apiUrl, { headers: this.getHeaders() });
-  }
+  
 
   updateTask(id: number, task: any) {
     return this.http.put(`${this.apiUrl}/${id}`, task, { headers: this.getHeaders() });
   }
 
-  deleteTask(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
-  }
-=======
+
   // ✅ Get all tasks (for manager)
   getAllTasks(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl, {
+    return this.http.get<any[]>(this.apiUrl, {
       headers: this.getHeaders()
     });
   }
 
   // ✅ Get tasks for a specific employee
   getTasksByEmployeeId(employeeId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/employee/${employeeId}`, {
+    return this.http.get<any[]>(`${this.apiUrl}/employee/${employeeId}`, {
       headers: this.getHeaders()
     });
   }
 
   // ✅ Get single task by ID
   getTaskById(id: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${id}`, {
+    return this.http.get(`${this.apiUrl}/${id}`, {
       headers: this.getHeaders()
     });
   }
 
- 
-// updateAllTaskStatusByEmployeeId(employeeId: number, status: string): Observable<any> {
-//   return this.http.put(
-//     `${this.baseUrl}/employee/${employeeId}/status?status=${status}`,
-//     {}, 
-//     {
-//       headers: this.getJsonHeaders(),
-//       responseType: 'text' as 'json'
-//     }
-//   );
-// }
+
+
 
 // ✅ Update Task Status By Task ID
 updateTaskStatus(taskId: number, status: string): Observable<any> {
   return this.http.put(
-    `${this.baseUrl}/${taskId}/status?status=${status}`,
+    `${this.apiUrl}/${taskId}/status?status=${status}`,
     {},
     {
       headers: this.getJsonHeaders(),
       responseType: 'text' as 'json',
     }
   );
->>>>>>> 6c8f79d041ccaea6c12f91aea418daedd202d463
 }
 
 
   // ✅ Delete a task
   deleteTask(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`, {
+    return this.http.delete(`${this.apiUrl}/${id}`, {
       headers: this.getHeaders()
     });
   }
 }
+
