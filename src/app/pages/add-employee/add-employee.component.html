@@ -48,6 +48,7 @@
 </div>
 
 <!-- Add employee modal  -->
+<!-- Add employee modal  -->
 <div class="modal fade" id="employeeModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -58,74 +59,140 @@
         </div>
 
         <div class="modal-body row g-3">
+          <!-- First Name -->
           <div class="col-md-6">
             <label for="firstName">First Name</label>
-            <input id="firstName" formControlName="firstName" class="form-control" />
+            <input id="firstName" formControlName="firstName" class="form-control"
+              [class.is-invalid]="employeeForm.get('firstName')?.invalid && employeeForm.get('firstName')?.touched" />
+            <div class="invalid-feedback" *ngIf="employeeForm.get('firstName')?.errors?.['required']">
+              First name is required.
+            </div>
+            <div class="invalid-feedback" *ngIf="employeeForm.get('firstName')?.errors?.['notCapitalized']">
+              First letter must be capital.
+            </div>
           </div>
 
+          <!-- Last Name -->
           <div class="col-md-6">
             <label for="lastName">Last Name</label>
-            <input id="lastName" formControlName="lastName" class="form-control" />
+            <input id="lastName" formControlName="lastName" class="form-control"
+              [class.is-invalid]="employeeForm.get('lastName')?.invalid && employeeForm.get('lastName')?.touched" />
+            <div class="invalid-feedback" *ngIf="employeeForm.get('lastName')?.errors?.['required']">
+              Last name is required.
+            </div>
+            <div class="invalid-feedback" *ngIf="employeeForm.get('lastName')?.errors?.['notCapitalized']">
+              First letter must be capital.
+            </div>
           </div>
 
+          <!-- Email -->
           <div class="col-md-6">
             <label for="email">Email</label>
-            <input type="email" id="email" formControlName="email" class="form-control" />
+            <input type="email" id="email" formControlName="email" class="form-control"
+              [class.is-invalid]="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched" />
+            <div class="invalid-feedback" *ngIf="employeeForm.get('email')?.errors?.['required']">
+              Email is required.
+            </div>
+            <div class="invalid-feedback" *ngIf="employeeForm.get('email')?.errors?.['email']">
+              Invalid email format.
+            </div>
           </div>
 
+          <!-- Phone -->
           <div class="col-md-6">
             <label for="phone">Phone</label>
-            <input id="phone" formControlName="phone" class="form-control" />
+            <input id="phone" formControlName="phone" class="form-control"
+              [class.is-invalid]="employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched" />
+            <div class="invalid-feedback" *ngIf="employeeForm.get('phone')?.errors?.['pattern']">
+              Phone number must be 10 digits.
+            </div>
           </div>
 
+          <!-- Department -->
           <div class="col-md-6">
             <label for="department">Department</label>
-            <input id="department" formControlName="department" class="form-control" />
+            <input id="department" formControlName="department" class="form-control"
+              [class.is-invalid]="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched" />
+            <div class="invalid-feedback" *ngIf="employeeForm.get('department')?.errors?.['required']">
+              Department is required.
+            </div>
           </div>
 
+          <!-- Job Title -->
           <div class="col-md-6">
             <label for="jobTitle">Job Title</label>
-            <input id="jobTitle" formControlName="jobTitle" class="form-control" />
+            <input id="jobTitle" formControlName="jobTitle" class="form-control"
+              [class.is-invalid]="employeeForm.get('jobTitle')?.invalid && employeeForm.get('jobTitle')?.touched" />
+            <div class="invalid-feedback" *ngIf="employeeForm.get('jobTitle')?.errors?.['required']">
+              Job title is required.
+            </div>
           </div>
 
+          <!-- Role -->
           <div class="col-md-6">
             <label for="role">Role</label>
-            <select class="form-select" id="role" formControlName="role">
+            <select class="form-select" id="role" formControlName="role"
+              [class.is-invalid]="employeeForm.get('role')?.invalid && employeeForm.get('role')?.touched">
+              <option value="" disabled>Select Role</option>
               <option value="USER">USER</option>
               <option value="HR">HR</option>
               <option value="SENIOR_HR">SENIOR_HR</option>
               <option value="MANAGER">MANAGER</option>
             </select>
+            <div class="invalid-feedback" *ngIf="employeeForm.get('role')?.errors?.['required']">
+              Role is required.
+            </div>
           </div>
 
+          <!-- Status -->
           <div class="col-md-6">
             <label for="status">Status</label>
-            <select class="form-select" id="status" formControlName="status">
+            <select class="form-select" id="status" formControlName="status"
+              [class.is-invalid]="employeeForm.get('status')?.invalid && employeeForm.get('status')?.touched">
+              <option value="" disabled>Select Status</option>
               <option value="Active">Active</option>
               <option value="On Notice">On Notice</option>
               <option value="Resigned">Resigned</option>
             </select>
+            <div class="invalid-feedback" *ngIf="employeeForm.get('status')?.errors?.['required']">
+              Status is required.
+            </div>
           </div>
 
+          <!-- Joining Date -->
           <div class="col-md-6">
             <label for="joiningDate">Joining Date</label>
-            <input type="date" id="joiningDate" class="form-control" formControlName="joiningDate" />
+            <input type="date" id="joiningDate" class="form-control" formControlName="joiningDate"
+              [class.is-invalid]="employeeForm.get('joiningDate')?.invalid && employeeForm.get('joiningDate')?.touched" />
+            <div class="invalid-feedback" *ngIf="employeeForm.get('joiningDate')?.errors?.['required']">
+              Joining date is required.
+            </div>
           </div>
 
+          <!-- Exit Date -->
           <div class="col-md-6">
             <label for="exitDate">Exit Date</label>
             <input type="date" id="exitDate" class="form-control" formControlName="exitDate" />
           </div>
 
+<<<<<<< HEAD
           <!-- <div class="col-md-6">
             <label for="profilePicture">Profile Picture</label>
             <input type="file" id="profilePicture" (change)="onFileChange($event)"
               accept="image/png, image/jpeg, image/jpg" />
           </div> -->
+=======
+          <!-- Profile Picture -->
+          <div class="col-md-6">
+            <label for="profilePicture">Profile Picture</label>
+            <input type="file" id="profilePicture" (change)="onFileChange($event)"
+              accept="image/png, image/jpeg, image/jpg" class="form-control" />
+          </div>
+>>>>>>> 6c8f79d041ccaea6c12f91aea418daedd202d463
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Submit</button>
+          <button type="submit" class="btn btn-success" [disabled]="employeeForm.invalid">Submit</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </form>
@@ -204,7 +271,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- Register Employee Modal -->
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog">

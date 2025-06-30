@@ -94,7 +94,7 @@ export const routes: Routes = [
       { path: 'hr/document-centre', component: HrDocumentCentreComponent, canActivate: [AuthGuard] },
       { path: 'hr/people', component: HrPeopleComponent, canActivate: [AuthGuard] },
       { path: 'hr/helpdesk', component: HrHelpdeskComponent, canActivate: [AuthGuard] },
-      // { path: 'hr/all-leave-request', component: AllLeaveRequestComponent, canActivate: [AuthGuard] },
+      { path: 'hr/all-leave-request', component: ManagerAllLeaveRequestComponent, canActivate: [AuthGuard] },
 
     ]
   },
