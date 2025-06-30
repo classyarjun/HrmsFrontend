@@ -3,64 +3,96 @@ import { TaskService } from '../../../services/task.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgIf, NgFor } from '@angular/common';
+import { AddEmployeeService } from './../../../services/add-employee.service';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-manager-task',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgIf, NgFor],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule],
   templateUrl: './manager-task.component.html',
-  styleUrl: './manager-task.component.css'
+  styleUrl: './manager-task.component.css',
 })
 export class ManagerTaskComponent implements OnInit {
-
+  assignee = JSON.parse(localStorage.getItem('userData') || '{}').email || '';
   taskForm: FormGroup;
   selectedFile: File | null = null;
   message = '';
   tasks: any[] = [];
   editingTask: any = null;
+  employees: any[] = [];
+  date: any;
 
-  constructor(private fb: FormBuilder, private taskService: TaskService) {
+  constructor(
+    private fb: FormBuilder,
+    private taskService: TaskService,
+    private addEmployeeService: AddEmployeeService
+  ) {
     this.taskForm = this.fb.group({
-      title: [''],
+      taskName: [''],
       description: [''],
+      priority: [''],
+      status: [''],
       dueDate: [''],
-      employeeId: ['']
+      employeeId: [''],
     });
   }
 
   ngOnInit(): void {
     this.loadTasks();
+    this.loadEmployees();
   }
 
   onFileChange(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
-  loadTasks() {
-    this.taskService.getAllTasks().subscribe((data: any) => {
-      this.tasks = data;
-    });
-  }
-
   onSubmit() {
     const task = {
-      title: this.taskForm.value.title,
+      assignee: this.assignee,
+      taskName: this.taskForm.value.taskName,
       description: this.taskForm.value.description,
-      dueDate: this.taskForm.value.dueDate
+      priority: this.taskForm.value.priority,
+      status: this.taskForm.value.status,
+      dueDate: this.taskForm.value.dueDate,
     };
 
     const employeeId = this.taskForm.value.employeeId;
 
     this.taskService.createTask(task, this.selectedFile!, employeeId).subscribe({
       next: (res: any) => {
-        this.message = 'Task Created Successfully';
-        this.loadTasks();
+        this.message = res;
+        alert('✅ Task created successfully');
         this.taskForm.reset();
+        this.loadTasks();
       },
       error: (err: any) => {
-        this.message = err.error;
-      }
+        console.error('❌ Error creating task:', err);
+        this.message = err.error?.message || 'Server error';
+        alert('❌ Failed to create task: ' + this.message);
+      },
+    });
+  }
+
+  loadEmployees() {
+    this.addEmployeeService.getEmployees().subscribe({
+      next: (res: any) => {
+        this.employees = res.map((emp: any) => ({
+          id: emp.id,
+          fullName: `${emp.firstName} ${emp.lastName}`,
+        }));
+      },
+      error: (err: any) => {
+        console.error('❌ Error fetching employees:', err);
+      },
+    });
+  }
+
+  loadTasks() {
+    this.taskService.getAllTasks().subscribe((data: any) => {
+      this.tasks = data;
+      console.log("task data",data);
+      
     });
   }
 
@@ -89,71 +121,3 @@ export class ManagerTaskComponent implements OnInit {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { Component } from '@angular/core';
-// import { TaskService } from '../../../services/task.service';
-// import { FormBuilder, FormGroup } from '@angular/forms';
-// import { CommonModule } from '@angular/common';
-// import { ReactiveFormsModule } from '@angular/forms';
-
-
-// @Component({
-//   selector: 'app-manager-task',
-//   standalone: true,
-//   imports: [CommonModule ,ReactiveFormsModule],
-//   templateUrl: './manager-task.component.html',
-//   styleUrl: './manager-task.component.css'
-// })
-// export class ManagerTaskComponent {
-
-//  taskForm: FormGroup;
-//   selectedFile: File | null = null;
-//   message = '';
-
-//   constructor(private fb: FormBuilder, private taskService: TaskService) {
-//     this.taskForm = this.fb.group({
-//       title: [''],
-//       description: [''],
-//       dueDate: [''],
-//       employeeId: ['']
-//     });
-//   }
-
-//   onFileChange(event: any) {
-//     this.selectedFile = event.target.files[0];
-//   }
-
-//   onSubmit() {
-//     const task = {
-//       title: this.taskForm.value.title,
-//       description: this.taskForm.value.description,
-//       dueDate: this.taskForm.value.dueDate
-//     };
-
-//     const employeeId = this.taskForm.value.employeeId;
-
-//     this.taskService.createTask(task, this.selectedFile!, employeeId).subscribe({
-//       next: (res: any) => {
-//         this.message = res;
-//       },
-//       error: (err:any) => {
-//         this.message = err.error;
-//       }
-//     });
-//   }
-// }
-
-

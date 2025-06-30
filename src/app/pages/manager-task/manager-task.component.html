@@ -1,10 +1,27 @@
 <div class="container mt-4">
   <h3>Create Task</h3>
   <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+
+  
+
+ <div class="mb-3">
+  <label class="form-label">Select Employee</label>
+  <ng-select
+    [items]="employees"
+    bindLabel="fullName"
+    bindValue="id"
+    [searchable]="true"
+    placeholder="Select employee"
+    formControlName="employeeId">
+  </ng-select>
+</div> 
+
+
     <div class="mb-3">
-      <label class="form-label">Title</label>
-      <input type="text" class="form-control" formControlName="title" />
+      <label class="form-label">TaskName</label>
+      <input type="text" class="form-control" formControlName="taskName" />
     </div>
+   
 
     <div class="mb-3">
       <label class="form-label">Description</label>
@@ -12,14 +29,28 @@
     </div>
 
     <div class="mb-3">
+      <label class="form-label">Priority</label>
+      <select class="form-select" formControlName="priority">
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+      </select>
+    </div>
+
+
+ <div class="mb-3">
+      <label class="form-label">Status</label>
+      <select class="form-select" formControlName="status">
+        <option value="PENDING">Pending</option>
+        <option value="IN_PROGRESS">In Progress</option>
+        <option value="COMPLETED">Completed</option>
+      </select>
+    </div>    
+    <div class="mb-3">
       <label class="form-label">Due Date</label>
       <input type="date" class="form-control" formControlName="dueDate" />
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Employee ID</label>
-      <input type="number" class="form-control" formControlName="employeeId" />
-    </div>
 
     <div class="mb-3">
       <label class="form-label">Attachment (optional)</label>
@@ -29,8 +60,9 @@
     <button type="submit" class="btn btn-primary">Create Task</button>
   </form>
 
-  <div *ngIf="message" class="mt-3 alert alert-info">{{ message }}</div>
 </div>
+
+
 
 
 
@@ -46,19 +78,26 @@
     <thead class="table-dark">
       <tr>
         <th>ID</th>
-        <th>Title</th>
+        <th>Assignee</th>
+        <th>Task Name</th>
         <th>Description</th>
+        <th>Priority</th>
+        <th>Status</th>
         <th>Due Date</th>
         <th>Actions</th>
       </tr>
+
     </thead>
     <tbody>
       <tr *ngFor="let task of tasks">
-        <ng-container *ngIf="editingTask?.id !== task.id; else editForm">
+        <ng-container *ngIf="editingTask?.id !== task.id; else editForm"> 
           <td>{{ task.id }}</td>
-          <td>{{ task.title }}</td>
+          <td>{{ task.assignee}}</td>
+          <td>{{ task.taskName}}</td>
           <td>{{ task.description }}</td>
-          <td>{{ task.dueDate | date }}</td>
+          <td>{{ task.priority}}</td>
+          <td>{{ task.status}}</td>
+          <td>{{ task.dueDate || date }}</td> 
           <td>
             <button class="btn btn-sm btn-primary me-2" (click)="onEdit(task)">
               <i class="bi bi-pencil-square"></i>
@@ -71,7 +110,7 @@
 
         <ng-template #editForm>
           <td>{{ editingTask.id }}</td>
-          <td><input class="form-control" [(ngModel)]="editingTask.title" /></td>
+          <td><input class="form-control" [(ngModel)]="editingTask.taskName" /></td>
           <td><input class="form-control" [(ngModel)]="editingTask.description" /></td>
           <td><input class="form-control" [(ngModel)]="editingTask.dueDate" type="date" /></td>
           <td>
