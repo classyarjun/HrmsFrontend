@@ -116,14 +116,12 @@
 
 <!-- ? design change  -->
 
-
-
 <div class="container mt-4">
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <button class="btn btn-outline-secondary btn-sm" (click)="goToPreviousMonth()">&lt; Prev</button>
+  <div class="d-flex justify-content-around align-items-center mb-3 border-bottom pb-3">
+    <button class="btn btn-outline-primary btn-sm" (click)="goToPreviousMonth()">&lt; Prev</button>
     <h4 class="text-primary mb-0">{{ currentMonthName }} {{ currentYear }}</h4>
-    <button class="btn btn-outline-secondary btn-sm" (click)="goToNextMonth()">Next &gt;</button>
+    <button class="btn btn-outline-primary btn-sm" (click)="goToNextMonth()">Next &gt;</button>
   </div>
 
   <div class="row">

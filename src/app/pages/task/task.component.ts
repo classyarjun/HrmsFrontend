@@ -4,19 +4,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../../services/task.service';
 
-type TaskStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  dueDate: string;
-  status: TaskStatus;
-  employeeId: number;
-  assignee: string;
-  taskName: string;
-}
-
 @Component({
   selector: 'app-user-task',
   standalone: true,
@@ -25,8 +12,9 @@ interface Task {
   imports: [CommonModule, FormsModule, HttpClientModule],
 })
 export class TaskComponent implements OnInit {
-  tasks: Task[] = [];
+  tasks: any[] = [];
   employeeId: number = 0;
+  globalStatus: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' = 'PENDING';
 
   constructor(private taskService: TaskService) {}
 
@@ -38,22 +26,19 @@ export class TaskComponent implements OnInit {
 
   loadTasks(): void {
     this.taskService.getTasksByEmployeeId(this.employeeId).subscribe({
-      next: (res: Task[]) => this.tasks = res,
+      next: (res: any[]) => this.tasks = res,
       error: (err) => console.error('Error loading tasks:', err),
     });
   }
 
-  globalStatus: TaskStatus = 'PENDING';
-
-updateStatus(taskId: number, newStatus: TaskStatus): void {
-  this.taskService.updateTaskStatus(taskId, newStatus).subscribe({
-    next: (res) => {
-      console.log('✅ Task status updated:', res);
-    },
-    error: (err) => {
-      console.error('❌ Failed to update task status:', err);
-    }
-  });
-}
-
+  updateStatus(taskId: number, newStatus: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED'): void {
+    this.taskService.updateTaskStatus(taskId, newStatus).subscribe({
+      next: (res) => {
+        console.log('✅ Task status updated:', res);
+      },
+      error: (err) => {
+        console.error('❌ Failed to update task status:', err);
+      }
+    });
+  }
 }

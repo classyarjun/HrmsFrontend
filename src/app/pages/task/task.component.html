@@ -1,56 +1,48 @@
-<div class="container mt-4">
-  <!-- 🔷 Task Panel Heading -->
-  <div class="text-center mb-5">
-    <h2 class="fw-bold text-primary">📝 Task Panel</h2>
-    <p class="text-muted">Here you can view and update the status of your assigned tasks.</p>
-    <hr />
+<div class="container mt-5 mb-4">
+  <!-- 🔷 Heading -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold text-primary">📝 Task Dashboard</h2>
+    <p class="text-muted">Track and manage all your assigned tasks in one place.</p>
+    <hr class="w-25 mx-auto">
   </div>
 
-  <!-- 🔹 No tasks message -->
-  <div *ngIf="tasks.length === 0" class="alert alert-info text-center">
-    No tasks assigned.
+  <!-- 🔹 No tasks available -->
+  <div *ngIf="tasks.length === 0" class="alert alert-info text-center shadow-sm rounded-3">
+    No tasks assigned yet.
   </div>
 
-  <!-- 🔸 Task list -->
-  <div *ngFor="let task of tasks" class="card shadow-sm mb-4 border-0 rounded-4">
-    <div class="card-body">
-      <div class="mb-2">
-        <strong class="text-secondary">Task Name:</strong>
-        <span class="text-primary fw-semibold">{{ task.taskName }}</span>
-      </div>
-
-      <div class="mb-2">
-        <strong class="text-secondary">Description:</strong>
-        <span class="text-muted">{{ task.description }}</span>
-      </div>
-
-      <div class="mb-2">
-        <strong class="text-secondary">Due Date:</strong>
-        <span class="text-dark">{{ task.dueDate | date: 'mediumDate' }}</span>
-      </div>
-
-      <!-- 🔽 Individual Dropdown -->
-      <div class="mb-2">
-        <strong class="text-secondary">Status:</strong>
-        <select class="form-select w-auto d-inline-block ms-2"
-                [(ngModel)]="task.status"
-                (ngModelChange)="updateStatus(task.id, $event)">
-          <option value="PENDING">PENDING</option>
-          <option value="IN_PROGRESS">IN_PROGRESS</option>
-          <option value="COMPLETED">COMPLETED</option>
-        </select>
-      </div>
-
-      <!-- 🔸 Status Badge -->
-      <div class="mt-2">
-        <span class="badge px-3 py-2"
-              [ngClass]="{
-                'bg-success': task.status === 'COMPLETED',
-                'bg-warning text-dark': task.status === 'IN_PROGRESS',
-                'bg-secondary': task.status === 'PENDING'
-              }">
+  <!-- 🔸 Task Cards -->
+  <div *ngFor="let task of tasks" class="card glass shadow-sm mb-4 border-0 rounded-4">
+    <div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0 text-primary fw-semibold">{{ task.taskName }}</h5>
+        <span class="badge rounded-pill px-3 py-2 fs-6"
+          [ngClass]="{
+            'bg-success': task.status === 'COMPLETED',
+            'bg-warning text-dark': task.status === 'IN_PROGRESS',
+            'bg-secondary': task.status === 'PENDING'
+          }">
           {{ task.status }}
         </span>
+      </div>
+
+      <p class="text-muted mb-2">{{ task.description }}</p>
+
+      <div class="d-flex justify-content-between flex-wrap mb-3">
+        <div class="text-muted">
+          <strong>Due:</strong> {{ task.dueDate | date: 'mediumDate' }}
+        </div>
+
+        <div class="mt-2 mt-md-0">
+          <label class="me-2 fw-semibold text-secondary">Update Status:</label>
+          <select class="form-select d-inline-block w-auto"
+                  [(ngModel)]="task.status"
+                  (ngModelChange)="updateStatus(task.id, $event)">
+            <option value="PENDING">Pending</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>

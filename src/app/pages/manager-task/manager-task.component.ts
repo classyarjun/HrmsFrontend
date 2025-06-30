@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AddEmployeeService } from './../../../services/add-employee.service';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-manager-task',
@@ -26,7 +27,8 @@ export class ManagerTaskComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private taskService: TaskService,
-    private addEmployeeService: AddEmployeeService
+    private addEmployeeService: AddEmployeeService,
+    private toastr: ToastrService
   ) {
     this.taskForm = this.fb.group({
       taskName: [''],
@@ -62,12 +64,14 @@ export class ManagerTaskComponent implements OnInit {
     this.taskService.createTask(task, this.selectedFile!, employeeId).subscribe({
       next: (res: any) => {
         this.message = res;
-        alert('✅ Task created successfully');
+        // alert('✅ Task created successfully');
+        this.toastr.success('Task created successfully', 'Success');
         this.taskForm.reset();
         this.loadTasks();
       },
       error: (err: any) => {
         console.error('❌ Error creating task:', err);
+        this.toastr.error('Error creating task', 'Error');
         this.message = err.error?.message || 'Server error';
         alert('❌ Failed to create task: ' + this.message);
       },
@@ -92,7 +96,7 @@ export class ManagerTaskComponent implements OnInit {
     this.taskService.getAllTasks().subscribe((data: any) => {
       this.tasks = data;
       console.log("task data",data);
-      
+
     });
   }
 
