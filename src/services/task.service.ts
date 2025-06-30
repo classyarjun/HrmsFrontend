@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class TaskService {
-  private baseUrl = 'http://localhost:8080/api/tasks';
+
+  private apiUrl = 'http://localhost:8080/api/tasks';
 
   constructor(private http: HttpClient) {}
 
@@ -24,25 +25,25 @@ export class TaskService {
     }
     formData.append('employeeId', employeeId?.toString() || '');
 
-    return this.http.post(`${this.baseUrl}`, formData, {
+    return this.http.post(`${this.apiUrl}`, formData, {
       headers: this.getHeaders()
     });
   }
 
   getTaskById(id: number) {
-    return this.http.get(`${this.baseUrl}/${id}`, { headers: this.getHeaders() });
+    return this.http.get(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
   getAllTasks() {
-    return this.http.get(this.baseUrl, { headers: this.getHeaders() });
+    return this.http.get(this.apiUrl, { headers: this.getHeaders() });
   }
 
   updateTask(id: number, task: any) {
-    return this.http.put(`${this.baseUrl}/${id}`, task, { headers: this.getHeaders() });
+    return this.http.put(`${this.apiUrl}/${id}`, task, { headers: this.getHeaders() });
   }
 
   deleteTask(id: number) {
-    return this.http.delete(`${this.baseUrl}/${id}`, { headers: this.getHeaders() });
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 }
 

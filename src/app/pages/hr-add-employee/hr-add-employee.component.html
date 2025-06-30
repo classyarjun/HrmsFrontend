@@ -32,14 +32,12 @@
         <td class="text-center">
           <button class="btn  btn-sm btn-outline-success mx-1 " (click)="openEditModal(emp)">Edit</button>
 
-          <!-- <button class="btn btn-sm btn-outline-primary me-1">Register</button> -->
-
           <!-- Register Button -->
           <button class="btn btn-sm btn-outline-primary mx-1" data-bs-toggle="modal" data-bs-target="#registerModal"
             (click)="openRegisterModal(emp)">Register
           </button>
 
-          <!-- <button class="btn btn-sm btn-outline-danger" (click)="delete(emp.id)">Delete</button> -->
+          <button class="btn btn-sm btn-outline-danger" (click)="delete(emp.id)">Delete</button>
         </td>
       </tr>
     </tbody>
@@ -122,6 +120,7 @@
             <input type="file" id="profilePicture" (change)="onFileChange($event)"
               accept="image/png, image/jpeg, image/jpg" />
           </div> -->
+          
         </div>
 
         <div class="modal-footer">

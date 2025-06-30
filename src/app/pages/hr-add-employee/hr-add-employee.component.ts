@@ -14,13 +14,13 @@ import { ToastrService } from 'ngx-toastr';
 declare var bootstrap: any;
 
 @Component({
-  selector: 'app-add-employee',
+  selector: 'app-hr-add-employee',
   standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule],
-  templateUrl: './add-employee.component.html',
-  styleUrl: './add-employee.component.css',
+  templateUrl: './hr-add-employee.component.html',
+  styleUrl: './hr-add-employee.component.css'
 })
-export class AddEmployeeComponent implements OnInit {
+export class HrAddEmployeeComponent implements OnInit {
   employees: any[] = [];
   employeeForm!: FormGroup;
   editForm!: FormGroup;

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SeniorHrLayoutComponent } from './senior-hr-layout.component';
+import { HrAddEmployeeComponent } from './hr-add-employee.component';
 
-describe('SeniorHrLayoutComponent', () => {
-  let component: SeniorHrLayoutComponent;
-  let fixture: ComponentFixture<SeniorHrLayoutComponent>;
+describe('HrAddEmployeeComponent', () => {
+  let component: HrAddEmployeeComponent;
+  let fixture: ComponentFixture<HrAddEmployeeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SeniorHrLayoutComponent]
+      imports: [HrAddEmployeeComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(SeniorHrLayoutComponent);
+    fixture = TestBed.createComponent(HrAddEmployeeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
