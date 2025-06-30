@@ -1,33 +1,30 @@
-import { HolidayService } from './../../../services/holidays.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AttendanceService } from './../../../services/attendance.service';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { HolidayService } from './../../../services/holidays.service';
 
 @Component({
   selector: 'app-hr-home',
   standalone: true,
-    imports: [ReactiveFormsModule,FormsModule, CommonModule, HttpClientModule],
-
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, HttpClientModule],
   templateUrl: './hr-home.component.html',
   styleUrl: './hr-home.component.css'
 })
 export class HrHomeComponent implements OnInit, OnDestroy {
-
-  [x: string]: any;
-  remarks: any;
   timeString: string = '';
-  holidays: any[] = []; // without interface
-
+  currentDate: string = '';
+  holidays: any[] = [];
   isSignedIn: boolean = false;
+  signInTime: string = ''; // ✅ Stores sign-in time for display
 
   attendanceData = {
-    employeeId:
-      JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '',
+    employeeId: JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '',
     location: '',
     remarks: '',
+    time: ''
   };
 
   private intervalId: any;
@@ -41,9 +38,11 @@ export class HrHomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateTime();
+    this.updateDate();
     this.intervalId = setInterval(() => this.updateTime(), 1000);
     this.getHolidays();
     this.getStatus();
+    this.signInTime = localStorage.getItem('signInTime') || '-'; // ✅ Load saved time
   }
 
   ngOnDestroy(): void {
@@ -55,91 +54,72 @@ export class HrHomeComponent implements OnInit, OnDestroy {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
-    this.timeString = `${hours} : ${minutes} : ${seconds}`;
+    this.timeString = `${hours}:${minutes}:${seconds}`;
+  }
+
+  updateDate(): void {
+    const now = new Date();
+    const options = { day: '2-digit', month: 'short', year: 'numeric' } as const;
+    this.currentDate = now.toLocaleDateString('en-GB', options);
   }
 
   signIn() {
-    if (!this.attendanceData.location) return;
+    if (!this.attendanceData.location) {
+      this.toastr.warning('Please enter location');
+      return;
+    }
+
+    const now = new Date();
+    const formattedTime = now.toLocaleTimeString('en-GB', { hour12: false });
+
+    this.attendanceData.time = formattedTime;
 
     this.AttendanceService.signIn(this.attendanceData).subscribe({
-      next: (res) => {
+      next: () => {
         this.isSignedIn = true;
+        this.signInTime = formattedTime; // ✅ Update and store time
+        localStorage.setItem('signInTime', formattedTime);
         this.toastr.success('Sign-in successful!', 'Success');
-        // console.log('Sign-in successful:', res);
-
-        const modalElement = document.getElementById('workLocationModal');
-        if (modalElement) {
-          // @ts-ignore
-          const modal =
-            (window as any).bootstrap.Modal.getInstance(modalElement) ||
-            new (window as any).bootstrap.Modal(modalElement);
-          modal.hide();
-        }
       },
       error: (err) => {
-        console.error('Error during sign-in:', err);
         let errorMessage = 'An error occurred';
-
         if (err.error) {
           if (typeof err.error === 'string') {
-            // If backend sent plain string response
             errorMessage = err.error;
           } else if (err.error.message) {
-            // If backend sent object with message property
             errorMessage = err.error.message;
           }
         }
-
         this.toastr.error(errorMessage, 'Error');
-      },
+      }
     });
   }
 
   signOut() {
     this.AttendanceService.signOut(this.attendanceData.employeeId).subscribe({
-      next: (res) => {
-        console.log('Sign-out successful!:', res);
+      next: () => {
         this.toastr.success('Sign-out successful!', 'Success');
-
         this.isSignedIn = false;
-
-        // Close modal manually
-        const modalElement = document.getElementById('workLocationModal');
-        if (modalElement) {
-          // @ts-ignore
-          const modal =
-            (window as any).bootstrap.Modal.getInstance(modalElement) ||
-            new (window as any).bootstrap.Modal(modalElement);
-          modal.hide();
-        }
+        // ✅ Optional: don't remove signInTime to persist in modal
+        // localStorage.removeItem('signInTime');
       },
       error: (err) => {
-        console.error('Error during sign-out:', err);
-        this.toastr.error(err.error);
-      },
+        this.toastr.error(err.error || 'Error during sign-out');
+      }
     });
   }
 
   getStatus() {
     this.AttendanceService.getStatus(this.attendanceData.employeeId).subscribe({
       next: (res: any[]) => {
-        if (res && res.length > 0) {
-          // Check if any record has issingin === "TRUE"
-          const signedInRecord = res.find((a) => a.issingin === 'TRUE');
-          this.isSignedIn = signedInRecord ? true : false;
-        } else {
-          this.isSignedIn = false;
-        }
-        // console.log('Sign-in status:', this.isSignedIn);
+        const signedInRecord = res.find((a) => a.issingin === 'TRUE');
+        this.isSignedIn = !!signedInRecord;
       },
-      error: (err) => {
-        console.error('Error:', err);
+      error: () => {
         this.isSignedIn = false;
-      },
+      }
     });
   }
-
-  //! getholidays method for manager home component
 
   getHolidays() {
     this.holidayService.getHolidays().subscribe({
@@ -148,7 +128,15 @@ export class HrHomeComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error fetching holidays', err);
-      },
+      }
     });
+  }
+
+  openSwipeModal() {
+    const modalElement = document.getElementById('swipeModal');
+    if (modalElement) {
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
+    }
   }
 }
