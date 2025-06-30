@@ -48,10 +48,10 @@ export class PerformanceReviewService {
     });
   }
 
-  deleteReview(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/DeleteById/${id}`, {
-      headers: this.getHeaders(),
-      // responseType: 'text'  // ✅ prevent JSON parsing error
-    });
-  }
+ deleteReview(id: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/DeleteById/${id}`, {
+    headers: this.getHeaders(),
+    responseType: 'text'  // ✅ क्योंकि backend से plain message आ सकता है
+  });
+}
 }

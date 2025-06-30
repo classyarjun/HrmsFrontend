@@ -114,6 +114,8 @@ export const routes: Routes = [
       { path: 'hr/people', component: HrPeopleComponent, canActivate: [AuthGuard] },
       { path: 'hr/helpdesk', component: HrHelpdeskComponent, canActivate: [AuthGuard] },
       { path: 'hr/all-leave-request', component: ManagerAllLeaveRequestComponent, canActivate: [AuthGuard] },
+      { path: 'hr/holiday', component: HolidaysComponent, canActivate: [AuthGuard] },
+
 
     ]
   },

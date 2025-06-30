@@ -78,15 +78,21 @@ export class ManagerReviewComponent implements OnInit {
     modal.show();
   }
 
-  deleteReview(id: number) {
-    if (confirm('Are you sure to delete this review?')) {
-      this.reviewService.deleteReview(id).subscribe({
-        next: () => this.loadReviews(),
-        complete: () => this.toastr.success('Review deleted successfully!', 'Success'),
-        error: (err) => console.error("Delete failed", err)
-      });
-    }
+ deleteReview(id: number) {
+  if (confirm('Are you sure to delete this review?')) {
+    this.reviewService.deleteReview(id).subscribe({
+      next: () => {
+        // ✅ Instant remove from table
+        this.reviews = this.reviews.filter(r => r.reviewId !== id);
+        this.toastr.success('Review deleted successfully!', 'Success');
+      },
+      error: (err) => {
+        console.error('❌ Delete failed', err);
+        this.toastr.error('Failed to delete review', 'Error');
+      }
+    });
   }
+}
 
 
   resetForm() {
