@@ -40,7 +40,8 @@ export class TaskService {
     });
   }
 
-  
+
+
 
   updateTask(id: number, task: any) {
     return this.http.put(`${this.apiUrl}/${id}`, task, { headers: this.getHeaders() });

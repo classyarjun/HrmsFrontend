@@ -1,37 +1,9 @@
 <div class="container mt-4">
   <h3>Create Task</h3>
   <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
-
-    <!-- <div class="mb-3">
-      <label class="form-label">Employee ID</label>
-      <input type="number" class="form-control" formControlName="employeeId" />
-    </div> -->
-
-    <!-- <div class="mb-3">
-  <label class="form-label">Select Employee</label>
-  <select class="form-select" formControlName="employeeId">
-    <option *ngFor="let emp of employees" [value]="emp.id">
-      {{ emp.firstName }} {{ emp.lastName }}
-    </option>
-  </select>
-</div> -->
-
-<div class="mb-3">
-  <label class="form-label">Select Employee</label>
-  <ng-select
-    [items]="employees"
-    bindLabel="fullName"
-    bindValue="id"
-    [searchable]="true"
-    placeholder="Select employee"
-    formControlName="employeeId">
-  </ng-select>
-</div>
-
-
     <div class="mb-3">
-      <label class="form-label">TaskName</label>
-      <input type="text" class="form-control" formControlName="taskName" />
+      <label class="form-label">Title</label>
+      <input type="text" class="form-control" formControlName="title" />
     </div>
 
     <div class="mb-3">
@@ -44,6 +16,10 @@
       <input type="date" class="form-control" formControlName="dueDate" />
     </div>
 
+    <div class="mb-3">
+      <label class="form-label">Employee ID</label>
+      <input type="number" class="form-control" formControlName="employeeId" />
+    </div>
 
     <div class="mb-3">
       <label class="form-label">Attachment (optional)</label>
@@ -53,5 +29,61 @@
     <button type="submit" class="btn btn-primary">Create Task</button>
   </form>
 
-  <!-- <div *ngIf="message" class="mt-3 alert alert-info">{{ message }}</div> -->
+  <div *ngIf="message" class="mt-3 alert alert-info">{{ message }}</div>
+</div>
+
+
+
+
+
+
+
+<!-- table of task handle-->
+
+<div class="container mt-4">
+  <h3 class="mb-3">Task List</h3>
+  <table class="table table-bordered table-hover table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Due Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <ng-container *ngIf="editingTask?.id !== task.id; else editForm">
+          <td>{{ task.id }}</td>
+          <td>{{ task.title }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.dueDate | date }}</td>
+          <td>
+            <button class="btn btn-sm btn-primary me-2" (click)="onEdit(task)">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="onDelete(task.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-template #editForm>
+          <td>{{ editingTask.id }}</td>
+          <td><input class="form-control" [(ngModel)]="editingTask.title" /></td>
+          <td><input class="form-control" [(ngModel)]="editingTask.description" /></td>
+          <td><input class="form-control" [(ngModel)]="editingTask.dueDate" type="date" /></td>
+          <td>
+            <button class="btn btn-sm btn-success me-2" (click)="updateTask()">
+              <i class="bi bi-check-lg"></i>
+            </button>
+            <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
 </div>
