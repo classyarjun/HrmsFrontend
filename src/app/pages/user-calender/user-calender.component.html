@@ -1,0 +1,151 @@
+<!-- <div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button class="btn btn-outline-secondary btn-sm">&lt; Prev</button>
+    <h4 class="text-primary mb-0">June 2025</h4>
+    <button class="btn btn-outline-secondary btn-sm">Next &gt;</button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered text-center">
+      <thead class="table-light">
+        <tr>
+          <th>Sun</th>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+        </tr>
+      </thead>
+      <tbody> -->
+<!-- Week 1 -->
+<!-- <tr>
+          <td class="bg-light text-muted small">01<br><span>O</span></td>
+          <td class="bg-warning-subtle">02<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">03<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">04<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">05<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle text-danger">06<br><strong>A</strong><br><small>GEN</small></td>
+          <td class="bg-light text-muted small">07<br><span>O</span></td>
+        </tr> -->
+
+<!-- Week 2 -->
+<!-- <tr>
+          <td class="bg-light text-muted small">08<br><span>O</span></td>
+          <td class="bg-success-subtle">09<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle text-danger">10<br><strong>A</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle text-danger">11<br><strong>A</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">12<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">13<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-light text-muted small">14<br><span>O</span></td>
+        </tr> -->
+
+<!-- Week 3 -->
+<!-- <tr>
+          <td class="bg-light text-muted small">15<br><span>O</span></td>
+          <td class="bg-warning-subtle text-danger">16<br><strong>A</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle text-danger">17<br><strong>A</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">18<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">19<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle text-danger">20<br><strong>A</strong><br><small>GEN</small></td>
+          <td class="bg-light text-muted small">21<br><span>O</span></td>
+        </tr> -->
+
+<!-- Week 4 -->
+<!-- <tr>
+          <td class="bg-light text-muted small">22<br><span>O</span></td>
+          <td class="bg-warning-subtle">23<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle text-danger">24<br><strong>A</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">25<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">26<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-warning-subtle">27<br><strong>P</strong><br><small>GEN</small></td>
+          <td class="bg-light text-muted small">28<br><span>O</span></td>
+        </tr> -->
+
+<!-- Week 5 -->
+<!-- <tr>
+          <td class="bg-light text-muted small">29<br><span>O</span></td>
+          <td class="bg-info-subtle border border-primary">30<br><strong>30</strong><br><small>GEN</small></td>
+          <td class="bg-light-subtle"></td>
+          <td class="bg-light-subtle"></td>
+          <td class="bg-light-subtle"></td>
+          <td class="bg-light-subtle"></td>
+          <td class="bg-light-subtle"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->
+
+<!-- ! new code with maaping  -->
+<!--
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button class="btn btn-outline-secondary btn-sm" (click)="goToPreviousMonth()">&lt; Prev</button>
+    <h4 class="text-primary mb-0">{{ currentMonthName }} {{ currentYear }}</h4>
+    <button class="btn btn-outline-secondary btn-sm" (click)="goToNextMonth()">Next &gt;</button>
+  </div>
+
+  <div class="row">
+    <div class="col-12 d-flex flex-wrap">
+      <div
+        *ngFor="let day of monthDays"
+        class="border m-1 text-center p-2"
+        style="width: 13%; min-height: 100px;"
+        [ngClass]="{
+          'bg-success-subtle': getAttendanceForDate(day)?.status === 'P',
+          'bg-danger-subtle': getAttendanceForDate(day)?.status === 'A',
+          'bg-light': !getAttendanceForDate(day)
+        }"
+      >
+        <div class="fw-bold">{{ day.split('-')[2] }}</div>
+
+        <div *ngIf="getAttendanceForDate(day)">
+          <strong>{{ getAttendanceForDate(day)?.status }}</strong><br />
+          <small>{{ getAttendanceForDate(day)?.shift }}</small>
+        </div>
+        <div *ngIf="!getAttendanceForDate(day)">
+          <small>No Data</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<!-- ? design change  -->
+
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-around align-items-center mb-3 border-bottom pb-3">
+    <button class="btn btn-outline-primary btn-sm" (click)="goToPreviousMonth()">&lt; Prev</button>
+    <h4 class="text-primary mb-0">{{ currentMonthName }} {{ currentYear }}</h4>
+    <button class="btn btn-outline-primary btn-sm" (click)="goToNextMonth()">Next &gt;</button>
+  </div>
+
+  <div class="row">
+    <div class="col-12 d-flex flex-wrap">
+      <div *ngFor="let day of monthDays" class="border m-1  p-2 text-center " style="width: 13%; min-height: 100px;"
+        [ngClass]="{
+          'bg-success-subtle': getAttendanceForDate(day)?.status === 'P',
+          'bg-danger-subtle': getAttendanceForDate(day)?.status === 'A',
+          'bg-light': !getAttendanceForDate(day)}">
+
+        <div class="d-flex justify-content-start">
+          <div class="fw-bold">{{ day.split('-')[2] }}</div>
+        </div>
+
+        <div *ngIf="getAttendanceForDate(day)">
+          <strong>{{ getAttendanceForDate(day)?.status }}</strong><br />
+          <div class="d-flex justify-content-end">
+            <small>{{ getAttendanceForDate(day)?.shift }}</small>
+          </div>
+        </div>
+        <div *ngIf="!getAttendanceForDate(day)">
+          <small>No Data</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
