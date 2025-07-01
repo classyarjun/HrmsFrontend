@@ -1,18 +1,5 @@
-<!-- <div class="container mt-4"> -->
-
-<!-- <div class="py-3 d-flex justify-content-between">
-
-    <h3 class="mb-3">Holiday Management</h3>
-    <button class="btn btn-outline-success" (click)="resetForm()" data-bs-toggle="modal" data-bs-target="#holidayModal">
-      + Add Holiday
-    </button>
-
-  </div> -->
-
-
-
 <div class="container mt-4">
-  <div class=" d-flex justify-content-between ">
+  <div class="d-flex justify-content-between">
     <h3 class="mb-3">Holiday Management</h3>
     <button class="btn btn-outline-success mb-3" (click)="resetForm()" data-bs-toggle="modal"
       data-bs-target="#holidayModal">
@@ -36,14 +23,18 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let holiday of holidays; let i = index" class=" text-center">
+      <tr *ngFor="let holiday of holidays; let i = index" class="text-center">
         <td>{{ i + 1 }}</td>
         <td>{{ holiday.name }}</td>
         <td>{{ holiday.date }}</td>
         <td>{{ getDayName(holiday.date) }}</td>
         <td>{{ holiday.description }}</td>
         <td>
-          <button class="btn btn-sm btn-outline-danger" (click)="onDelete(holiday.id)">Delete</button>
+          <button class="btn btn-sm btn-outline-danger"
+                  [disabled]="oisDeleting"
+                  (click)="onDelete(holiday.id)">
+            {{ oisDeleting ? 'Deleting...' : 'Delete' }}
+          </button>
         </td>
       </tr>
       <tr *ngIf="holidays.length === 0">

@@ -123,49 +123,64 @@ export class ApplyLeavesComponent {
     this.selectedFile = event.target.files[0];
   }
 
-  submitForm(): void {
-    if (this.leaveForm.invalid) {
-      this.toastr.error('Please fill all required fields.', 'Invalid Form');
-      return;
-    }
-
-    const formVal = this.leaveForm.value;
-
-    const userCCs = formVal.ccTo
-      ? formVal.ccTo.split(',').map((s: string) => s.trim()).filter(Boolean)
-      : [];
-
-    const manualCCs = ['hr@gmail.com', 'manager@gmail.com'];
-    const finalCC = Array.from(new Set([...userCCs, ...manualCCs]));
-
-    const jsonPart = JSON.stringify({
-      employeeId: this.employeeId,
-      fromDate: formVal.fromDate,
-      toDate: formVal.toDate,
-      reason: formVal.reason,
-      applyingTo: formVal.applyingTo,
-      ccTo: finalCC.join(','),
-      contactDetails: formVal.contactDetails,
-      leaveType: formVal.leaveType
-    });
-
-    const formData = new FormData();
-    formData.append('request', new Blob([jsonPart], { type: 'application/json' }));
-
-    if (this.selectedFile) {
-      formData.append('file', this.selectedFile);
-    }
-
-    this.applyLeavesService.applyLeave(formData).subscribe({
-      next: () => {
-        this.toastr.success('Leave applied successfully.', 'Success ✅');
-        this.leaveForm.reset();
-        this.selectedFile = null;
-      },
-      error: (err) => {
-        console.error('Error applying leave:', err);
-        this.toastr.error(err?.error || 'Failed to apply leave.', 'Error ❌');
-      }
-    });
+ submitForm(): void {
+  if (this.leaveForm.invalid) {
+    this.toastr.error('Please fill all required fields.', 'Invalid Form');
+    return;
   }
+
+  const formVal = this.leaveForm.value;
+
+  // User-entered CC emails
+  let userCCs: string[] = [];
+  if (formVal.ccTo) {
+    userCCs = formVal.ccTo
+      .split(',')
+      .map((s: string) => s.trim())
+      .filter(Boolean);
+  }
+
+  // ⛔ If user enters more than 2 CCs → reject
+  if (userCCs.length > 2) {
+    this.toastr.error('You can enter only up to 2 CC emails.', 'Too Many CCs');
+    return;
+  }
+
+  // Fill remaining slots with manual CCs
+  const manualCCs = ['hr@gmail.com', 'manager@gmail.com'];
+  const remainingSlots = 2 - userCCs.length;
+  const manualToAdd = manualCCs.slice(0, remainingSlots);
+
+  const finalCC = [...userCCs, ...manualToAdd];
+
+  const jsonPart = JSON.stringify({
+    employeeId: this.employeeId,
+    fromDate: formVal.fromDate,
+    toDate: formVal.toDate,
+    reason: formVal.reason,
+    applyingTo: formVal.applyingTo,
+    ccTo: finalCC.join(','), // total 2 hi honge
+    contactDetails: formVal.contactDetails,
+    leaveType: formVal.leaveType
+  });
+
+  const formData = new FormData();
+  formData.append('request', new Blob([jsonPart], { type: 'application/json' }));
+
+  if (this.selectedFile) {
+    formData.append('file', this.selectedFile);
+  }
+
+  this.applyLeavesService.applyLeave(formData).subscribe({
+    next: () => {
+      this.toastr.success('Leave applied successfully.', 'Success ✅');
+      this.leaveForm.reset();
+      this.selectedFile = null;
+    },
+    error: (err) => {
+      console.error('Error applying leave:', err);
+      this.toastr.error(err?.error || 'Failed to apply leave.', 'Error ❌');
+    }
+  });
+}
 }
