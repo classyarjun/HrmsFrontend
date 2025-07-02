@@ -12,7 +12,7 @@ import { AttendanceService } from '../../../services/attendance.service';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './user-calender.component.html',
-  styleUrl: './user-calender.component.css'
+  styleUrl: './user-calender.component.css',
 })
 export class UserCalenderComponent {
   currentMonth: number;
@@ -23,7 +23,8 @@ export class UserCalenderComponent {
   weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   attendanceData = [] as any[]; // Adjusted type to any[] for flexibility
 
-  employeeId:number = JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || 0;
+  employeeId: number =
+    JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || 0;
 
   // attendanceData = [
   //   { date: '2025-06-30', status: 'P', shift: 'GEN' },
@@ -38,36 +39,39 @@ export class UserCalenderComponent {
     this.updateCalendar();
   }
 
-   ngOnInit(): void {
-     this.getAttendanceData();
-     console.log(this.employeeId);
+  ngOnInit(): void {
+    this.getAttendanceData();
+    console.log(this.employeeId);
+  }
 
-      }
-
-getAttendanceData() {
+  getAttendanceData() {
     // Simulate fetching attendance data from a service or API
     const backendMonth = this.currentMonth + 1; // because backend expects 1-12
-    this.attendanceService.getEmployeeCalendar(this.employeeId, this.currentYear, backendMonth)
+    this.attendanceService
+      .getEmployeeCalendar(this.employeeId, this.currentYear, backendMonth)
       .subscribe({
         next: (data: any[]) => {
           this.attendanceData = data;
         },
-        error: err => {
+        error: (err) => {
           console.error('Failed to load calendar data:', err);
           this.attendanceData = [];
-        }
+        },
       });
   }
-
-
-
-
 
   updateCalendar() {
     const date = new Date(this.currentYear, this.currentMonth);
     this.currentMonthName = date.toLocaleString('default', { month: 'long' });
-    this.monthDays = this.generateMonthDays(this.currentYear, this.currentMonth);
-    const firstDayIndex = new Date(this.currentYear, this.currentMonth, 1).getDay();
+    this.monthDays = this.generateMonthDays(
+      this.currentYear,
+      this.currentMonth
+    );
+    const firstDayIndex = new Date(
+      this.currentYear,
+      this.currentMonth,
+      1
+    ).getDay();
     this.blanksBeforeFirstDay = new Array(firstDayIndex);
   }
 
@@ -81,7 +85,6 @@ getAttendanceData() {
         .padStart(2, '0')}`;
       days.push(dayStr);
     }
-
     return days;
   }
 
@@ -105,8 +108,8 @@ getAttendanceData() {
     this.updateCalendar();
   }
 
-  getAttendanceForDate(date: string): { status: string, shift: string } | null {
-    const attendance = this.attendanceData.find(item => item.date === date);
+  getAttendanceForDate(date: string): { status: string; shift: string } | null {
+    const attendance = this.attendanceData.find((item) => item.date === date);
     if (attendance) return attendance;
 
     const dayOfWeek = new Date(date).getDay(); // 0 = Sun, 6 = Sat
@@ -117,4 +120,3 @@ getAttendanceData() {
     return null;
   }
 }
-
