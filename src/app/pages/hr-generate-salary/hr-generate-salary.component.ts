@@ -39,7 +39,7 @@ throw new Error('Method not implemented.');
     this.uploadForm = this.fb.group({
       uploadedBy: ['', [Validators.required, Validators.email]],
       userEmail: ['', [Validators.required, Validators.email]],
-      role: ['', Validators.required],
+       role: ['HR'],
     });
   }
 

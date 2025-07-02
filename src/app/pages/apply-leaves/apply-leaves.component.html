@@ -1,81 +1,99 @@
-
-
-
 <div class="container mt-2 mb-5 p-4 shadow rounded bg-light">
-  <!-- 🔷 Heading -->
   <div class="text-center mb-4">
     <h2 class="fw-bold text-primary">📝 Apply Leave</h2>
-    <p class="text-muted">Track and manage all your Leaves </p>
-    <hr class="w-25 mx-auto">
+    <p class="text-muted">Track and manage all your Leaves</p>
+    <hr class="w-25 mx-auto" />
   </div>
 
   <form [formGroup]="leaveForm" (ngSubmit)="submitForm()">
-
-    <div class="card-body bg-light ">
-      <form [formGroup]="leaveForm" (ngSubmit)="submitForm()">
-        <div class="row g-4">
-
-          <!-- From Date -->
-          <div class="col-md-6">
-            <label for="fromDate" class="form-label fw-semibold">From Date</label>
-            <input type="date" class="form-control" id="fromDate" formControlName="fromDate">
+    <div class="card-body bg-light">
+      <div class="row g-4">
+        <!-- From Date -->
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">From Date</label>
+          <input type="date" class="form-control" formControlName="fromDate" />
+          <div class="text-danger" *ngIf="leaveForm.get('fromDate')?.touched && leaveForm.get('fromDate')?.invalid">
+            From Date is required.
           </div>
-
-          <!-- To Date -->
-          <div class="col-md-6">
-            <label for="toDate" class="form-label fw-semibold">To Date</label>
-            <input type="date" class="form-control" id="toDate" formControlName="toDate">
-          </div>
-
-          <!-- Manager Email -->
-          <div class="col-md-6">
-            <label for="applyingTo" class="form-label fw-semibold">Manager Email</label>
-            <input type="email" class="form-control" id="applyingTo" formControlName="applyingTo" placeholder="e.g. manager@company.com">
-          </div>
-
-          <!-- CC To -->
-          <div class="col-md-6">
-            <label for="ccTo" class="form-label fw-semibold">CC To</label>
-            <input type="text" class="form-control" id="ccTo" formControlName="ccTo" placeholder="Comma-separated emails">
-          </div>
-
-          <!-- Contact Details -->
-          <div class="col-md-6">
-            <label for="contactDetails" class="form-label fw-semibold">Contact Details</label>
-            <input type="text" class="form-control" id="contactDetails" formControlName="contactDetails" placeholder="Phone / Email / Alt Contact">
-          </div>
-
-          <!-- Leave Type -->
-          <div class="col-md-6">
-            <label for="leaveType" class="form-label fw-semibold">Leave Type</label>
-            <select class="form-select" id="leaveType" formControlName="leaveType">
-              <option value="">-- Select --</option>
-              <option *ngFor="let type of leaveTypes" [value]="type">{{ type }}</option>
-            </select>
-          </div>
-
-          <!-- Reason -->
-          <div class="col-12">
-            <label for="reason" class="form-label fw-semibold">Reason</label>
-            <textarea class="form-control" id="reason" formControlName="reason" rows="3" placeholder="Mention reason for leave"></textarea>
-          </div>
-
-          <!-- Attachment -->
-          <div class="col-12">
-            <label for="file" class="form-label fw-semibold">Attachment (Optional)</label>
-            <input type="file" class="form-control" id="file" (change)="onFileChange($event)">
-          </div>
-
-          <!-- Submit Button -->
-          <div class="col-12 text-center">
-            <button class="btn btn-success px-4 py-2 mt-3" type="submit" [disabled]="leaveForm.invalid">
-              <i class="bi bi-send-check me-2"></i>Submit Request
-            </button>
-          </div>
-
         </div>
-      </form>
+
+        <!-- To Date -->
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">To Date</label>
+          <input type="date" class="form-control" formControlName="toDate" />
+          <div class="text-danger" *ngIf="leaveForm.get('toDate')?.touched && leaveForm.get('toDate')?.invalid">
+            To Date is required.
+          </div>
+        </div>
+
+        <!-- Applying To -->
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Manager Email</label>
+          <input type="email" class="form-control" formControlName="applyingTo" placeholder="e.g. manager@company.com" />
+          <div class="text-danger" *ngIf="leaveForm.get('applyingTo')?.touched && leaveForm.get('applyingTo')?.invalid">
+            <div *ngIf="leaveForm.get('applyingTo')?.errors?.['required']">Manager Email is required.</div>
+            <div *ngIf="leaveForm.get('applyingTo')?.errors?.['email']">Invalid email format.</div>
+          </div>
+        </div>
+
+        <!-- CC To -->
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">CC To</label>
+          <input type="text" class="form-control" formControlName="ccTo" placeholder="Comma-separated emails" />
+        </div>
+
+        <!-- Contact Details -->
+        <div class="col-md-6">
+  <label class="form-label fw-semibold">Contact Details</label>
+  <input
+    type="text"
+    class="form-control"
+    formControlName="contactDetails"
+    placeholder="10-digit phone number"
+  />
+  <div class="text-danger" *ngIf="leaveForm.get('contactDetails')?.touched && leaveForm.get('contactDetails')?.invalid">
+    <div *ngIf="leaveForm.get('contactDetails')?.errors?.['required']">
+      Contact Details are required.
+    </div>
+    <div *ngIf="leaveForm.get('contactDetails')?.errors?.['pattern']">
+      Contact number must be exactly 10 digits.
+    </div>
+  </div>
+</div>
+        <!-- Leave Type -->
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Leave Type</label>
+          <select class="form-select" formControlName="leaveType">
+            <option value="">-- Select --</option>
+            <option *ngFor="let type of leaveTypes" [value]="type">{{ type }}</option>
+          </select>
+          <div class="text-danger" *ngIf="leaveForm.get('leaveType')?.touched && leaveForm.get('leaveType')?.invalid">
+            Leave Type is required.
+          </div>
+        </div>
+
+        <!-- Reason -->
+        <div class="col-12">
+          <label class="form-label fw-semibold">Reason</label>
+          <textarea class="form-control" formControlName="reason" rows="3" placeholder="Mention reason for leave"></textarea>
+          <div class="text-danger" *ngIf="leaveForm.get('reason')?.touched && leaveForm.get('reason')?.invalid">
+            Reason is required.
+          </div>
+        </div>
+
+        <!-- Attachment -->
+        <div class="col-12">
+          <label class="form-label fw-semibold">Attachment (Optional)</label>
+          <input type="file" class="form-control" (change)="onFileChange($event)" />
+        </div>
+
+        <!-- Submit -->
+        <div class="col-12 text-center">
+          <button type="submit" class="btn btn-success px-4 py-2 mt-3">
+            <i class="bi bi-send-check me-2"></i>Submit Request
+          </button>
+        </div>
+      </div>
     </div>
   </form>
 </div>
-

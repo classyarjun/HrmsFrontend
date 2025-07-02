@@ -25,10 +25,11 @@ td {
     background-color: #fff8e1 !important;
   }
 
-  .bg-info-subtle {
-    background-color: #d9efff !important;
-  }
-
   .bg-light-subtle {
     background-color: #f8f9fa !important;
   }
+
+.bg-info-subtle {
+  background-color: #e2f0fb !important; /* Weekend (O) */
+}
+

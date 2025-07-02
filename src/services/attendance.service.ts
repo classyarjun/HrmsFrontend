@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AttendanceService {
-  private apiUrl = 'http://localhost:8080/api/attendance';
+  
+  private apiUrl = 'http://localhost:8080/api';
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +21,7 @@ export class AttendanceService {
   }
 
   signIn(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/signIn`, data, {
+    return this.http.post(`${this.apiUrl}/attendance/signIn`, data, {
       responseType: 'text',
       headers: this.getHeaders(''),
     });
@@ -28,7 +29,7 @@ export class AttendanceService {
 
   signOut(employeeId: number): Observable<any> {
     return this.http.post(
-      `${this.apiUrl}/signOut`,
+      `${this.apiUrl}/attendance/signOut`,
       { employeeId },
       {
         headers: this.getHeaders(''),
@@ -40,10 +41,25 @@ export class AttendanceService {
 
   getStatus(employeeId: string): Observable<any[]> {
     return this.http.get<any[]>(
-      `${this.apiUrl}/getByEmployeeId/${employeeId}`,
+      `${this.apiUrl}/attendance/getByEmployeeId/${employeeId}`,
       {
         headers: this.getHeaders(''),
       }
     );
   }
+
+  getEmployeeCalendar(employeeId: number, year: number, month: number): Observable<any> {
+    const url = `${this.apiUrl}/calendar-days/employee/${employeeId}/calendar?year=${year}&month=${month}`;
+    return this.http.get(url);
+  }
+
 }
+
+
+
+
+
+
+
+
+
