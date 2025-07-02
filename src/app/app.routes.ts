@@ -43,6 +43,7 @@ import { LeaveStatusComponent } from './pages/leave-status/leave-status.componen
 import { HrAddEmployeeComponent } from './pages/hr-add-employee/hr-add-employee.component';
 import { UserCalenderComponent } from './pages/user-calender/user-calender.component';
 import { HelpDeskComponent } from './pages/helpdesk/helpdesk.component';
+import { ManagerPyslipComponent } from './pages/manager-pyslip/manager-pyslip.component';
 
 
 
@@ -77,6 +78,7 @@ export const routes: Routes = [
       { path: 'manager/document-centre', component: ManagerDocumentCenterComponent, canActivate: [AuthGuard] },
       { path: 'manager/all-leave-request', component: ManagerAllLeaveRequestComponent, canActivate: [AuthGuard] },
       { path: 'manager/create-holiday', component: HolidaysComponent, canActivate: [AuthGuard] },
+       { path: 'manager/pay-slip', component: ManagerPyslipComponent, canActivate: [AuthGuard] },
     ]
   },
   // 📌 Hr Layout Route
