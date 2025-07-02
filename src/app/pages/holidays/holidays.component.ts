@@ -4,6 +4,7 @@ import { HolidayService } from './../../../services/holidays.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+
 declare var bootstrap: any;
 
 @Component({
@@ -19,17 +20,17 @@ export class HolidaysComponent implements OnInit {
 
   successMessage = '';
   errorMessage = '';
+  oisDeleting: boolean = false;
 
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
-    private holidayService: HolidayService) {
-
+    private holidayService: HolidayService
+  ) {
     this.holidayForm = this.fb.group({
       name: ['', Validators.required],
       date: ['', Validators.required],
       description: [''],
-
     });
   }
 
@@ -64,7 +65,6 @@ export class HolidaysComponent implements OnInit {
       const holidayData = this.holidayForm.value;
       this.holidayService.createHoliday(holidayData).subscribe({
         next: () => {
-
           this.toastr.success('Holiday added successfully!', 'Success');
           this.resetForm();
           this.loadHolidays();
@@ -78,28 +78,32 @@ export class HolidaysComponent implements OnInit {
       this.errorMessage = 'Please fill all required fields.';
     }
   }
+  resetForm() {
+    throw new Error('Method not implemented.');
+  }
 
   onDelete(id: number): void {
-    if (confirm('Are you sure you want to delete this holiday?')) {
-      this.holidayService.deleteHoliday(id).subscribe({
-        next: () => {
-          this.loadHolidays();
-          this.toastr.success('Holiday deleted successfully!', 'Success');
-        },
-        error: () => {
-          this.errorMessage = 'Failed to delete holiday.';
-        },
-      });
-    }
-  }
+  if (confirm('Are you sure you want to delete this holiday?')) {
+    this.oisDeleting = true;
 
-  resetForm(): void {
-    this.holidayForm.reset();
-    this.successMessage = '';
-    this.errorMessage = '';
-  }
+    this.holidayService.deleteHoliday(id).subscribe({
+      next: () => {
+        // ✅ Remove the holiday from local array immediately
+        this.holidays = this.holidays.filter(holiday => holiday.id !== id);
 
-  getDayName(dateStr: string): string {
-    return new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long' });
+        // ✅ Show success message
+        this.toastr.success('Holiday deleted successfully!', 'Success');
+
+        this.oisDeleting = false;
+        this.errorMessage = '';
+      },
+      error: (error) => {
+        console.error('Delete error:', error);
+        this.toastr.error('Failed to delete holiday.', 'Error');
+        this.oisDeleting = false;
+      }
+    });
   }
+}
+
 }

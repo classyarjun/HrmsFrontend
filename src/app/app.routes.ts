@@ -46,6 +46,7 @@ import { UserCalenderComponent } from './pages/user-calender/user-calender.compo
 import { HelpDeskComponent } from './pages/helpdesk/helpdesk.component';
 
 
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
@@ -121,7 +122,6 @@ export const routes: Routes = [
       { path: 'user/my-worklife/feedback', component: UserFeedbackComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/apply-leaves', component: ApplyLeavesComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/leaves-status', component: LeaveStatusComponent, canActivate: [AuthGuard] },
-      { path: 'user/attendance/mark', component: UserCalenderComponent, canActivate: [AuthGuard] },
 
 
     ]

@@ -37,10 +37,13 @@ export class HolidayService {
     });
   }
 
-  // 🔥 Fix this function with headers
-  deleteHoliday(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/id/${id}`, {
-      headers: this.getHeaders()
-    });
-  }
+ deleteHoliday(id: number): Observable<any> {
+  const token = localStorage.getItem('token') || '';
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+
+  return this.http.delete(`${this.apiUrl}/id/${id}`, { headers });
+}
+
 }
