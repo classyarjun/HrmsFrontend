@@ -114,7 +114,7 @@ export class ApplyLeavesComponent {
       reason: ['', Validators.required],
       applyingTo: ['', [Validators.required, Validators.email]],
       ccTo: [''],
-      contactDetails: ['', Validators.required],
+     contactDetails: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       leaveType: ['', Validators.required]
     });
   }
