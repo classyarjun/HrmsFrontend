@@ -1,4 +1,4 @@
-<h5 class="text-start p-3">Helpdesk</h5>
+<!-- <h5 class="text-start p-3">Helpdesk</h5>
 
 <div class="tabs-container">
   <button class="btn btn-primary new-request-button">New Request</button>
@@ -13,4 +13,158 @@
 
 <div class="footer">
   v6.3.0-prod-1043 | <a href="#">Privacy Policy</a> | <a href="#">Terms Of Service</a>
+</div> -->
+
+
+
+
+
+<div class="container py-4">
+  <h2 class="mb-4">Help Desk Tickets</h2>
+
+  <!-- Ticket Form -->
+  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Create New Ticket</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <!-- Category Field -->
+          <div class="col-md-6">
+            <label for="category" class="form-label">Category</label>
+            <input type="text" class="form-control" id="category" formControlName="category"
+                   [class.is-invalid]="ticketForm.get('category')?.invalid && ticketForm.get('category')?.touched">
+            <div *ngIf="ticketForm.get('category')?.invalid && ticketForm.get('category')?.touched" class="invalid-feedback">
+              <span *ngIf="ticketForm.get('category')?.errors?.['required']">Category is required</span>
+              <span *ngIf="ticketForm.get('category')?.errors?.['maxlength']">Max length is 50 characters</span>
+            </div>
+          </div>
+
+          <!-- Subject Field -->
+          <div class="col-md-6">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="subject" formControlName="subject"
+                   [class.is-invalid]="ticketForm.get('subject')?.invalid && ticketForm.get('subject')?.touched">
+            <div *ngIf="ticketForm.get('subject')?.invalid && ticketForm.get('subject')?.touched" class="invalid-feedback">
+              <span *ngIf="ticketForm.get('subject')?.errors?.['required']">Subject is required</span>
+              <span *ngIf="ticketForm.get('subject')?.errors?.['maxlength']">Max length is 100 characters</span>
+            </div>
+          </div>
+
+          <!-- Description Field -->
+          <div class="col-12">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" rows="3" formControlName="description"
+                      [class.is-invalid]="ticketForm.get('description')?.invalid && ticketForm.get('description')?.touched"></textarea>
+            <div *ngIf="ticketForm.get('description')?.invalid && ticketForm.get('description')?.touched" class="invalid-feedback">
+              <span *ngIf="ticketForm.get('description')?.errors?.['required']">Description is required</span>
+              <span *ngIf="ticketForm.get('description')?.errors?.['maxlength']">Max length is 2000 characters</span>
+            </div>
+          </div>
+
+          <!-- CC To Field -->
+          <div class="col-md-6">
+            <label for="ccTo" class="form-label">CC To (comma separated emails)</label>
+            <input type="text" class="form-control" id="ccTo" formControlName="ccTo">
+          </div>
+
+          <!-- Priority Field -->
+          <div class="col-md-6">
+            <label for="priority" class="form-label">Priority</label>
+            <select class="form-select" id="priority" formControlName="priority"
+                    [class.is-invalid]="ticketForm.get('priority')?.invalid && ticketForm.get('priority')?.touched">
+              <option *ngFor="let priority of priorities" [value]="priority">{{priority}}</option>
+            </select>
+            <div *ngIf="ticketForm.get('priority')?.invalid && ticketForm.get('priority')?.touched" class="invalid-feedback">
+              Please select a priority
+            </div>
+          </div>
+
+          <!-- File Upload -->
+          <div class="col-12">
+            <label for="file" class="form-label">Attachment</label>
+            <input type="file" class="form-control" id="file" (change)="onFileSelected($event)"
+                   [class.is-invalid]="ticketForm.get('file')?.invalid && ticketForm.get('file')?.touched">
+            <small class="text-muted">Max file size: 10MB</small>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="col-12" *ngIf="fileUploadProgress !== null">
+            <div class="progress">
+              <div class="progress-bar" [style.width.%]="fileUploadProgress" role="progressbar">
+                {{fileUploadProgress}}%
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+              <span *ngIf="!isLoading">Submit Ticket</span>
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Tickets List -->
+  <div class="card">
+    <div class="card-header bg-info text-white">
+      <h5 class="mb-0">Existing Tickets</h5>
+    </div>
+    <div class="card-body p-0">
+      <div *ngIf="isLoading && tickets.length === 0" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && tickets.length === 0" class="text-center py-4">
+        <p class="text-muted">No tickets found</p>
+      </div>
+
+      <div *ngIf="tickets.length > 0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Subject</th>
+                <th>Priority</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ticket of tickets">
+                <td>{{ticket.id}}</td>
+                <td>{{ticket.category}}</td>
+                <td>{{ticket.subject}}</td>
+                <td>
+                  <span class="badge" [ngClass]="getPriorityClass(ticket.priority)">
+                    {{ticket.priority}}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-danger me-2" (click)="deleteTicket(ticket.id)">
+                    Delete
+                  </button>
+                  <button *ngIf="ticket.attachedFile" class="btn btn-sm btn-secondary" 
+                          (click)="downloadFile(ticket.id)">
+                    Download
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+
