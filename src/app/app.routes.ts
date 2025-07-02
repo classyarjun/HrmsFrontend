@@ -18,7 +18,7 @@ import { PayslipComponent } from './pages/payslip/payslip.component';
 import { UserPeopleComponent } from './pages/user-people/user-people.component';
 import { TaskComponent } from './pages/task/task.component';
 import { KudoComponent } from './pages/kudo/kudo.component';
-import { HelpdeskComponent } from './pages/helpdesk/helpdesk.component';
+
 import { RequestHubComponent } from './pages/request-hub/request-hub.component';
 import { UserFeedbackComponent } from './pages/user-feedback/user-feedback.component';
 import { ApplyLeavesComponent } from './pages/apply-leaves/apply-leaves.component';
@@ -43,6 +43,9 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { TermsAndConditionComponent } from './pages/terms-and-condition/terms-and-condition.component';
 import { LeaveStatusComponent } from './pages/leave-status/leave-status.component';
 import { HrAddEmployeeComponent } from './pages/hr-add-employee/hr-add-employee.component';
+import { UserCalenderComponent } from './pages/user-calender/user-calender.component';
+import { HelpDeskComponent } from './pages/helpdesk/helpdesk.component';
+
 
 
 export const routes: Routes = [
@@ -115,7 +118,7 @@ export const routes: Routes = [
       { path: 'user/to-do/task', component: TaskComponent, canActivate: [AuthGuard] },
       { path: 'user/to-do/review', component: TaskComponent, canActivate: [AuthGuard] },
       { path: 'user/engage', component: EngageComponent, canActivate: [AuthGuard] },
-      { path: 'user/Helpdesk', component: HelpdeskComponent, canActivate: [AuthGuard] },
+      { path: 'user/Helpdesk', component: HelpDeskComponent, canActivate: [AuthGuard] },
       { path: 'Workflow Delegates/request-hub', component: RequestHubComponent, canActivate: [AuthGuard] },
       { path: 'user/my-worklife/feedback', component: UserFeedbackComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/apply-leaves', component: ApplyLeavesComponent, canActivate: [AuthGuard] },
