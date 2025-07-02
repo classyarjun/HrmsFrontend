@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AttendanceService {
   private apiUrl = 'http://localhost:8080/api/attendance';
+  private baseUrl = 'http://localhost:8080/api/calendar-days';
 
   constructor(private http: HttpClient) {}
 
@@ -46,4 +47,20 @@ export class AttendanceService {
       }
     );
   }
+
+
+  getEmployeeCalendar(employeeId: number, year: number, month: number): Observable<any> {
+    const url = `${this.baseUrl}/employee/${employeeId}/calendar?year=${year}&month=${month}`;
+    return this.http.get(url);
+  }
+
 }
+
+
+
+
+
+
+
+
+

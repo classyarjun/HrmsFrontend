@@ -1,5 +1,3 @@
-import { UserCalenderComponent } from './pages/user-calender/user-calender.component';
-
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';

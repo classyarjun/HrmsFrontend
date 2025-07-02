@@ -116,7 +116,7 @@
 
 <!-- ? design change  -->
 
-<div class="container mt-4">
+<!-- <div class="container mt-4">
 
   <div class="d-flex justify-content-around align-items-center mb-3 border-bottom pb-3">
     <button class="btn btn-outline-primary btn-sm" (click)="goToPreviousMonth()">&lt; Prev</button>
@@ -146,6 +146,62 @@
           <small>No Data</small>
         </div>
       </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="container mt-4">
+  <!-- Top Bar -->
+  <div class="d-flex justify-content-around align-items-center mb-3 border-bottom pb-3">
+    <button class="btn btn-outline-primary btn-sm" (click)="goToPreviousMonth()">&lt; Prev</button>
+    <h4 class="text-primary mb-0">{{ currentMonthName }} {{ currentYear }}</h4>
+    <button class="btn btn-outline-primary btn-sm" (click)="goToNextMonth()">Next &gt;</button>
+  </div>
+
+  <!-- Week Days Header -->
+  <div class="row fw-bold  border-bottom pb-2 mb-2 px-auto">
+    <div class="col" *ngFor="let day of weekDays">{{ day }}</div>
+  </div>
+
+  <!-- Calendar Body -->
+  <div class="row flex-wrap">
+    <!-- Blank spaces before first day -->
+    <div
+      *ngFor="let blank of blanksBeforeFirstDay"
+      class="m-1 p-2"
+      style="width: 13%; min-height: 100px; visibility: hidden;"
+    ></div>
+
+    <!-- Actual Days -->
+    <div
+      *ngFor="let day of monthDays"
+      class="border m-1 p-2 text-center"
+      style="width: 13%; min-height: 100px;"
+      [ngClass]="{
+        'bg-success-subtle': getAttendanceForDate(day)?.status === 'P',
+        'bg-danger-subtle': getAttendanceForDate(day)?.status === 'A',
+        'bg-info-subtle': getAttendanceForDate(day)?.status === 'O',
+        'bg-warning-subtle': getAttendanceForDate(day)?.status === 'L',
+        'bg-light': !getAttendanceForDate(day)
+      }"
+    >
+      <!-- Day Number -->
+      <div class="d-flex justify-content-start">
+        <div class="fw-bold">{{ day.split('-')[2] }}</div>
+      </div>
+
+      <!-- Status & Shift -->
+      <div *ngIf="getAttendanceForDate(day)">
+        <strong>{{ getAttendanceForDate(day)?.status }}</strong><br />
+        <div class="d-flex justify-content-end">
+          <small>{{ getAttendanceForDate(day)?.shift }}</small>
+        </div>
+      </div>
+
+      <!-- No Data -->
+      <!-- <div *ngIf="!getAttendanceForDate(day)">
+        <small>No Data</small>
+      </div> -->
     </div>
   </div>
 </div>
