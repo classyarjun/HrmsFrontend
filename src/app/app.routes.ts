@@ -41,9 +41,6 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { TermsAndConditionComponent } from './pages/terms-and-condition/terms-and-condition.component';
 import { LeaveStatusComponent } from './pages/leave-status/leave-status.component';
 import { HrAddEmployeeComponent } from './pages/hr-add-employee/hr-add-employee.component';
-import { UserCalenderComponent } from './pages/user-calender/user-calender.component';
-import { HelpDeskComponent } from './pages/helpdesk/helpdesk.component';
-
 
 
 export const routes: Routes = [
@@ -77,6 +74,7 @@ export const routes: Routes = [
       { path: 'manager/document-centre', component: ManagerDocumentCenterComponent, canActivate: [AuthGuard] },
       { path: 'manager/all-leave-request', component: ManagerAllLeaveRequestComponent, canActivate: [AuthGuard] },
       { path: 'manager/create-holiday', component: HolidaysComponent, canActivate: [AuthGuard] },
+       { path: 'manager/pay-slip', component: ManagerPyslipComponent, canActivate: [AuthGuard] },
     ]
   },
   // 📌 Hr Layout Route
@@ -121,7 +119,6 @@ export const routes: Routes = [
       { path: 'user/my-worklife/feedback', component: UserFeedbackComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/apply-leaves', component: ApplyLeavesComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/leaves-status', component: LeaveStatusComponent, canActivate: [AuthGuard] },
-      { path: 'user/attendance/mark', component: UserCalenderComponent, canActivate: [AuthGuard] },
 
 
     ]

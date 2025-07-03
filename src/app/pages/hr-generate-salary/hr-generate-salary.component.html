@@ -31,18 +31,13 @@
               </small>
             </div>
 
-            <!-- Role -->
-            <div class="mb-3">
-              <label for="role" class="form-label">Select Role</label>
-              <select id="role" class="form-select shadow-sm" formControlName="role">
-                <option value="" disabled>Select Role</option>
-                <option value="HR">HR</option>
-                <option value="SENIOR-HR">SENIOR-HR</option>
-              </select>
-              <small class="text-danger" *ngIf="uploadForm.get('role')?.invalid && uploadForm.get('role')?.touched">
-                Role is required.
-              </small>
-            </div>
+           <!-- Role -->
+<div class="mb-3">
+  <label for="role" class="form-label">Role</label>
+  <input type="text" id="role" class="form-control shadow-sm" formControlName="role" readonly />
+</div>
+
+
 
             <!-- File Upload -->
             <div class="mb-4">
