@@ -80,6 +80,14 @@ export class UserHomeComponent implements OnInit, OnDestroy {
         this.signInTime = formattedTime; // ✅ Update and store time
         localStorage.setItem('signInTime', formattedTime);
         this.toastr.success('Sign-in successful!', 'Success');
+        // close bootrsp model
+        // const modalElement = document.getElementById('workLocationModal');
+        // if (modalElement) {
+        //   const modal = new (window as any).bootstrap.Modal(modalElement);
+        //   modal.hide();
+        // }
+
+
       },
       error: (err) => {
         let errorMessage = 'An error occurred';
