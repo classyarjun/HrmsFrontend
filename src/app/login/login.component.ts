@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +27,7 @@ export class LoginComponent {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    // private toastr: ToastrService
   ) {}
 
   togglePassword() {
@@ -51,7 +51,7 @@ export class LoginComponent {
         );
 
         // Toastr notification
-        this.toastr.success('Login successful!', 'Welcome');
+        // this.toastr.success('Login successful!', 'Welcome');
         this.message = ''; // clear previous messages
 
         const role = this.auth.getRoleFromToken();
@@ -65,7 +65,7 @@ export class LoginComponent {
         console.error('Login error:', err);
 
         // Show both toast & inline alert
-        this.toastr.error('Incorrect email or password', 'Login Failed');
+        // this.toastr.error('Incorrect email or password', 'Login Failed');
 
         this.message =
           err?.error?.message || 'Incorrect email or password. Please try again.';

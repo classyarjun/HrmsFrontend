@@ -1,6 +1,7 @@
+
 <div class="container mt-5">
   <h4 class="text-center">Leave Summary</h4>
- 
+
   <!-- ✅ Latest Leave Status -->
   <div *ngIf="latestLeaveStatus" class="alert mt-3"
        [ngClass]="{
@@ -8,42 +9,46 @@
          'alert-danger': latestLeaveStatus === 'REJECTED',
          'alert-warning': latestLeaveStatus === 'PENDING'
        }">
-    <strong>LeaveStatus:</strong> Your last leave ({{ latestLeaveDate }}) was <strong>{{ latestLeaveStatus }}</strong>.
+    <strong>Leave Status:</strong> Your last leave ({{ latestLeaveDate | date:'dd MMM yyyy' }}) was
+    <strong>{{ latestLeaveStatus }}</strong>.
   </div>
- 
+
   <!-- 🧾 Total Approved Leaves -->
-  <div class="alert alert-info text-center">
+  <div class="alert alert-info text-center mt-3">
     <strong>Total Approved Leaves:</strong> {{ totalApprovedLeaves }}
   </div>
- 
+
   <!-- 📊 Leave Breakdown -->
-  <div class="row text-center">
-    <div class="col-md-4" >
+  <div class="row text-center mt-4">
+    <!-- Sick Leave -->
+    <div class="col-md-4 mb-3">
       <div class="card">
         <div class="card-header bg-primary text-white">Sick Leave</div>
         <div class="card-body">
-          Used: {{ leaveBalance.sickLeaveUsed || 0 }} / 3<br>
-          Remaining: {{ 3 - (leaveBalance.sickLeaveUsed || 0) }}
+          Used: {{ sickLeaveUsed }} / 3 <br />
+          Remaining: {{ 3 - sickLeaveUsed }}
         </div>
       </div>
     </div>
- 
-    <div class="col-md-4" >
+
+    <!-- Casual Leave -->
+    <div class="col-md-4 mb-3">
       <div class="card">
         <div class="card-header bg-success text-white">Casual Leave</div>
         <div class="card-body">
-          Used: {{ leaveBalance.casualLeaveUsed || 0 }} / 3<br>
-          Remaining: {{ 3 - (leaveBalance.casualLeaveUsed || 0) }}
+          Used: {{ casualLeaveUsed }} / 3 <br />
+          Remaining: {{ 3 - casualLeaveUsed }}
         </div>
       </div>
     </div>
- 
-    <div class="col-md-4" >
+
+    <!-- Sample Leave -->
+    <div class="col-md-4 mb-3">
       <div class="card">
         <div class="card-header bg-warning text-dark">Sample Leave</div>
         <div class="card-body">
-          Used: {{ leaveBalance.sampleLeaveUsed || 0 }} / 3<br>
-          Remaining: {{ 3 - (leaveBalance.sampleLeaveUsed || 0) }}
+          Used: {{ sampleLeaveUsed }} / 3 <br />
+          Remaining: {{ 3 - sampleLeaveUsed }}
         </div>
       </div>
     </div>

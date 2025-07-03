@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LeavestatusService } from '../../../services/leavestatus.service';
@@ -11,28 +12,19 @@ import { LeavestatusService } from '../../../services/leavestatus.service';
 })
 export class LeaveStatusComponent implements OnInit {
   employeeId = JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || 0;
-  leaveBalance: any = {};
   totalApprovedLeaves = 0;
   latestLeaveStatus: string = '';
   latestLeaveDate: string = '';
 
+  // ✅ Individual counts
+  sickLeaveUsed = 0;
+  casualLeaveUsed = 0;
+  sampleLeaveUsed = 0;
+
   constructor(private LeavestatusService: LeavestatusService) {}
 
   ngOnInit(): void {
-    this.fetchLeaveBalance();
     this.fetchLatestLeaveStatus();
-  }
-
-  fetchLeaveBalance(): void {
-    this.LeavestatusService.getLeaveBalance(this.employeeId).subscribe({
-      next: (data: any) => {
-        this.leaveBalance = data;
-        this.calculateTotalApproved();
-      },
-      error: (err) => {
-        console.error('Error fetching leave balance:', err);
-      },
-    });
   }
 
   fetchLatestLeaveStatus(): void {
@@ -40,14 +32,16 @@ export class LeaveStatusComponent implements OnInit {
       next: (data: any[]) => {
         const userLeaves = data
           .filter((l) => l.employeeId === this.employeeId)
-          .sort(
-            (a, b) =>
-              new Date(b.fromDate).getTime() - new Date(a.fromDate).getTime()
-          );
+          .sort((a, b) => new Date(b.fromDate).getTime() - new Date(a.fromDate).getTime());
+
+        console.log('userLeaves:', userLeaves);
+
         if (userLeaves.length > 0) {
           this.latestLeaveStatus = userLeaves[0].status;
           this.latestLeaveDate = userLeaves[0].fromDate;
         }
+
+        this.calculateApprovedLeaves(userLeaves);
       },
       error: (err) => {
         console.error('Error fetching leaves:', err);
@@ -55,11 +49,13 @@ export class LeaveStatusComponent implements OnInit {
     });
   }
 
-  calculateTotalApproved(): void {
-    const sickUsed = this.leaveBalance.sickLeaveUsed || 0;
-    const casualUsed = this.leaveBalance.casualLeaveUsed || 0;
-    const sampleUsed = this.leaveBalance.sampleLeaveUsed || 0;
-    this.totalApprovedLeaves = sickUsed + casualUsed + sampleUsed;
-  }
+  calculateApprovedLeaves(leaves: any[]): void {
 
+    const approvedLeaves = leaves.filter((l) => l.status === 'APPROVED');
+    this.sickLeaveUsed = approvedLeaves.filter((l) => l.leaveType === 'SICK').length;
+    this.casualLeaveUsed = approvedLeaves.filter((l) => l.leaveType === 'CASUAL').length;
+    this.sampleLeaveUsed = approvedLeaves.filter((l) => l.leaveType === 'SAMPLE').length;
+    this.totalApprovedLeaves = this.sickLeaveUsed + this.casualLeaveUsed + this.sampleLeaveUsed;
+    
+  }
 }
