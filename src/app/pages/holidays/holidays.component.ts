@@ -28,10 +28,15 @@ export class HolidaysComponent implements OnInit {
     private holidayService: HolidayService
   ) {
     this.holidayForm = this.fb.group({
-      name: ['', Validators.required],
+      name: [
+        '',
+        [Validators.required, Validators.pattern('^[A-Za-z ]+$')] // ✅ Only letters & spaces
+      ],
       date: ['', Validators.required],
-      description: [''],
+      description: ['', [Validators.pattern('^[A-Za-z ]*$')]], 
+      
     });
+     [Validators.pattern('^[A-Za-z ]+$')] // *Optional field but if filled, only words allowed*
   }
 
   ngOnInit(): void {
@@ -78,32 +83,28 @@ export class HolidaysComponent implements OnInit {
       this.errorMessage = 'Please fill all required fields.';
     }
   }
-  resetForm() {
-    throw new Error('Method not implemented.');
+
+  resetForm(): void {
+    this.holidayForm.reset();
   }
 
   onDelete(id: number): void {
-  if (confirm('Are you sure you want to delete this holiday?')) {
-    this.oisDeleting = true;
+    if (confirm('Are you sure you want to delete this holiday?')) {
+      this.oisDeleting = true;
 
-    this.holidayService.deleteHoliday(id).subscribe({
-      next: () => {
-        // ✅ Remove the holiday from local array immediately
-        this.holidays = this.holidays.filter(holiday => holiday.id !== id);
-
-        // ✅ Show success message
-        this.toastr.success('Holiday deleted successfully!', 'Success');
-
-        this.oisDeleting = false;
-        this.errorMessage = '';
-      },
-      error: (error) => {
-        console.error('Delete error:', error);
-        this.toastr.error('Failed to delete holiday.', 'Error');
-        this.oisDeleting = false;
-      }
-    });
+      this.holidayService.deleteHoliday(id).subscribe({
+        next: () => {
+          this.holidays = this.holidays.filter(holiday => holiday.id !== id);
+          this.toastr.success('Holiday deleted successfully!', 'Success');
+          this.oisDeleting = false;
+          this.errorMessage = '';
+        },
+        error: (error) => {
+          console.error('Delete error:', error);
+          this.toastr.error('Failed to delete holiday.', 'Error');
+          this.oisDeleting = false;
+        }
+      });
+    }
   }
-}
-
 }

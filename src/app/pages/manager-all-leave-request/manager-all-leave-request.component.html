@@ -1,12 +1,13 @@
 <table class="table table-bordered table-striped">
   <thead class="table-dark text-center">
     <tr>
-      <th>Sr.no</th>
-      <th>Employee Name</th> <!-- ✅ Changed -->
+      <th>Sr. No</th>
+      <th>Employee Name</th>
       <th>From</th>
       <th>To</th>
       <th>Reason</th>
       <th>Type</th>
+      <th>Document</th>
       <th>Status</th>
       <th>Update Status</th>
     </tr>
@@ -14,11 +15,20 @@
   <tbody>
     <tr *ngFor="let leave of leaveRequests; let i = index">
       <td>{{ i + 1 }}</td>
-      <td>{{ leave.employeeName }}</td> <!-- ✅ Changed -->
-      <td>{{ leave.fromDate | date:'dd-MM-yyyy' }}</td>
-      <td>{{ leave.toDate | date:'dd-MM-yyyy' }}</td>
+      <td>{{ leave.employeeName }}</td>
+      <td>{{ leave.fromDate | date: 'dd-MM-yyyy' }}</td>
+      <td>{{ leave.toDate | date: 'dd-MM-yyyy' }}</td>
       <td>{{ leave.reason }}</td>
       <td>{{ leave.leaveType }}</td>
+      <td>
+        <a *ngIf="leave.documentUrl"
+           [href]="leave.documentUrl"
+           [attr.download]="leave.fileName"
+           target="_blank">
+          {{ leave.fileName }}
+        </a>
+        <span *ngIf="!leave.documentUrl">N/A</span>
+      </td>
       <td>
         <span class="badge"
           [ngClass]="{
