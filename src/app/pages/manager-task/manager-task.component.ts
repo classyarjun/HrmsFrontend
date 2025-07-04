@@ -1,3 +1,5 @@
+// task.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../../services/task.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -22,7 +24,7 @@ export class ManagerTaskComponent implements OnInit {
   tasks: any[] = [];
   editingTask: any = null;
   employees: any[] = [];
-  date: any;
+  today: string = new Date().toISOString().split('T')[0]; // 🟢 Today's date in yyyy-MM-dd format
 
   constructor(
     private fb: FormBuilder,
@@ -30,14 +32,16 @@ export class ManagerTaskComponent implements OnInit {
     private addEmployeeService: AddEmployeeService,
     private toastr: ToastrService
   ) {
-    this.taskForm = this.fb.group({
-      taskName: [''],
-      description: [''],
-      priority: [''],
-      status: [''],
-      dueDate: [''],
-      employeeId: [''],
-    });
+   this.taskForm = this.fb.group({
+  taskName: [''],
+  description: [''],
+  priority: [''],
+  status: ['PENDING'],
+  dueDate: [''],
+  taskAssignDate: [''], // 🟢 Add this line
+  employeeId: [''],
+});
+
   }
 
   ngOnInit(): void {
@@ -49,34 +53,33 @@ export class ManagerTaskComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-  onSubmit() {
-    const task = {
-      assignee: this.assignee,
-      taskName: this.taskForm.value.taskName,
-      description: this.taskForm.value.description,
-      priority: this.taskForm.value.priority,
-      status: this.taskForm.value.status,
-      dueDate: this.taskForm.value.dueDate,
-    };
+ onSubmit() {
+  const task = {
+    assignee: this.assignee,
+    taskName: this.taskForm.value.taskName,
+    description: this.taskForm.value.description,
+    priority: this.taskForm.value.priority,
+     status: this.taskForm.value.status,   // ✅ This picks 'PENDING' or whatever selected
+    dueDate: this.taskForm.value.dueDate,
+    taskAssignDate: this.taskForm.value.taskAssignDate, // ✅ Include assign date
+  };
 
-    const employeeId = this.taskForm.value.employeeId;
+  const employeeId = this.taskForm.value.employeeId;
 
-    this.taskService.createTask(task, this.selectedFile!, employeeId).subscribe({
-      next: (res: any) => {
-        this.message = res;
-        // alert('✅ Task created successfully');
-        this.toastr.success('Task created successfully', 'Success');
-        this.taskForm.reset();
-        this.loadTasks();
-      },
-      error: (err: any) => {
-        console.error('❌ Error creating task:', err);
-        this.toastr.error('Error creating task', 'Error');
-        this.message = err.error?.message || 'Server error';
-        alert('❌ Failed to create task: ' + this.message);
-      },
-    });
-  }
+  this.taskService.createTask(task, this.selectedFile!, employeeId).subscribe({
+    next: (res: any) => {
+      this.toastr.success('Task created successfully', 'Success');
+      this.taskForm.reset();
+      this.loadTasks();
+    },
+    error: (err: any) => {
+      console.error('Error creating task:', err);
+      this.toastr.error('Error creating task', 'Error');
+      alert('Failed to create task: ' + (err.error?.message || 'Server error'));
+    },
+  });
+}
+
 
   loadEmployees() {
     this.addEmployeeService.getEmployees().subscribe({
@@ -87,7 +90,7 @@ export class ManagerTaskComponent implements OnInit {
         }));
       },
       error: (err: any) => {
-        console.error('❌ Error fetching employees:', err);
+        console.error('Error fetching employees:', err);
       },
     });
   }
@@ -95,8 +98,6 @@ export class ManagerTaskComponent implements OnInit {
   loadTasks() {
     this.taskService.getAllTasks().subscribe((data: any) => {
       this.tasks = data;
-      console.log("task data",data);
-
     });
   }
 

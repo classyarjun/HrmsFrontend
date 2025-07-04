@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../../services/task.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-task',
@@ -14,9 +15,12 @@ import { TaskService } from '../../../services/task.service';
 export class TaskComponent implements OnInit {
   tasks: any[] = [];
   employeeId: number = 0;
-  globalStatus: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' = 'PENDING';
+  loading: boolean = false;
 
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -25,18 +29,29 @@ export class TaskComponent implements OnInit {
   }
 
   loadTasks(): void {
+    this.loading = true;
     this.taskService.getTasksByEmployeeId(this.employeeId).subscribe({
-      next: (res: any[]) => this.tasks = res,
-      error: (err) => console.error('Error loading tasks:', err),
+      next: (res: any[]) => {
+        this.tasks = res;
+        this.loading = false;
+        
+      },
+      error: (err) => {
+        this.loading = false;
+        this.toastr.error('Failed to load tasks');
+        console.error('Error loading tasks:', err);
+      }
     });
   }
 
   updateStatus(taskId: number, newStatus: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED'): void {
     this.taskService.updateTaskStatus(taskId, newStatus).subscribe({
       next: (res) => {
-        console.log('✅ Task status updated:', res);
+        this.toastr.success('Task status updated successfully');
+        this.loadTasks(); // 🔄 Refresh task list
       },
       error: (err) => {
+        this.toastr.error('Failed to update task status');
         console.error('❌ Failed to update task status:', err);
       }
     });
