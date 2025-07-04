@@ -1,56 +1,45 @@
-
-
-
- <div class="container mt-4">
-  <div class="d-flex justify-content-between">
-    <h3 class="mb-3">Leave Management Panel</h3>
-
-  </div>
-
-
-    <table class="table table-bordered table-striped">
-      <thead class="table-dark text-center">
-        <tr>
-          <th>Sr.no</th>
-          <th>Employee ID</th>
-          <th>From</th>
-          <th>To</th>
-          <th>Reason</th>
-          <th>Type</th>
-          <th>Status</th>
-          <th>Update Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let leave of leaveRequests; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ leave.employeeId }}</td>
-          <td>{{ leave.fromDate }}</td>
-          <td>{{ leave.toDate }}</td>
-          <td>{{ leave.reason }}</td>
-          <td>{{ leave.leaveType }}</td>
-          <td>
-            <span class="badge"
-              [ngClass]="{
-                'bg-success': leave.status === 'APPROVED',
-                'bg-danger': leave.status === 'REJECTED',
-                'bg-warning text-dark': !leave.status || leave.status === 'PENDING'
-              }">
-              {{ leave.status || 'PENDING' }}
-            </span>
-          </td>
-          <td>
-            <select #statusSelect
-          [value]="leave.status || 'PENDING'"
-          (change)="updateLeaveStatus(leave.leaveId!, statusSelect.value)">
-    <option value="" disabled>Update status</option>
-    <option *ngFor="let status of leaveStatuses" [value]="status">
-      {{ status }}
-    </option>
-  </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
+<table class="table table-bordered table-striped">
+  <thead class="table-dark text-center">
+    <tr>
+      <th>Sr.no</th>
+      <th>Employee Name</th> <!-- ✅ Changed -->
+      <th>From</th>
+      <th>To</th>
+      <th>Reason</th>
+      <th>Type</th>
+      <th>Status</th>
+      <th>Update Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let leave of leaveRequests; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ leave.employeeName }}</td> <!-- ✅ Changed -->
+      <td>{{ leave.fromDate | date:'dd-MM-yyyy' }}</td>
+      <td>{{ leave.toDate | date:'dd-MM-yyyy' }}</td>
+      <td>{{ leave.reason }}</td>
+      <td>{{ leave.leaveType }}</td>
+      <td>
+        <span class="badge"
+          [ngClass]="{
+            'bg-success': leave.status === 'APPROVED',
+            'bg-danger': leave.status === 'REJECTED',
+            'bg-warning text-dark': !leave.status || leave.status === 'PENDING'
+          }">
+          {{ leave.status || 'PENDING' }}
+        </span>
+      </td>
+      <td>
+        <select #statusSelect
+                class="form-select"
+                [value]="leave.status || 'PENDING'"
+                (change)="updateLeaveStatus(leave.leaveId!, statusSelect.value)">
+          <option value="" disabled>Update status</option>
+          <option *ngFor="let status of leaveStatuses" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+      </td>
+    </tr>
+  </tbody>
+</table>

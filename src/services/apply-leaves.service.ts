@@ -6,9 +6,10 @@ import { Observable } from 'rxjs';
 export type LeaveType = 'SICK' | 'CASUAL' | 'PAID' | 'UNPAID';
 export type LeaveStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
  
-export interface LeaveRequest {
+interface LeaveRequest {
   leaveId?: number;
   employeeId: number;
+  employeeName?: string; // ✅ Add this
   fromDate: string;
   toDate: string;
   reason: string;
@@ -18,6 +19,7 @@ export interface LeaveRequest {
   leaveType: LeaveType;
   status?: LeaveStatus;
 }
+
  
 @Injectable({
   providedIn: 'root'

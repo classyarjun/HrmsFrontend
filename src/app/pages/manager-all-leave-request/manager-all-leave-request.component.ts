@@ -10,6 +10,7 @@ type LeaveStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 interface LeaveRequest {
   leaveId?: number;
   employeeId: number;
+  employeeName?: string; // ✅ Add this
   fromDate: string;
   toDate: string;
   reason: string;
@@ -19,6 +20,7 @@ interface LeaveRequest {
   leaveType: LeaveType;
   status?: LeaveStatus;
 }
+
 
 @Component({
   selector: 'app-all-leave-request',
@@ -45,10 +47,11 @@ export class ManagerAllLeaveRequestComponent {
   }
 
   updateLeaveStatus(leaveId: number, newStatus: string) {
-  this.applyLeavesService.updateLeaveStatus(leaveId, newStatus as LeaveStatus).subscribe({
-    next: () => this.fetchLeaves(),
-    error: (err: any) => console.error('Failed to update leave status', err)
-  });
+    this.applyLeavesService.updateLeaveStatus(leaveId, newStatus as LeaveStatus).subscribe({
+      next: () => this.fetchLeaves(),
+      error: (err: any) => console.error('Failed to update leave status', err)
+    });
+  }
 }
 
-}
+
