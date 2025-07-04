@@ -45,9 +45,15 @@ export class AddEmployeeComponent implements OnInit {
       lastName: ['', [Validators.required, this.capitalizeValidator]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.pattern(/^\d{10}$/)]],
-      department: ['', Validators.required],
-      jobTitle: ['', Validators.required],
-      role: ['', Validators.required],
+       department: [
+      '',
+      [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)],
+    ],
+    jobTitle: [
+      '',
+      [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)],
+    ],
+    role: ['', Validators.required],
       status: ['', Validators.required],
       joiningDate: ['', Validators.required],
       exitDate: [''],
@@ -77,6 +83,13 @@ export class AddEmployeeComponent implements OnInit {
     this.getEmployees();
   }
 
+  allowLettersOnly(event: KeyboardEvent) {
+  const inputChar = event.key;
+  const regex = /^[A-Za-z\s]$/;
+  if (!regex.test(inputChar)) {
+    event.preventDefault();
+  }
+}
   // Custom validator for capitalizing first letter
   capitalizeValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
