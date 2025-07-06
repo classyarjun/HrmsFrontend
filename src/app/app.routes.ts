@@ -41,6 +41,8 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { TermsAndConditionComponent } from './pages/terms-and-condition/terms-and-condition.component';
 import { LeaveStatusComponent } from './pages/leave-status/leave-status.component';
 import { HrAddEmployeeComponent } from './pages/hr-add-employee/hr-add-employee.component';
+import { HelpDeskComponent } from './pages/helpdesk/helpdesk.component';
+import { ManagerPyslipComponent } from './pages/manager-pyslip/manager-pyslip.component';
 
 
 export const routes: Routes = [
