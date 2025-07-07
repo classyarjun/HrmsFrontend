@@ -327,15 +327,25 @@
               [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" />
           </div>
 
-          <div class="mb-3 position-relative">
-            <label class="form-label">Password</label>
-            <input [type]="showPassword ? 'text' : 'password'" placeholder="Example@123" formControlName="password"
-              class="form-control pe-5"
+         <div class="mb-3 position-relative">
+  <label class="form-label">Password</label>
+  <input [type]="showPassword ? 'text' : 'password'" placeholder="Example@123" 
+         formControlName="password"
+         class="form-control pe-5"
+         [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" />
 
-              [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" />
-            <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"
-              style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
-          </div>
+  <!-- Toggle eye icon -->
+  <i class="fa" 
+     [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" 
+     (click)="togglePassword()"
+     style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #6c757d;"></i>
+
+  <!-- Validation message -->
+  <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="invalid-feedback d-block">
+    <div *ngIf="registerForm.get('password')?.errors?.['required']">Password is required.</div>
+    <div *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters.First letter must be capital</div>
+  </div>
+</div>
 
           <div class="mb-3">
             <label class="form-label">Role</label>
