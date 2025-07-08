@@ -59,10 +59,23 @@ export class AddEmployeeComponent implements OnInit {
       exitDate: [''],
     });
 
-    this.editForm = this.fb.group({
-      firstName: ['', [Validators.required, this.capitalizeValidator]],
-      lastName: ['', [Validators.required, this.capitalizeValidator]],
-      email: ['', [Validators.required, Validators.email]],
+  this.editForm = this.fb.group({
+  firstName: [
+    '',
+    [
+      Validators.required,
+      this.capitalizeValidator,
+      Validators.pattern(/^[A-Za-z\s]+$/), // ⛔️ disallow numbers
+    ],
+  ],
+  lastName: [
+    '',
+    [
+      Validators.required,
+      this.capitalizeValidator,
+      Validators.pattern(/^[A-Za-z\s]+$/), // ⛔️ disallow numbers
+    ],
+  ], email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.pattern(/^\d{10}$/)]],
       department: ['', Validators.required],
       jobTitle: ['', Validators.required],
