@@ -43,6 +43,7 @@ import { LeaveStatusComponent } from './pages/leave-status/leave-status.componen
 import { HrAddEmployeeComponent } from './pages/hr-add-employee/hr-add-employee.component';
 import { ManagerPyslipComponent } from './pages/manager-pyslip/manager-pyslip.component';
 import { HelpDeskComponent } from './pages/helpdesk/helpdesk.component';
+import { UserCalenderComponent } from './pages/user-calender/user-calender.component';
 
 
 export const routes: Routes = [
@@ -121,6 +122,7 @@ export const routes: Routes = [
       { path: 'user/my-worklife/feedback', component: UserFeedbackComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/apply-leaves', component: ApplyLeavesComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/leaves-status', component: LeaveStatusComponent, canActivate: [AuthGuard] },
+      { path: 'user/attendance/mark', component: UserCalenderComponent, canActivate: [AuthGuard] },
 
     ]
   },

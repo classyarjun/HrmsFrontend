@@ -29,7 +29,8 @@
         <!-- Applying To -->
         <div class="col-md-6">
           <label class="form-label fw-semibold">Manager Email</label>
-          <input type="email" class="form-control" formControlName="applyingTo" placeholder="e.g. manager@company.com" />
+          <input type="email" class="form-control" formControlName="applyingTo"
+            placeholder="e.g. manager@company.com" />
           <div class="text-danger" *ngIf="leaveForm.get('applyingTo')?.touched && leaveForm.get('applyingTo')?.invalid">
             <div *ngIf="leaveForm.get('applyingTo')?.errors?.['required']">Manager Email is required.</div>
             <div *ngIf="leaveForm.get('applyingTo')?.errors?.['email']">Invalid email format.</div>
@@ -37,29 +38,37 @@
         </div>
 
         <!-- CC To -->
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
           <label class="form-label fw-semibold">CC To</label>
           <input type="text" class="form-control" formControlName="ccTo" placeholder="Comma-separated emails" />
+        </div> -->
+
+
+        <!-- CC To -->
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">CC To</label>
+          <ng-select [items]="emailList" bindLabel="email" [multiple]="true" placeholder="Select emails"
+            formControlName="ccTo">
+          </ng-select>
         </div>
+
+
 
         <!-- Contact Details -->
         <div class="col-md-6">
-  <label class="form-label fw-semibold">Contact Details</label>
-  <input
-    type="text"
-    class="form-control"
-    formControlName="contactDetails"
-    placeholder="10-digit phone number"
-  />
-  <div class="text-danger" *ngIf="leaveForm.get('contactDetails')?.touched && leaveForm.get('contactDetails')?.invalid">
-    <div *ngIf="leaveForm.get('contactDetails')?.errors?.['required']">
-      Contact Details are required.
-    </div>
-    <div *ngIf="leaveForm.get('contactDetails')?.errors?.['pattern']">
-      Contact number must be exactly 10 digits.
-    </div>
-  </div>
-</div>
+          <label class="form-label fw-semibold">Contact Details</label>
+          <input type="text" class="form-control" formControlName="contactDetails"
+            placeholder="10-digit phone number" />
+          <div class="text-danger"
+            *ngIf="leaveForm.get('contactDetails')?.touched && leaveForm.get('contactDetails')?.invalid">
+            <div *ngIf="leaveForm.get('contactDetails')?.errors?.['required']">
+              Contact Details are required.
+            </div>
+            <div *ngIf="leaveForm.get('contactDetails')?.errors?.['pattern']">
+              Contact number must be exactly 10 digits.
+            </div>
+          </div>
+        </div>
         <!-- Leave Type -->
         <div class="col-md-6">
           <label class="form-label fw-semibold">Leave Type</label>
@@ -75,7 +84,8 @@
         <!-- Reason -->
         <div class="col-12">
           <label class="form-label fw-semibold">Reason</label>
-          <textarea class="form-control" formControlName="reason" rows="3" placeholder="Mention reason for leave"></textarea>
+          <textarea class="form-control" formControlName="reason" rows="3"
+            placeholder="Mention reason for leave"></textarea>
           <div class="text-danger" *ngIf="leaveForm.get('reason')?.touched && leaveForm.get('reason')?.invalid">
             Reason is required.
           </div>

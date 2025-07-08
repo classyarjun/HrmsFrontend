@@ -63,108 +63,49 @@ export class HelpDeskComponent implements OnInit {
     }
   }
 
-  // onSubmit(): void {
-  //   if (this.ticketForm.invalid) {
-  //     this.ticketForm.markAllAsTouched();
-  //     return;
-  //   }
-
-  //   const formValue = this.ticketForm.value;
-
-  //   // 🎯 Convert the form fields (except file) into a single JSON string
-  //   const helpDeskPayload = {
-  //     category: formValue.category,
-  //     subject: formValue.subject,
-  //     description: formValue.description,
-  //     ccTo: formValue.ccTo.split(',').map((email: string) => email.trim()), // ✅ Fix here
-  //     priority: formValue.priority,
-  //   };
-
-  //   const formData = new FormData();
-  //   formData.append('helpDesk', JSON.stringify(helpDeskPayload));
-
-  //   // Append file if selected
-  //   if (formValue.file) {
-  //     formData.append('file', formValue.file);
-  //   }
-
-  //   this.isLoading = true;
-  //   this.fileUploadProgress = 0;
-
-  //   this.helpDeskService.createTicket(formData).subscribe({
-  //     next: () => {
-  //       this.ticketForm.reset({
-  //         priority: 'MEDIUM',
-  //       });
-  //       this.loadTickets();
-  //       this.fileUploadProgress = null;
-      
-  //     },
-
-  //     error: () => {
-
-  //       this.isLoading = false;
-  //       this.fileUploadProgress = null;
-  //     },
-  //   });
-  // }
-
-
-
-
-
   onSubmit(): void {
-  if (this.ticketForm.invalid) {
-    this.ticketForm.markAllAsTouched();
-    alert('कृपया सभी ज़रूरी फ़ील्ड भरें।');
-    return;
+    if (this.ticketForm.invalid) {
+      this.ticketForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.ticketForm.value;
+
+    // 🎯 Convert the form fields (except file) into a single JSON string
+    const helpDeskPayload = {
+      category: formValue.category,
+      subject: formValue.subject,
+      description: formValue.description,
+      ccTo: formValue.ccTo.split(',').map((email: string) => email.trim()), // ✅ Fix here
+      priority: formValue.priority,
+    };
+
+    const formData = new FormData();
+    formData.append('helpDesk', JSON.stringify(helpDeskPayload));
+
+    // Append file if selected
+    if (formValue.file) {
+      formData.append('file', formValue.file);
+    }
+
+    this.isLoading = true;
+    this.fileUploadProgress = 0;
+
+    this.helpDeskService.createTicket(formData).subscribe({
+      next: () => {
+        this.ticketForm.reset({
+          priority: 'MEDIUM',
+        });
+        this.loadTickets();
+        this.fileUploadProgress = null;
+        
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.fileUploadProgress = null;
+      },
+    });
   }
-
-  const formValue = this.ticketForm.value;
-
-  // ✅ Validate file type or size if needed here (optional)
-
-  const helpDeskPayload = {
-    category: formValue.category,
-    subject: formValue.subject,
-    description: formValue.description,
-    ccTo: formValue.ccTo
-      ? formValue.ccTo.split(',').map((email: string) => email.trim())
-      : [],
-    priority: formValue.priority,
-  };
-
-  const formData = new FormData();
-  formData.append('helpDesk', JSON.stringify(helpDeskPayload));
-
-  // ✅ Optional: Check if file is a valid File object
-  if (formValue.file instanceof File) {
-    formData.append('file', formValue.file);
-  }
-
-  this.isLoading = true;
-  this.fileUploadProgress = 0;
-
-  this.helpDeskService.createTicket(formData).subscribe({
-    next: () => {
-      alert('Ticket सफलतापूर्वक सबमिट हो गया है!');
-      this.ticketForm.reset({
-        priority: 'MEDIUM',
-      });
-      this.loadTickets();
-      this.isLoading = false;
-      this.fileUploadProgress = null;
-    },
-
-    error: (err) => {
-      alert('Ticket सफलतापूर्वक सबमिट हो गया है!');
-    this.loadTickets();
-      this.isLoading = false;
-      this.fileUploadProgress = null;
-    },
-  });
-}
-
 
   deleteTicket(id: number): void {
     if (confirm('Are you sure you want to delete this ticket?')) {

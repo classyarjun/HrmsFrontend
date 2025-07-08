@@ -4,11 +4,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ApplyLeavesService } from '../../../services/apply-leaves.service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-apply-leaves',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, ToastrModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, ToastrModule,NgSelectModule],
   templateUrl: './apply-leaves.component.html',
   styleUrls: ['./apply-leaves.component.css']
 })
@@ -17,7 +18,7 @@ export class ApplyLeavesComponent {
   selectedFile: File | null = null;
   leaveTypes = ['SICK', 'CASUAL', 'PAID', 'UNPAID', 'MATERNITY'];
   today = new Date().toISOString().split('T')[0]; //
-
+  emailList: any[] = [];
   employeeId = JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '';
 
   constructor(
@@ -36,6 +37,9 @@ export class ApplyLeavesComponent {
     }, { validators: this.dateRangeValidator });
   }
 
+  ngOnInit(): void {
+    this.fetchEmailList();
+  }
   // ✅ Prevent past dates
   noPastDateValidator(control: AbstractControl): ValidationErrors | null {
     const inputDate = new Date(control.value);
@@ -58,56 +62,85 @@ export class ApplyLeavesComponent {
     this.selectedFile = event.target.files[0];
   }
 
-  submitForm(): void {
-    if (this.leaveForm.invalid) {
-      this.toastr.error('Please fill all required fields correctly.', 'Invalid Form');
-      return;
+ submitForm(): void {
+  if (this.leaveForm.invalid) {
+    this.toastr.error('Please fill all required fields correctly.', 'Invalid Form');
+    return;
+  }
+
+  const formVal = this.leaveForm.value;
+  let userCCs: string[] = [];
+
+  // ✅ Fix here
+  if (formVal.ccTo && Array.isArray(formVal.ccTo)) {
+    userCCs = formVal.ccTo.map((e: any) => e.email).filter(Boolean);
+  }
+
+  if (userCCs.length > 2) {
+    this.toastr.error('You can enter only up to 2 CC emails.', 'Too Many CCs');
+    return;
+  }
+
+  const manualCCs = ['hr@gmail.com', 'manager@gmail.com'];
+  const remainingSlots = 2 - userCCs.length;
+  const manualToAdd = manualCCs.slice(0, remainingSlots);
+  const finalCC = [...userCCs, ...manualToAdd];
+
+  const jsonPart = JSON.stringify({
+    employeeId: this.employeeId,
+    fromDate: formVal.fromDate,
+    toDate: formVal.toDate,
+    reason: formVal.reason,
+    applyingTo: formVal.applyingTo,
+    ccTo: finalCC.join(','), // backend expects comma-separated
+    contactDetails: formVal.contactDetails,
+    leaveType: formVal.leaveType
+  });
+
+  const formData = new FormData();
+  formData.append('request', new Blob([jsonPart], { type: 'application/json' }));
+
+  if (this.selectedFile) {
+    formData.append('file', this.selectedFile);
+  }
+
+  this.applyLeavesService.applyLeave(formData).subscribe({
+    next: () => {
+      this.toastr.success('Leave applied successfully.', 'Success ✅');
+      this.leaveForm.reset();
+      this.selectedFile = null;
+    },
+    error: (err) => {
+      console.error('Error applying leave:', err);
+      this.toastr.error(err?.error || 'Failed to apply leave.', 'Error ❌');
     }
+  });
+}
 
-    const formVal = this.leaveForm.value;
-    let userCCs: string[] = [];
-    if (formVal.ccTo) {
-      userCCs = formVal.ccTo.split(',').map((s: string) => s.trim()).filter(Boolean);
-    }
 
-    if (userCCs.length > 2) {
-      this.toastr.error('You can enter only up to 2 CC emails.', 'Too Many CCs');
-      return;
-    }
 
-    const manualCCs = ['hr@gmail.com', 'manager@gmail.com'];
-    const remainingSlots = 2 - userCCs.length;
-    const manualToAdd = manualCCs.slice(0, remainingSlots);
-    const finalCC = [...userCCs, ...manualToAdd];
-
-    const jsonPart = JSON.stringify({
-      employeeId: this.employeeId,
-      fromDate: formVal.fromDate,
-      toDate: formVal.toDate,
-      reason: formVal.reason,
-      applyingTo: formVal.applyingTo,
-      ccTo: finalCC.join(','),
-      contactDetails: formVal.contactDetails,
-      leaveType: formVal.leaveType
-    });
-
-    const formData = new FormData();
-    formData.append('request', new Blob([jsonPart], { type: 'application/json' }));
-
-    if (this.selectedFile) {
-      formData.append('file', this.selectedFile);
-    }
-
-    this.applyLeavesService.applyLeave(formData).subscribe({
-      next: () => {
-        this.toastr.success('Leave applied successfully.', 'Success ✅');
-        this.leaveForm.reset();
-        this.selectedFile = null;
+ fetchEmailList(): void {
+    this.applyLeavesService.getCcToEmployees().subscribe({
+      next: (data: any[]) => {
+        this.emailList = data;
+        console.log('Email list loaded:', this.emailList );
       },
       error: (err) => {
-        console.error('Error applying leave:', err);
-        this.toastr.error(err?.error || 'Failed to apply leave.', 'Error ❌');
+        console.error('Failed to load email list', err);
       }
     });
   }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
