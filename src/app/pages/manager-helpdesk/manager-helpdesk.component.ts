@@ -1,5 +1,4 @@
-import { Component, signal } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,27 +8,30 @@ import {
 import { HelpdeskService } from '../../../services/helpdesk.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { ApplyLeavesService } from './../../../services/apply-leaves.service';
 
 
 @Component({
   selector: 'app-manager-helpdesk',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
-  
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, ],
+
   templateUrl: './manager-helpdesk.component.html',
   styleUrl: './manager-helpdesk.component.css'
 })
 export class ManagerHelpdeskComponent {
-  
+
   ticketForm: FormGroup;
   tickets: any[] = [];
   isLoading = false;
   fileUploadProgress: number | null = null;
   priorities = ['LOW', 'MEDIUM', 'HIGH'];
+  emailList: any[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private helpDeskService: HelpdeskService
+    private helpDeskService: HelpdeskService,
+    private applyLeavesService: ApplyLeavesService // Assuming this service has the method to fetch email list
   ) {
     this.ticketForm = this.fb.group({
       category: ['', [Validators.required, Validators.maxLength(50)]],
@@ -90,6 +92,22 @@ export class ManagerHelpdeskComponent {
         return 'bg-secondary';
     }
   }
+
+
+
+ fetchEmailList(): void {
+    this.applyLeavesService.getCcToEmployees().subscribe({
+      next: (data: any[]) => {
+        this.emailList = data;
+        console.log('Email list loadedfrom help desk :', this.emailList );
+      },
+      error: (err) => {
+        console.error('Failed to load email list', err);
+      }
+    });
+  }
+
+
 }
 
 

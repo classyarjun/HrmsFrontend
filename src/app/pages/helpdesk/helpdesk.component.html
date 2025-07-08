@@ -2,41 +2,11 @@
 <div class="d-flex justify-content-between align-items-center">
 
   <h2 class="mb-4">Help Desk Tickets</h2>
-  
-  <!-- <button
-  type="button"
-  class="btn btn-primary"
-  data-bs-toggle="modal"
-  data-bs-target="#myModal"
-  >
-New Request
-</button> -->
+
 </div>
 
-<!-- <div class="tab-content-box">
-  <img
-    src="https://cdn-icons-png.flaticon.com/512/4086/4086679.png"
-    alt="No Items"
-  />
-  <p>No helpdesk items</p>
-</div>
-
-<div class="footer">
-  v6.3.0-prod-1043 | <a href="#">Privacy Policy</a> |
-  <a href="#">Terms Of Service</a>
-</div> -->
-
-
-<!-- <div
-  class="modal fade"
-  id="myModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-lg"> -->
     <div class="container">
-     
+
       <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="card mb-4">
           <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -142,17 +112,15 @@ New Request
               </div>
 
               <!-- CC To Field -->
-              <div class="col-md-6">
-                <label for="ccTo" class="form-label"
-                  >CC To (comma separated emails)</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="ccTo"
-                  formControlName="ccTo"
-                />
-              </div>
+
+          <div class="col-md-6">
+          <label class="form-label fw-semibold">CC To</label>
+          <ng-select [items]="emailList"
+          bindLabel="email" [multiple]="true"
+           placeholder="Select emails"
+            formControlName="ccTo">
+          </ng-select>
+        </div>
 
               <!-- Priority Field -->
               <div class="col-md-6">
@@ -232,5 +200,4 @@ New Request
         </div>
       </form>
     </div>
-  <!-- </div>
-</div> -->
+
