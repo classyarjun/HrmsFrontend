@@ -8,14 +8,11 @@ import {
 import { HelpdeskService } from '../../../services/helpdesk.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ApplyLeavesService } from '../../../services/apply-leaves.service';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-helpdesk',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule,NgSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './helpdesk.component.html',
   styleUrl: './helpdesk.component.css',
 })
@@ -25,13 +22,10 @@ export class HelpDeskComponent implements OnInit {
   isLoading = false;
   fileUploadProgress: number | null = null;
   priorities = ['LOW', 'MEDIUM', 'HIGH'];
-  emailList: any[] = []; // Array to hold email list
 
   constructor(
     private fb: FormBuilder,
-    private helpDeskService: HelpdeskService,
-    private toaster: ToastrService,
-    private applyLeavesService: ApplyLeavesService // Assuming this service has the method to fetch email list
+    private helpDeskService: HelpdeskService
   ) {
     this.ticketForm = this.fb.group({
       category: ['', [Validators.required, Validators.maxLength(50)]],
@@ -45,7 +39,6 @@ export class HelpDeskComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTickets();
-    this.fetchEmailList(); // Load email list on component initialization
   }
 
   loadTickets(): void {
@@ -61,18 +54,6 @@ export class HelpDeskComponent implements OnInit {
     });
   }
 
- fetchEmailList(): void {
-    this.applyLeavesService.getCcToEmployees().subscribe({
-      next: (data: any[]) => {
-        this.emailList = data;
-      },
-      error: (err) => {
-        console.error('Failed to load email list', err);
-      }
-    });
-  }
-
-
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
@@ -83,53 +64,48 @@ export class HelpDeskComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.ticketForm.invalid) {
+      this.ticketForm.markAllAsTouched();
+      return;
+    }
 
-  if (this.ticketForm.invalid) {
-    this.ticketForm.markAllAsTouched();
-    return;
+    const formValue = this.ticketForm.value;
+
+    // 🎯 Convert the form fields (except file) into a single JSON string
+    const helpDeskPayload = {
+      category: formValue.category,
+      subject: formValue.subject,
+      description: formValue.description,
+      ccTo: formValue.ccTo.split(',').map((email: string) => email.trim()), // ✅ Fix here
+      priority: formValue.priority,
+    };
+
+    const formData = new FormData();
+    formData.append('helpDesk', JSON.stringify(helpDeskPayload));
+
+    // Append file if selected
+    if (formValue.file) {
+      formData.append('file', formValue.file);
+    }
+
+    this.isLoading = true;
+    this.fileUploadProgress = 0;
+
+    this.helpDeskService.createTicket(formData).subscribe({
+      next: () => {
+        this.ticketForm.reset({
+          priority: 'MEDIUM',
+        });
+        this.loadTickets();
+        this.fileUploadProgress = null;
+        
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.fileUploadProgress = null;
+      },
+    });
   }
-
-  const formValue = this.ticketForm.value;
-
-  const helpDeskPayload = {
-    category: formValue.category,
-    subject: formValue.subject,
-    description: formValue.description,
-    ccTo: Array.isArray(formValue.ccTo)
-      ? formValue.ccTo.map((e: any) => e.email).filter(Boolean)
-      : [],
-    priority: formValue.priority,
-  };
-
-  const formData = new FormData();
-  formData.append('helpDesk', JSON.stringify(helpDeskPayload));
-
-  if (formValue.file) {
-    formData.append('file', formValue.file);
-  }
-
-  this.isLoading = true;
-  this.fileUploadProgress = 0;
-
-  this.helpDeskService.createTicket(formData).subscribe({
-    next: () => {
-      this.ticketForm.reset({
-        priority: 'MEDIUM',
-        ccTo: [],
-      });
-      this.loadTickets();
-      this.fileUploadProgress = null;
-      this.toaster.success('Ticket submitted successfully!', 'Success ✅');
-    },
-    error: (err) => {
-      console.error('❌ Error submitting ticket:', err);
-      this.isLoading = false;
-      this.fileUploadProgress = null;
-      this.toaster.error(err?.error || 'Failed to submit ticket.', 'Error ❌');
-    },
-  });
-}
-
 
   deleteTicket(id: number): void {
     if (confirm('Are you sure you want to delete this ticket?')) {
