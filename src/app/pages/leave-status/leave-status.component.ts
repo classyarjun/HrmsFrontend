@@ -20,6 +20,9 @@ export class LeaveStatusComponent implements OnInit {
   sickLeaveUsed = 0;
   casualLeaveUsed = 0;
   sampleLeaveUsed = 0;
+  paidleaveUsed = 0;
+  unpaidLeaveUsed = 0;
+  maternityLeaveUsed = 0;
 
   constructor(private LeavestatusService: LeavestatusService) {}
 
@@ -55,7 +58,11 @@ export class LeaveStatusComponent implements OnInit {
     this.sickLeaveUsed = approvedLeaves.filter((l) => l.leaveType === 'SICK').length;
     this.casualLeaveUsed = approvedLeaves.filter((l) => l.leaveType === 'CASUAL').length;
     this.sampleLeaveUsed = approvedLeaves.filter((l) => l.leaveType === 'SAMPLE').length;
+    this.paidleaveUsed = approvedLeaves.filter((l) => l.leaveType === 'PAID').length;
+    this.unpaidLeaveUsed = approvedLeaves.filter((l) => l.leaveType === 'UNPAID').length;
+    this.maternityLeaveUsed = approvedLeaves.filter((l) => l.leaveType === 'MATERNITY').length;
+
     this.totalApprovedLeaves = this.sickLeaveUsed + this.casualLeaveUsed + this.sampleLeaveUsed;
-    
+
   }
 }

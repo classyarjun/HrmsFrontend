@@ -123,7 +123,8 @@ export const routes: Routes = [
       { path: 'user/my-worklife/feedback', component: UserFeedbackComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/apply-leaves', component: ApplyLeavesComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/leaves-status', component: LeaveStatusComponent, canActivate: [AuthGuard] },
-       { path: 'uer/attendece/attendence-info', component: UserCalenderComponent, canActivate: [AuthGuard] },
+
+       { path: 'user/attendece/attendence-info', component: UserCalenderComponent, canActivate: [AuthGuard] },
 
 
     ]

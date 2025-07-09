@@ -101,7 +101,6 @@ export class HelpDeskComponent implements OnInit {
         
       },
       error: (err) => {
-        console.error('❌ Error submitting ticket:', err);
         this.isLoading = false;
         this.fileUploadProgress = null;
       },

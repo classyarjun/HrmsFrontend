@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
- 
+
 
 export type LeaveType = 'SICK' | 'CASUAL' | 'PAID' | 'UNPAID';
 export type LeaveStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
- 
+
 interface LeaveRequest {
   leaveId?: number;
   employeeId: number;
@@ -20,17 +20,19 @@ interface LeaveRequest {
   status?: LeaveStatus;
 }
 
- 
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApplyLeavesService {
+
   [x: string]: any;
-  private baseUrl = 'http://localhost:8080/api/leaves';
- 
+
+  private apiUrl = 'http://localhost:8080/api/leaves';
+
   constructor(private http: HttpClient) {}
- 
-  
+
+
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('jwtToken');
     let headers = new HttpHeaders();
@@ -39,57 +41,63 @@ export class ApplyLeavesService {
     }
     return headers;
   }
- 
+
 
  applyLeave(formData: FormData): Observable<any> {
-    return this.http.post(`${this.baseUrl}/createLeave`, formData, {
+    return this.http.post(`${this.apiUrl}/createLeave`, formData, {
       headers: this.getAuthHeaders()
     });
   }
- 
-  
+
+
   getAllLeaves(): Observable<LeaveRequest[]> {
-    return this.http.get<LeaveRequest[]>(`${this.baseUrl}/getAllLeaves`, {
+    return this.http.get<LeaveRequest[]>(`${this.apiUrl}/getAllLeaves`, {
       headers: this.getAuthHeaders()
     });
   }
- 
+
   getLeaveById(id: number): Observable<LeaveRequest> {
-    return this.http.get<LeaveRequest>(`${this.baseUrl}/getLeaveById/${id}`, {
+    return this.http.get<LeaveRequest>(`${this.apiUrl}/getLeaveById/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
- 
- 
+
+
   updateLeaveStatus(id: number, status: LeaveStatus): Observable<any> {
-    return this.http.put(`${this.baseUrl}/updateStatusById/${id}/status?status=${status}`, null, {
+    return this.http.put(`${this.apiUrl}/updateStatusById/${id}/status?status=${status}`, null, {
       headers: this.getAuthHeaders()
     });
   }
- 
-  
+
+
   deleteLeave(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/DeleteLeaveById/${id}`, {
+    return this.http.delete(`${this.apiUrl}/DeleteLeaveById/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
- 
-  
+
+
   getLeavesByEmployeeId(empId: number): Observable<LeaveRequest[]> {
-    return this.http.get<LeaveRequest[]>(`${this.baseUrl}/employee/${empId}`, {
+    return this.http.get<LeaveRequest[]>(`${this.apiUrl}/employee/${empId}`, {
       headers: this.getAuthHeaders()
     });
   }
- 
-  
+
+
   getMyLeaves(): Observable<LeaveRequest[]> {
-    return this.http.get<LeaveRequest[]>(`${this.baseUrl}/myLeaves`, {
+    return this.http.get<LeaveRequest[]>(`${this.apiUrl}/myLeaves`, {
       headers: this.getAuthHeaders()
     });
   }
    getLeaveStatusByEmployeeId(employeeId: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/leaveStatuses/${employeeId}`);
+    return this.http.get(`${this.apiUrl}/leaveStatuses/${employeeId}`);
   }
-}
 
- 
+
+ getCcToEmployees(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/ccToEmployees`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+}
