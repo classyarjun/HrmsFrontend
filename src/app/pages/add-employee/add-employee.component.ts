@@ -32,6 +32,7 @@ export class AddEmployeeComponent implements OnInit {
   selectedEmployeeId!: number;
 
   showPassword: boolean = false;
+minDate: any;
 
   constructor(
     private fb: FormBuilder,
@@ -55,7 +56,7 @@ export class AddEmployeeComponent implements OnInit {
     ],
     role: ['', Validators.required],
       status: ['', Validators.required],
-      joiningDate: ['', Validators.required],
+      joiningDate: ['', [Validators.required, this.futureOrTodayDateValidator]], // ✅ updated
       exitDate: [''],
     });
 
@@ -81,7 +82,7 @@ export class AddEmployeeComponent implements OnInit {
       jobTitle: ['', Validators.required],
       role: ['', Validators.required],
       status: ['', Validators.required],
-      joiningDate: ['', Validators.required],
+      joiningDate: ['', [Validators.required, this.futureOrTodayDateValidator]], // ✅ updated
       exitDate: [''],
     });
 
@@ -108,6 +109,16 @@ export class AddEmployeeComponent implements OnInit {
     const value = control.value;
     if (value && value.length > 0 && value[0] !== value[0].toUpperCase()) {
       return { notCapitalized: true };
+    }
+    return null;
+  }
+futureOrTodayDateValidator(control: AbstractControl): ValidationErrors | null {
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Remove time part
+
+    if (control.value && selectedDate < today) {
+      return { pastDate: true };
     }
     return null;
   }

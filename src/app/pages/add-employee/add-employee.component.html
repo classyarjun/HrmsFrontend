@@ -192,14 +192,27 @@
           </div>
 
           <!-- Joining Date -->
-          <div class="col-md-6">
-            <label for="joiningDate">Joining Date</label>
-            <input type="date" id="joiningDate" class="form-control" formControlName="joiningDate"
-              [class.is-invalid]="employeeForm.get('joiningDate')?.invalid && employeeForm.get('joiningDate')?.touched" />
-            <div class="invalid-feedback" *ngIf="employeeForm.get('joiningDate')?.errors?.['required']">
-              Joining date is required.
-            </div>
-          </div>
+         <div class="col-md-6">
+  <label for="joiningDate">Joining Date</label>
+  <input
+    type="date"
+    id="joiningDate"
+    class="form-control"
+    formControlName="joiningDate"
+    [min]="minDate"
+    [class.is-invalid]="
+      employeeForm.get('joiningDate')?.invalid &&
+      employeeForm.get('joiningDate')?.touched
+    "
+  />
+  <div class="invalid-feedback" *ngIf="employeeForm.get('joiningDate')?.errors?.['required']">
+    Joining date is required.
+  </div>
+  <div class="invalid-feedback" *ngIf="employeeForm.get('joiningDate')?.errors?.['pastDate']">
+    Joining date cannot be in the past.
+  </div>
+</div>
+
 
          
 
