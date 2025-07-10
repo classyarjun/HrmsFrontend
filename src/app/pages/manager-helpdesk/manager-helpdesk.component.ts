@@ -16,7 +16,6 @@ import { ApplyLeavesService } from './../../../services/apply-leaves.service';
   selector: 'app-manager-helpdesk',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule, FormsModule, ],
-
   templateUrl: './manager-helpdesk.component.html',
   styleUrl: './manager-helpdesk.component.css'
 })
@@ -57,7 +56,7 @@ export class ManagerHelpdeskComponent {
       next: (tickets) => {
         this.tickets = tickets;
         this.isLoading = false;
-        console.log('Tickets loaded:', this.tickets);
+        // console.log('Tickets loaded:', this.tickets);
         
       },
       error: () => {
@@ -120,13 +119,11 @@ export class ManagerHelpdeskComponent {
     });
   }
 
-
-
  fetchEmailList(): void {
     this.applyLeavesService.getCcToEmployees().subscribe({
       next: (data: any[]) => {
         this.emailList = data;
-        console.log('Email list loadedfrom help desk :', this.emailList );
+        // console.log('Email list loadedfrom help desk :', this.emailList );
       },
       error: (err) => {
         console.error('Failed to load email list', err);

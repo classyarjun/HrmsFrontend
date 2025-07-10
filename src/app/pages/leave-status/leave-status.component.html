@@ -1,10 +1,8 @@
-
 <div class="container mt-5">
   <h4 class="text-center">Leave Summary</h4>
 
   <!-- ✅ Latest Leave Status -->
-  <div *ngIf="latestLeaveStatus" class="alert mt-3"
-       [ngClass]="{
+  <div *ngIf="latestLeaveStatus" class="alert mt-3" [ngClass]="{
          'alert-success': latestLeaveStatus === 'APPROVED',
          'alert-danger': latestLeaveStatus === 'REJECTED',
          'alert-warning': latestLeaveStatus === 'PENDING'
@@ -52,5 +50,40 @@
         </div>
       </div>
     </div>
+
+
+    <!-- Paid Leave -->
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-header bg-primary text-dark">Paid Leave</div>
+        <div class="card-body">
+          Used: {{ paidleaveUsed }} / 3 <br />
+          Remaining: {{ 3 - paidleaveUsed }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Unpaid Leave -->
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-header bg-danger text-white">Unpaid Leave</div>
+        <div class="card-body">
+          Used: {{ unpaidLeaveUsed }} / 3 <br />
+          Remaining: {{ 3 - unpaidLeaveUsed }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Maternity Leave -->
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-header bg-info text-white">Maternity Leave</div>
+        <div class="card-body">
+          Used: {{ maternityLeaveUsed }} / 180 <br />
+          Remaining: {{ 180 - maternityLeaveUsed }}
+        </div>
+      </div>
+
+
+
   </div>
-</div>

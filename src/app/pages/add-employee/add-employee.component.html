@@ -168,7 +168,7 @@
               <option value="" disabled>Select Role</option>
               <option value="USER">USER</option>
               <option value="HR">HR</option>
-              <option value="SENIOR_HR">SENIOR_HR</option>
+              
               <option value="MANAGER">MANAGER</option>
             </select>
             <div class="invalid-feedback" *ngIf="employeeForm.get('role')?.errors?.['required']">
@@ -221,7 +221,7 @@
   </div>
 </div>
 
-
+<!-- Edit employee modal  -->
 <!-- Edit employee modal  -->
 <div class="modal fade" id="editEmployeeModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
@@ -233,66 +233,116 @@
         </div>
 
         <div class="modal-body row g-3">
+          <!-- First Name -->
           <div class="col-md-6">
             <label>First Name</label>
             <input formControlName="firstName" class="form-control" />
+            <div class="text-danger" *ngIf="editForm.get('firstName')?.touched && editForm.get('firstName')?.invalid">
+              <small *ngIf="editForm.get('firstName')?.errors?.['required']">First Name is required.</small>
+              <small *ngIf="editForm.get('firstName')?.errors?.['notCapitalized']">First letter must be capital.</small>
+              <small *ngIf="editForm.get('firstName')?.errors?.['pattern']">Only alphabets allowed. Numbers are not allowed.</small>
+
+            </div>
           </div>
+
+          <!-- Last Name -->
           <div class="col-md-6">
             <label>Last Name</label>
             <input formControlName="lastName" class="form-control" />
+            <div class="text-danger" *ngIf="editForm.get('lastName')?.touched && editForm.get('lastName')?.invalid">
+              <small *ngIf="editForm.get('lastName')?.errors?.['required']">Last Name is required.</small>
+              <small *ngIf="editForm.get('lastName')?.errors?.['notCapitalized']">First letter must be capital.</small>
+              <small *ngIf="editForm.get('firstName')?.errors?.['pattern']">Only alphabets allowed. Numbers are not allowed.</small>
           </div>
+          </div>
+
+          <!-- Email -->
           <div class="col-md-6">
             <label>Email</label>
             <input formControlName="email" type="email" class="form-control" />
+            <div class="text-danger" *ngIf="editForm.get('email')?.touched && editForm.get('email')?.invalid">
+              <small *ngIf="editForm.get('email')?.errors?.['required']">Email is required.</small>
+              <small *ngIf="editForm.get('email')?.errors?.['email']">Invalid email format.</small>
+            </div>
           </div>
+
+          <!-- Phone -->
           <div class="col-md-6">
             <label>Phone</label>
             <input formControlName="phone" class="form-control" />
+            <div class="text-danger" *ngIf="editForm.get('phone')?.touched && editForm.get('phone')?.invalid">
+              <small *ngIf="editForm.get('phone')?.errors?.['pattern']">Phone must be 10 digits.</small>
+            </div>
           </div>
+
+          <!-- Department -->
           <div class="col-md-6">
             <label>Department</label>
             <input formControlName="department" class="form-control" />
+            <div class="text-danger" *ngIf="editForm.get('department')?.touched && editForm.get('department')?.invalid">
+              <small *ngIf="editForm.get('department')?.errors?.['required']">Department is required.</small>
+            </div>
           </div>
+
+          <!-- Job Title -->
           <div class="col-md-6">
             <label>Job Title</label>
             <input formControlName="jobTitle" class="form-control" />
+            <div class="text-danger" *ngIf="editForm.get('jobTitle')?.touched && editForm.get('jobTitle')?.invalid">
+              <small *ngIf="editForm.get('jobTitle')?.errors?.['required']">Job Title is required.</small>
+            </div>
           </div>
+
+          <!-- Role -->
           <div class="col-md-6">
             <label>Role</label>
             <select formControlName="role" class="form-select">
+              <option value="">Select Role</option>
               <option value="USER">USER</option>
               <option value="HR">HR</option>
               <option value="SENIOR_HR">SENIOR_HR</option>
               <option value="MANAGER">MANAGER</option>
             </select>
+            <div class="text-danger" *ngIf="editForm.get('role')?.touched && editForm.get('role')?.invalid">
+              <small *ngIf="editForm.get('role')?.errors?.['required']">Role is required.</small>
+            </div>
           </div>
+
+          <!-- Status -->
           <div class="col-md-6">
             <label>Status</label>
             <select formControlName="status" class="form-select">
+              <option value="">Select Status</option>
               <option value="Active">Active</option>
               <option value="On Notice">On Notice</option>
               <option value="Resigned">Resigned</option>
             </select>
+            <div class="text-danger" *ngIf="editForm.get('status')?.touched && editForm.get('status')?.invalid">
+              <small *ngIf="editForm.get('status')?.errors?.['required']">Status is required.</small>
+            </div>
           </div>
+
+          <!-- Joining Date -->
           <div class="col-md-6">
             <label>Joining Date</label>
             <input type="date" formControlName="joiningDate" class="form-control" />
+            <div class="text-danger" *ngIf="editForm.get('joiningDate')?.touched && editForm.get('joiningDate')?.invalid">
+              <small *ngIf="editForm.get('joiningDate')?.errors?.['required']">Joining Date is required.</small>
+            </div>
           </div>
-          <div class="col-md-6">
-            <label>Exit Date</label>
-            <input type="date" formControlName="exitDate" class="form-control" />
-          </div>
+
+          <!-- Exit Date -->
+         
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Update</button>
+          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Update</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </form>
     </div>
   </div>
 </div>
-
 <!-- Register Employee Modal -->
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -353,7 +403,7 @@
               <option value="" disabled>Select Role</option>
               <option value="USER">USER</option>
               <option value="HR">HR</option>
-              <option value="SENIOR_HR">SENIOR_HR</option>
+             
               <option value="MANAGER">MANAGER</option>
             </select>
           </div>

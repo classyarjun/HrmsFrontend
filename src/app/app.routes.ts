@@ -36,7 +36,7 @@ import { HrPeopleComponent } from './pages/hr-people/hr-people.component';
 import { HrHelpdeskComponent } from './pages/hr-helpdesk/hr-helpdesk.component';
 import { HrDocumentCentreComponent } from './pages/hr-document-centre/hr-document-centre.component';
 import { ManagerAllLeaveRequestComponent } from './pages/manager-all-leave-request/manager-all-leave-request.component';
-import { HolidaysComponent } from './pages/holidays/holidays.component';
+import { HolidayComponent } from './pages/holidays/holidays.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 import { TermsAndConditionComponent } from './pages/terms-and-condition/terms-and-condition.component';
 import { LeaveStatusComponent } from './pages/leave-status/leave-status.component';
@@ -44,6 +44,7 @@ import { HrAddEmployeeComponent } from './pages/hr-add-employee/hr-add-employee.
 import { ManagerPyslipComponent } from './pages/manager-pyslip/manager-pyslip.component';
 import { HelpDeskComponent } from './pages/helpdesk/helpdesk.component';
 import { UserCalenderComponent } from './pages/user-calender/user-calender.component';
+
 
 
 export const routes: Routes = [
@@ -76,7 +77,7 @@ export const routes: Routes = [
       { path: 'manager/todo/tasks', component: ManagerTaskComponent, canActivate: [AuthGuard] },
       { path: 'manager/document-centre', component: ManagerDocumentCenterComponent, canActivate: [AuthGuard] },
       { path: 'manager/all-leave-request', component: ManagerAllLeaveRequestComponent, canActivate: [AuthGuard] },
-      { path: 'manager/create-holiday', component: HolidaysComponent, canActivate: [AuthGuard] },
+      { path: 'manager/create-holiday', component: HolidayComponent, canActivate: [AuthGuard] },
        { path: 'manager/pay-slip', component: ManagerPyslipComponent, canActivate: [AuthGuard] },
     ]
   },
@@ -98,8 +99,8 @@ export const routes: Routes = [
       { path: 'hr/people', component: HrPeopleComponent, canActivate: [AuthGuard] },
       { path: 'hr/helpdesk', component: HrHelpdeskComponent, canActivate: [AuthGuard] },
       { path: 'hr/all-leave-request', component: ManagerAllLeaveRequestComponent, canActivate: [AuthGuard] },
-      { path: 'hr/holiday', component: HolidaysComponent, canActivate: [AuthGuard] },
-
+      { path: 'hr/holiday', component: HolidayComponent, canActivate: [AuthGuard] },
+    
 
     ]
   },
@@ -122,7 +123,9 @@ export const routes: Routes = [
       { path: 'user/my-worklife/feedback', component: UserFeedbackComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/apply-leaves', component: ApplyLeavesComponent, canActivate: [AuthGuard] },
       { path: 'user/leaves/leaves-status', component: LeaveStatusComponent, canActivate: [AuthGuard] },
-      { path: 'user/attendance/mark', component: UserCalenderComponent, canActivate: [AuthGuard] },
+
+       { path: 'user/attendece/attendence-info', component: UserCalenderComponent, canActivate: [AuthGuard] },
+
 
     ]
   },
