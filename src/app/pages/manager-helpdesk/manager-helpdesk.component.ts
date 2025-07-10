@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -14,7 +15,7 @@ import { ApplyLeavesService } from './../../../services/apply-leaves.service';
 @Component({
   selector: 'app-manager-helpdesk',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, ],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, FormsModule, ],
 
   templateUrl: './manager-helpdesk.component.html',
   styleUrl: './manager-helpdesk.component.css'
@@ -28,6 +29,9 @@ export class ManagerHelpdeskComponent {
   priorities = ['LOW', 'MEDIUM', 'HIGH'];
   emailList: any[] = [];
 
+  statusList = ['PENDING','IN_PROGRESS','COMPLETED',];
+  selectedStatus = '';
+
   constructor(
     private fb: FormBuilder,
     private helpDeskService: HelpdeskService,
@@ -38,7 +42,7 @@ export class ManagerHelpdeskComponent {
       subject: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.maxLength(2000)]],
       ccTo: [''],
-      priority: ['MEDIUM', Validators.required],
+      priority: ['LOW', Validators.required],
       file: [null],
     });
   }
@@ -53,6 +57,8 @@ export class ManagerHelpdeskComponent {
       next: (tickets) => {
         this.tickets = tickets;
         this.isLoading = false;
+        console.log('Tickets loaded:', this.tickets);
+        
       },
       error: () => {
         this.isLoading = false;
@@ -94,6 +100,27 @@ export class ManagerHelpdeskComponent {
   }
 
 
+ filterByStatus(): void {
+    if (!this.selectedStatus) {
+      this.loadTickets();
+      return;
+    }
+
+    this.isLoading = true;
+    this.helpDeskService.getTicketsByStatus(this.selectedStatus).subscribe({
+      next: (tickets) => {
+        this.tickets = tickets;
+        this.isLoading = false;
+        // console.log('Filtered tickets:', this.tickets);
+      },
+      error: () => {
+        this.tickets = [];
+        this.isLoading = false;
+      }
+    });
+  }
+
+
 
  fetchEmailList(): void {
     this.applyLeavesService.getCcToEmployees().subscribe({
@@ -106,6 +133,20 @@ export class ManagerHelpdeskComponent {
       }
     });
   }
+
+  
+  updateStatus(id: number, newStatus: string): void {
+  this.helpDeskService.updateTicketStatus(id, newStatus).subscribe({
+    next: () => {
+      this.loadTickets(); // Reload updated data
+    },
+    error: (err) => {
+      console.error('Status update failed:', err);
+      alert('Failed to update ticket status.');
+    }
+  });
+}
+
 
 
 }

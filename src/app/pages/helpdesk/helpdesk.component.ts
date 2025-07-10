@@ -8,6 +8,8 @@ import {
 import { HelpdeskService } from '../../../services/helpdesk.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { userInfo } from 'node:os';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-helpdesk',
@@ -22,10 +24,12 @@ export class HelpDeskComponent implements OnInit {
   isLoading = false;
   fileUploadProgress: number | null = null;
   priorities = ['LOW', 'MEDIUM', 'HIGH'];
+  // logdinUserId =// Default to 2 if not set
 
   constructor(
     private fb: FormBuilder,
-    private helpDeskService: HelpdeskService
+    private toastr: ToastrService,
+    private helpDeskService: HelpdeskService,
   ) {
     this.ticketForm = this.fb.group({
       category: ['', [Validators.required, Validators.maxLength(50)]],
@@ -63,49 +67,58 @@ export class HelpDeskComponent implements OnInit {
     }
   }
 
-  onSubmit(): void {
-    if (this.ticketForm.invalid) {
-      this.ticketForm.markAllAsTouched();
-      return;
-    }
-
-    const formValue = this.ticketForm.value;
-
-    // 🎯 Convert the form fields (except file) into a single JSON string
-    const helpDeskPayload = {
-      category: formValue.category,
-      subject: formValue.subject,
-      description: formValue.description,
-      ccTo: formValue.ccTo.split(',').map((email: string) => email.trim()), // ✅ Fix here
-      priority: formValue.priority,
-    };
-
-    const formData = new FormData();
-    formData.append('helpDesk', JSON.stringify(helpDeskPayload));
-
-    // Append file if selected
-    if (formValue.file) {
-      formData.append('file', formValue.file);
-    }
-
-    this.isLoading = true;
-    this.fileUploadProgress = 0;
-
-    this.helpDeskService.createTicket(formData).subscribe({
-      next: () => {
-        this.ticketForm.reset({
-          priority: 'MEDIUM',
-        });
-        this.loadTickets();
-        this.fileUploadProgress = null;
-        
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.fileUploadProgress = null;
-      },
-    });
+ onSubmit(): void {
+  if (this.ticketForm.invalid) {
+    this.ticketForm.markAllAsTouched();
+    return;
   }
+
+  const formValue = this.ticketForm.value;
+
+  // ✅ Construct helpDesk payload as per backend requirement
+  const helpDeskPayload = {
+    category: formValue.category,
+    subject: formValue.subject,
+    description: formValue.description,
+    ccTo: formValue.ccTo
+      ? formValue.ccTo.split(',').map((email: string) => email.trim())
+      : [],
+    priority: formValue.priority,
+    helpDeskStatus: 'IN_PROGRESS', // ✅ Always default
+    employee: {
+      id: 2 // ✅ Hardcoded employee ID (replace with dynamic employee: { id: this.loggedInUserId })
+    }
+  };
+
+  const formData = new FormData();
+  formData.append(
+    'helpDesk',
+    JSON.stringify(helpDeskPayload)
+  );
+
+  if (formValue.file) {
+    formData.append('file', formValue.file);
+  }
+
+  this.isLoading = true;
+  this.fileUploadProgress = 0;
+
+  this.helpDeskService.createTicket(formData).subscribe({
+    next: () => {
+      this.ticketForm.reset({
+        priority: 'MEDIUM'
+      });
+      this.loadTickets();
+      this.fileUploadProgress = null;
+      this.toastr.success('Ticket created successfully!');
+    },
+    error: (err) => {
+      this.isLoading = false;
+      this.fileUploadProgress = null;
+    }
+  });
+}
+
 
   deleteTicket(id: number): void {
     if (confirm('Are you sure you want to delete this ticket?')) {

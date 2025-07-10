@@ -1,37 +1,7 @@
 <div class="d-flex justify-content-between align-items-center">
   <h2 class="mb-4">Help Desk Tickets</h2>
-
-  <!-- <button
-  type="button"
-  class="btn btn-primary"
-  data-bs-toggle="modal"
-  data-bs-target="#myModal"
-  >
-New Request
-</button> -->
 </div>
 
-<!-- <div class="tab-content-box">
-  <img
-    src="https://cdn-icons-png.flaticon.com/512/4086/4086679.png"
-    alt="No Items"
-  />
-  <p>No helpdesk items</p>
-</div>
-
-<div class="footer">
-  v6.3.0-prod-1043 | <a href="#">Privacy Policy</a> |
-  <a href="#">Terms Of Service</a>
-</div> -->
-
-<!-- <div
-  class="modal fade"
-  id="myModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-lg"> -->
 <div class="container">
   <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" novalidate>
     <div class="card mb-4">
@@ -68,16 +38,7 @@ New Request
               <option value="other">Other</option>
             </select>
 
-            <!-- <input
-                  type="text"
-                  class="form-control"
-                  id="category"
-                  formControlName="category"
-                  [class.is-invalid]="
-                    ticketForm.get('category')?.invalid &&
-                    ticketForm.get('category')?.touched
-                  "
-                /> -->
+            
 
             <div
               *ngIf="
