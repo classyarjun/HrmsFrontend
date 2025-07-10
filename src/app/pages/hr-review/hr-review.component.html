@@ -1,30 +1,24 @@
-<div class="container mt-5">
-  <h2>Performance Reviews</h2>
+<div class="container py-4">
+  <h3 class="mb-4 text-primary">Employee Performance Reviews</h3>
 
-  <div *ngIf="message" class="alert alert-info">{{ message }}</div>
-
-  <div class="table-responsive mt-4">
+  <div class="table-responsive">
     <table class="table table-bordered table-striped">
       <thead class="table-dark">
         <tr>
-          <th>ID</th>
-          <th>Task Name</th>
-          <th>Manager Review</th>
-          <th>Review Date</th>
           <th>Employee ID</th>
+          <th>Task Name</th>
+          <th>Review Date</th>
+          <th>Manager Review</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let review of reviews">
-          <td>{{ review.reviewId }}</td>
+          <td>{{ review.employee.id }}</td>
           <td>{{ review.taskName }}</td>
-          <td>{{ review.managerReview }}</td>
           <td>{{ review.reviewDate }}</td>
-          <td>{{ review.employee.id || review.employeeId }}</td>
+          <td>{{ review.managerReview }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
-
- 

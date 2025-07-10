@@ -6,7 +6,7 @@ import { PayslipsService } from '../../../services/payslips.service';
 
 
 @Component({
-  selector: 'app-user-payslip',
+  selector: 'app-user-pyslip',
   standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './manager-pyslip.component.html',

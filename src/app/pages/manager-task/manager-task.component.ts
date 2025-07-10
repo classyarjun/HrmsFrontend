@@ -1,11 +1,9 @@
-// task.component.ts
-
 import { Component, OnInit } from '@angular/core';
-import { TaskService } from '../../../services/task.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { AddEmployeeService } from './../../../services/add-employee.service';
+import { TaskService } from '../../../services/task.service';
+import { AddEmployeeService } from '../../../services/add-employee.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 
@@ -20,11 +18,12 @@ export class ManagerTaskComponent implements OnInit {
   assignee = JSON.parse(localStorage.getItem('userData') || '{}').email || '';
   taskForm: FormGroup;
   selectedFile: File | null = null;
-  message = '';
   tasks: any[] = [];
   editingTask: any = null;
   employees: any[] = [];
-  today: string = new Date().toISOString().split('T')[0]; // 🟢 Today's date in yyyy-MM-dd format
+
+  today: string = '';
+  minDueDate: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -32,54 +31,79 @@ export class ManagerTaskComponent implements OnInit {
     private addEmployeeService: AddEmployeeService,
     private toastr: ToastrService
   ) {
-   this.taskForm = this.fb.group({
-  taskName: [''],
-  description: [''],
-  priority: [''],
-  status: ['PENDING'],
-  dueDate: [''],
-  taskAssignDate: [''], // 🟢 Add this line
-  employeeId: [''],
-});
-
+    this.taskForm = this.fb.group({
+      taskName: ['', Validators.required],
+      description: ['', Validators.required],
+      priority: ['', Validators.required],
+      status: ['PENDING'],
+      dueDate: ['', Validators.required],
+      taskAssignDate: ['', Validators.required],
+      employeeId: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
+    this.setTodayAsMinAssignDate();
     this.loadTasks();
     this.loadEmployees();
+  }
+
+  setTodayAsMinAssignDate() {
+    const todayDate = new Date();
+    this.today = todayDate.toISOString().split('T')[0];
+  }
+
+  onAssignDateChange() {
+    const assignDate = this.taskForm.get('taskAssignDate')?.value;
+    if (assignDate) {
+      this.minDueDate = assignDate;
+      this.taskForm.get('dueDate')?.reset();
+    }
   }
 
   onFileChange(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
- onSubmit() {
-  const task = {
-    assignee: this.assignee,
-    taskName: this.taskForm.value.taskName,
-    description: this.taskForm.value.description,
-    priority: this.taskForm.value.priority,
-     status: this.taskForm.value.status,   // ✅ This picks 'PENDING' or whatever selected
-    dueDate: this.taskForm.value.dueDate,
-    taskAssignDate: this.taskForm.value.taskAssignDate, // ✅ Include assign date
-  };
+  onSubmit() {
+    if (this.taskForm.invalid) {
+      this.toastr.error('Please fill all required fields correctly');
+      return;
+    }
 
-  const employeeId = this.taskForm.value.employeeId;
+    const assign = this.taskForm.value.taskAssignDate;
+    const due = this.taskForm.value.dueDate;
 
-  this.taskService.createTask(task, this.selectedFile!, employeeId).subscribe({
-    next: (res: any) => {
-      this.toastr.success('Task created successfully', 'Success');
-      this.taskForm.reset();
-      this.loadTasks();
-    },
-    error: (err: any) => {
-      console.error('Error creating task:', err);
-      this.toastr.error('Error creating task', 'Error');
-      alert('Failed to create task: ' + (err.error?.message || 'Server error'));
-    },
-  });
-}
+    if (new Date(due) < new Date(assign)) {
+      this.toastr.error('Due Date must be same or after Assign Date');
+      return;
+    }
 
+    const task = {
+      assignee: this.assignee,
+      taskName: this.taskForm.value.taskName,
+      description: this.taskForm.value.description,
+      priority: this.taskForm.value.priority,
+      status: this.taskForm.value.status,
+      dueDate: due,
+      taskAssignDate: assign,
+    };
+
+    const employeeId = this.taskForm.value.employeeId;
+
+    this.taskService.createTask(task, this.selectedFile!, employeeId).subscribe({
+      next: () => {
+        this.toastr.success('Task created successfully');
+        this.taskForm.reset();
+        this.minDueDate = '';
+        this.loadTasks();
+      },
+      error: (err) => {
+        console.error('Error creating task:', err);
+        this.toastr.error('Error creating task');
+      }
+    });
+  }
 
   loadEmployees() {
     this.addEmployeeService.getEmployees().subscribe({

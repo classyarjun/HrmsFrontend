@@ -66,17 +66,28 @@
               </div>
             </div>
 
-            <!-- Assign Date (readonly) -->
-            <div class="mb-3">
-              <label class="form-label">Assign Date</label>
-              <input type="date" class="form-control" formControlName="assign" />
-            </div>
+        
+<!-- Assign Date -->
+ <div class="mb-3">
+  <label class="form-label">Assign Date</label>
+<input
+  type="date"
+  class="form-control"
+  formControlName="taskAssignDate"
+  [min]="today"
+  (change)="onAssignDateChange()" />
+ </div>
 
-            <!-- Due Date -->
-            <div class="mb-3">
-              <label class="form-label">Due Date</label>
-              <input type="date" class="form-control" formControlName="dueDate" />
-            </div>
+<!-- Due Date -->
+ <div class="mb-3">
+  <label class="form-label">Due Date</label>
+<input
+  type="date"
+  class="form-control"
+  formControlName="dueDate"
+  [min]="minDueDate"
+  [disabled]="!taskForm.get('taskAssignDate')?.value" />
+ </div>
 
             <!-- File Upload -->
             <div class="mb-3">

@@ -11,25 +11,21 @@ import { PerformanceReview, PerformanceReviewService } from '../../../services/p
   styleUrls: ['./hr-review.component.css']
 })
 export class HrReviewComponent implements OnInit {
-  private reviewService = inject(PerformanceReviewService);
-
+  service = inject(PerformanceReviewService);
   reviews: PerformanceReview[] = [];
-  message = '';
 
-  ngOnInit() {
-    this.fetchAllReviews();
+  ngOnInit(): void {
+    this.loadReviews();
   }
 
-  fetchAllReviews() {
-    this.reviewService.getAllReviews().subscribe({
-      next: (res) => {
-        this.reviews = res.map(r => ({
-          ...r,
-          employee: r.employee ? r.employee : { id: r.employeeId??0 } // ensures compatibility
-        }));
-      },
-      error: () => this.message = 'Error fetching reviews.'
+  loadReviews() {
+    this.service.getAllReviews().subscribe((res) => {
+      this.reviews = res.map(r => ({
+        ...r,
+        employee: { id: r.employeeId ?? 0 },
+        task: { id: r.taskId ?? 0 },
+        description: r.description || ''
+      }));
     });
   }
 }
- 

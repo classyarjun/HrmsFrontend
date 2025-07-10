@@ -1,0 +1,6 @@
+.ng-invalid.ng-touched {
+  border-color: red;
+}
+.toast-container {
+  z-index: 9999 !important;
+}
