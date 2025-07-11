@@ -37,7 +37,7 @@
           <div class="card-body text-center py-4">
             <div class="d-flex align-items-center justify-content-center mb-2">
               <span class="status-dot bg-success me-2"></span>
-              <small class="text-muted"></small>
+              <small class="text-muted">{{ currentDate }}</small>
             </div>
             <p class="text-muted small mb-3"> General Shift</p>
             <div class="time-display text-dark mb-4">{{ timeString }}</div>
@@ -49,63 +49,64 @@
 
 
 
-<!-- Buttons with gap -->
-<div class="d-flex gap-3 justify-content-center mt-3">
-  <!-- View Swipes Button -->
-  <button class="btn btn-outline-primary px-4" *ngIf="isSignedIn" (click)="openSwipeModal()">
-    View Swipes
-  </button>
-
-  
-
-<!-- Swipe Modal -->
-<div class="modal fade" id="swipeModal" tabindex="-1" aria-labelledby="swipeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content shadow-sm rounded border-0" style="border-radius: 12px;">
-
-      <div class="modal-header bg-light border-0">
-        <h5 class="modal-title fw-semibold text-secondary">Swipes</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body px-4 pt-2 pb-4">
-        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap px-1">
-          <div><strong>Date:</strong> {{ currentDate }}</div>
-          <div><strong>Shift Time:</strong> 09:30 to 18:30</div>
-          <div><strong>Shift Type:</strong> GEN</div>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-bordered table-sm mb-0" style="background-color: #f8f9fa;">
-            <thead class="table-light">
-              <tr class="text-center">
-                <th>Swipe Time</th>
-                <th>Door/Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center">
-                <td>{{ signInTime }}</td>
-                <td>-</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-      
-
-      </div>
-    </div>
-  </div>
-</div>
+            <!-- Buttons with gap -->
+            <div class="d-flex gap-3 justify-content-center mt-3">
+              <!-- View Swipes Button -->
+              <button class="btn btn-outline-primary px-4" *ngIf="isSignedIn" (click)="openSwipeModal()">
+                View Swipes
+              </button>
 
 
-<!-- Sign Out Button -->
-  <button class="btn btn-danger px-4" *ngIf="isSignedIn" (click)="signOut()">
-    <i class="bi bi-box-arrow-right me-2"></i>
-    Sign Out
-  </button>
-</div>
+
+              <!-- Swipe Modal -->
+              <div class="modal fade" id="swipeModal" tabindex="-1" aria-labelledby="swipeModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                  <div class="modal-content shadow-sm rounded border-0" style="border-radius: 12px;">
+
+                    <div class="modal-header bg-light border-0">
+                      <h5 class="modal-title fw-semibold text-secondary">Swipes</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body px-4 pt-2 pb-4">
+                      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap px-1">
+                        <div><strong>Date:</strong> {{ currentDate }}</div>
+                        <div><strong>Shift Time:</strong> 09:30 to 18:30</div>
+                        <div><strong>Shift Type:</strong> GEN</div>
+                      </div>
+
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-sm mb-0" style="background-color: #f8f9fa;">
+                          <thead class="table-light">
+                            <tr class="text-center">
+                              <th>Swipe Time</th>
+                              <th>Door/Address</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="text-center">
+                              <td>{{ signInTime }}</td>
+                              <td>-</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <!-- Sign Out Button -->
+              <button class="btn btn-danger px-4" *ngIf="isSignedIn" (click)="signOut()">
+                <i class="bi bi-box-arrow-right me-2"></i>
+                Sign Out
+              </button>
+            </div>
 
 
           </div>
@@ -115,7 +116,7 @@
       <!--! Upcoming Holidays Card -->
 
       <div class="col-lg-4 col-md-12">
-        <div class="card h-100"style="overflow-y: auto; max-height: 300px;">
+        <div class="card h-100" style="overflow-y: auto; max-height: 300px;">
           <div class="card-header pb-2">
             <div class="d-flex justify-content-between align-items-center">
               <h6 class="card-title text-muted mb-0">Upcoming Holidays</h6>
@@ -280,7 +281,8 @@
           Privacy Policy
         </a>
         <span class="mx-2">|</span>
-        <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" class="text-muted text-decoration-none">
+        <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer"
+          class="text-muted text-decoration-none">
           Terms Of Service
         </a>
 
@@ -320,7 +322,7 @@
             <div class="mb-3">
               <label for="remarks" class="form-label">Remarks</label>
               <textarea id="remarks" name="remarks" class="form-control" [(ngModel)]="attendanceData.remarks"
-                        placeholder="Enter Reason"></textarea>
+                placeholder="Enter Reason"></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Sign in</button>

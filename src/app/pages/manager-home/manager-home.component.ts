@@ -49,6 +49,7 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
     clearInterval(this.intervalId);
   }
 
+
   updateTime(): void {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -140,3 +141,169 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
     }
   }
 }
+
+// ? updated code testing purpose
+
+// import { Component, OnInit, OnDestroy } from '@angular/core';
+// import { CommonModule } from '@angular/common';
+// import { HttpClient, HttpClientModule } from '@angular/common/http';
+// import { AttendanceService } from './../../../services/attendance.service';
+// import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// import { ToastrService } from 'ngx-toastr';
+// import { HolidayService } from './../../../services/holidays.service';
+
+// @Component({
+//   selector: 'app-manager-home',
+//   standalone: true,
+//   imports: [ReactiveFormsModule, FormsModule, CommonModule, HttpClientModule],
+//   templateUrl: './manager-home.component.html',
+//   styleUrl: './manager-home.component.css'
+// })
+// export class ManagerHomeComponent implements OnInit, OnDestroy {
+//   timeString: string = '';
+//   currentDate: string = '';
+//   holidays: any[] = [];
+//   isSignedIn: boolean = false;
+//   signInTime: string = '';
+
+//   attendanceData = {
+//     employeeId: JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '',
+//     location: '',
+//     remarks: '',
+//     time: ''
+//   };
+
+//   private intervalId: any;
+//   private autoSignOutInterval: any;
+
+//   constructor(
+//     private http: HttpClient,
+//     private toastr: ToastrService,
+//     private AttendanceService: AttendanceService,
+//     private holidayService: HolidayService
+//   ) {}
+
+//   ngOnInit(): void {
+//     this.updateTime();
+//     this.updateDate();
+//     this.intervalId = setInterval(() => this.updateTime(), 1000);
+//     this.getHolidays();
+//     this.getStatus();
+//     this.signInTime = localStorage.getItem('signInTime') || '-';
+//     this.checkAutoSignOut(); // ✅ initial check
+//     this.autoSignOutInterval = setInterval(() => this.checkAutoSignOut(), 60000); // ✅ check every 1 minute
+//   }
+
+//   ngOnDestroy(): void {
+//     clearInterval(this.intervalId);
+//     clearInterval(this.autoSignOutInterval);
+//   }
+
+//   updateTime(): void {
+//     const now = new Date();
+//     const hours = String(now.getHours()).padStart(2, '0');
+//     const minutes = String(now.getMinutes()).padStart(2, '0');
+//     const seconds = String(now.getSeconds()).padStart(2, '0');
+//     this.timeString = `${hours}:${minutes}:${seconds}`;
+//   }
+
+//   updateDate(): void {
+//     const now = new Date();
+//     const options = { day: '2-digit', month: 'short', year: 'numeric' } as const;
+//     this.currentDate = now.toLocaleDateString('en-GB', options);
+//   }
+
+//   signIn(): void {
+//     if (!this.attendanceData.location) {
+//       this.toastr.warning('Please enter location');
+//       return;
+//     }
+
+//     const now = new Date();
+//     const formattedTime = now.toLocaleTimeString('en-GB', { hour12: false });
+
+//     this.attendanceData.time = formattedTime;
+
+//     this.AttendanceService.signIn(this.attendanceData).subscribe({
+//       next: () => {
+//         this.isSignedIn = true;
+//         this.signInTime = formattedTime;
+//         localStorage.setItem('signInTime', formattedTime);
+//         localStorage.setItem('signInDateTime', now.toISOString()); // ✅ Save full datetime
+//         this.toastr.success('Sign-in successful!', 'Success');
+//       },
+//       error: (err) => {
+//         let errorMessage = 'An error occurred';
+//         if (err.error) {
+//           if (typeof err.error === 'string') {
+//             errorMessage = err.error;
+//           } else if (err.error.message) {
+//             errorMessage = err.error.message;
+//           }
+//         }
+//         this.toastr.error(errorMessage, 'Error');
+//       }
+//     });
+//   }
+
+//   signOut(): void {
+//     this.AttendanceService.signOut(this.attendanceData.employeeId).subscribe({
+//       next: () => {
+//         this.toastr.success('Sign-out successful!', 'Success');
+//         this.isSignedIn = false;
+//         localStorage.removeItem('signInTime');
+//         localStorage.removeItem('signInDateTime'); // ✅ Clear auto sign-out timer too
+//       },
+//       error: (err) => {
+//         this.toastr.error(err.error || 'Error during sign-out');
+//       }
+//     });
+//   }
+
+//   getStatus(): void {
+//     this.AttendanceService.getStatus(this.attendanceData.employeeId).subscribe({
+//       next: (res: any[]) => {
+//         const signedInRecord = res.find((a) => a.issingin === 'TRUE');
+//         this.isSignedIn = !!signedInRecord;
+//       },
+//       error: () => {
+//         this.isSignedIn = false;
+//       }
+//     });
+//   }
+
+//   getHolidays(): void {
+//     this.holidayService.getHolidays().subscribe({
+//       next: (data) => {
+//         this.holidays = data;
+//       },
+//       error: (err) => {
+//         console.error('Error fetching holidays', err);
+//       }
+//     });
+//   }
+
+//   openSwipeModal(): void {
+//     const modalElement = document.getElementById('swipeModal');
+//     if (modalElement) {
+//       const modal = new (window as any).bootstrap.Modal(modalElement);
+//       modal.show();
+//     }
+//   }
+
+//   // ✅ Auto Sign-out Checker
+//   checkAutoSignOut(): void {
+//     const signInTime = localStorage.getItem('signInDateTime');
+//     if (!signInTime) return;
+
+//     const signInDate = new Date(signInTime);
+//     const now = new Date();
+//     const diffMs = now.getTime() - signInDate.getTime();
+//     const diffHours = diffMs / (1000 * 60 * 60);
+
+//     if (diffHours >= 12) {
+//       this.toastr.warning('⏳ Session expired. You have been automatically signed out.', 'Auto Sign-out');
+//       this.signOut();
+//     }
+//   }
+// }
