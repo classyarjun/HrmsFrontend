@@ -83,17 +83,21 @@
           </div>
 
           <!-- Email -->
-          <div class="col-md-6">
-            <label for="email">Email</label>
-            <input type="email" id="email" formControlName="email" class="form-control"
-              [class.is-invalid]="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched" />
-            <div class="invalid-feedback" *ngIf="employeeForm.get('email')?.errors?.['required']">
-              Email is required.
-            </div>
-            <div class="invalid-feedback" *ngIf="employeeForm.get('email')?.errors?.['email']">
-              Invalid email format.
-            </div>
-          </div>
+            <div class="col-md-6">
+  <label class="form-label">Email</label>
+  <input
+    type="email"
+    formControlName="email"
+    class="form-control"
+    [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+  />
+  <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['required']">
+    Email is required.
+  </div>
+  <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['pattern']">
+    Email must start with a letter and be in valid format .
+  </div>
+</div>
 
           <!-- Phone -->
           <div class="col-md-6">
