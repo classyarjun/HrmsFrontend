@@ -85,18 +85,18 @@
           <!-- Email -->
             <div class="col-md-6">
   <label class="form-label">Email</label>
-  <input
-    type="email"
-    formControlName="email"
-    class="form-control"
-    [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-  />
-  <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['required']">
-    Email is required.
-  </div>
-  <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['pattern']">
-    Email must start with a letter and be in valid format .
-  </div>
+ <input
+  type="email"
+  formControlName="email"
+  class="form-control"
+  [class.is-invalid]="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched"
+/>
+<div class="invalid-feedback" *ngIf="employeeForm.get('email')?.errors?.['required']">
+  Email is required.
+</div>
+<div class="invalid-feedback" *ngIf="employeeForm.get('email')?.errors?.['pattern']">
+  Email must start with a letter and be in valid format.
+</div>
 </div>
 
           <!-- Phone -->
@@ -317,7 +317,7 @@
               <option value="">Select Role</option>
               <option value="USER">USER</option>
               <option value="HR">HR</option>
-              <option value="SENIOR_HR">SENIOR_HR</option>
+           
               <option value="MANAGER">MANAGER</option>
             </select>
             <div class="text-danger" *ngIf="editForm.get('role')?.touched && editForm.get('role')?.invalid">
@@ -331,8 +331,7 @@
             <select formControlName="status" class="form-select">
               <option value="">Select Status</option>
               <option value="Active">Active</option>
-              <option value="On Notice">On Notice</option>
-              <option value="Resigned">Resigned</option>
+              
             </select>
             <div class="text-danger" *ngIf="editForm.get('status')?.touched && editForm.get('status')?.invalid">
               <small *ngIf="editForm.get('status')?.errors?.['required']">Status is required.</small>
@@ -347,6 +346,8 @@
               <small *ngIf="editForm.get('joiningDate')?.errors?.['required']">Joining Date is required.</small>
             </div>
           </div>
+
+          
 
           <!-- Exit Date -->
          

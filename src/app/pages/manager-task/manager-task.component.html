@@ -1,5 +1,4 @@
-<!-- task.component.html -->
-
+<!-- Task Table -->
 <div class="container mt-4">
   <div class="d-flex justify-content-end">
     <button class="btn btn-outline-success shadow-sm" data-bs-toggle="modal" data-bs-target="#taskModal">
@@ -7,7 +6,7 @@
     </button>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal for Creating Task -->
   <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content border-0 shadow-lg rounded-4">
@@ -18,7 +17,6 @@
           </div>
 
           <div class="modal-body px-4 pt-0">
-            <!-- Employee Selector -->
             <div class="mb-3">
               <label class="form-label">Assign To</label>
               <ng-select
@@ -31,13 +29,11 @@
               </ng-select>
             </div>
 
-            <!-- Task Name -->
             <div class="mb-3">
               <label class="form-label">Task Title</label>
               <input type="text" class="form-control" placeholder="e.g., Complete report" formControlName="taskName" />
             </div>
 
-            <!-- Description -->
             <div class="mb-3">
               <label class="form-label">Description</label>
               <textarea
@@ -48,7 +44,6 @@
               </textarea>
             </div>
 
-            <!-- Priority & Status -->
             <div class="row mb-3">
               <div class="col-md-6">
                 <label class="form-label">Priority</label>
@@ -60,36 +55,31 @@
                 </select>
               </div>
               <div class="col-md-6">
-                 <label class="form-label">Status</label>
-  <input type="text" class="form-control" value="Pending" readonly />
-              
+                <label class="form-label">Status</label>
+                <input type="text" class="form-control" value="Pending" readonly />
               </div>
             </div>
 
-        
-<!-- Assign Date -->
- <div class="mb-3">
-  <label class="form-label">Assign Date</label>
-<input
-  type="date"
-  class="form-control"
-  formControlName="taskAssignDate"
-  [min]="today"
-  (change)="onAssignDateChange()" />
- </div>
+            <div class="mb-3">
+              <label class="form-label">Assign Date</label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="taskAssignDate"
+                [min]="today"
+                (change)="onAssignDateChange()" />
+            </div>
 
-<!-- Due Date -->
- <div class="mb-3">
-  <label class="form-label">Due Date</label>
-<input
-  type="date"
-  class="form-control"
-  formControlName="dueDate"
-  [min]="minDueDate"
-  [disabled]="!taskForm.get('taskAssignDate')?.value" />
- </div>
+            <div class="mb-3">
+              <label class="form-label">Due Date</label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="dueDate"
+                [min]="minDueDate"
+                [disabled]="!taskForm.get('taskAssignDate')?.value" />
+            </div>
 
-            <!-- File Upload -->
             <div class="mb-3">
               <label class="form-label">Attachment (optional)</label>
               <input type="file" class="form-control" (change)="onFileChange($event)" />
@@ -106,7 +96,7 @@
   </div>
 </div>
 
-<!-- Table -->
+<!-- Task List Table -->
 <div class="container mt-4">
   <h2>Task Management</h2>
   <table class="table table-bordered table-hover table-striped">
@@ -151,8 +141,20 @@
           <td><input class="form-control" [(ngModel)]="editingTask.description" /></td>
           <td><input class="form-control" [(ngModel)]="editingTask.priority" /></td>
           <td><input class="form-control" [(ngModel)]="editingTask.status" /></td>
-          <td>{{ editingTask.taskAssignDate | date: 'dd-MM-yyyy' }}</td>
-          <td><input class="form-control" [(ngModel)]="editingTask.dueDate" type="date" /></td>
+          <td>
+            <input
+              class="form-control"
+              [(ngModel)]="editingTask.taskAssignDate"
+              type="date"
+              [min]="today" />
+          </td>
+          <td>
+            <input
+              class="form-control"
+              [(ngModel)]="editingTask.dueDate"
+              type="date"
+              [min]="editingTask.taskAssignDate" />
+          </td>
           <td>
             <button class="btn btn-sm btn-success me-2" (click)="updateTask()">
               <i class="bi bi-check-lg"></i>

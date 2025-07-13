@@ -39,7 +39,7 @@ export class AddEmployeeService {
   //! ✅ Update employee
   updateEmployeeWithImage(id: number, formData: FormData): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, formData, {
-      headers: this.getHeaders(''), // 👈 No Content-Type
+      headers: this.getHeaders(''), // 
     });
   }
 
