@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environment/environment';
 
 export interface Employee {
   id: number;
@@ -27,6 +28,7 @@ export interface PerformanceReview {
 }
 
 
+const NAV_URL = environment.apiUrl;
 
 
 @Injectable({
@@ -50,28 +52,28 @@ export class PerformanceReviewService {
 
   // ➤ Create a performance review
   createReview(review: PerformanceReview): Observable<any> {
-    return this.http.post(`${this.baseUrl}/reviews/createReview`, review, {
+    return this.http.post(`${NAV_URL}/reviews/createReview`, review, {
       headers: this.getHeaders()
     });
   }
 
   // ➤ Get all performance reviews
   getAllReviews(): Observable<PerformanceReview[]> {
-    return this.http.get<PerformanceReview[]>(`${this.baseUrl}/reviews/getAllReviews`, {
+    return this.http.get<PerformanceReview[]>(`${NAV_URL}/reviews/getAllReviews`, {
       headers: this.getHeaders()
     });
   }
 
   // ➤ Update a performance review
   updateReview(id: number, review: PerformanceReview): Observable<any> {
-    return this.http.put(`${this.baseUrl}/reviews/updateReview/${id}`, review, {
+    return this.http.put(`${NAV_URL}/reviews/updateReview/${id}`, review, {
       headers: this.getHeaders()
     });
   }
 
   // ➤ Delete a review
   deleteReview(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/reviews/DeleteById/${id}`, {
+    return this.http.delete(`${NAV_URL}/reviews/DeleteById/${id}`, {
       headers: this.getHeaders(),
       responseType: 'text'
     });
@@ -79,21 +81,21 @@ export class PerformanceReviewService {
 
   // ➤ Get all employees (for manager dropdown)
   getAllEmployees(): Observable<Employee[]> {
-    return this.http.get<Employee[]>(`${this.baseUrl}/employee/getAll`, {
+    return this.http.get<Employee[]>(`${NAV_URL}/employee/getAll`, {
       headers: this.getHeaders()
     });
   }
 
   // ➤ Get all tasks assigned to manager or employees
   getAllTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.baseUrl}/task/getAll`, {
+    return this.http.get<Task[]>(`${NAV_URL}/task/getAll`, {
       headers: this.getHeaders()
     });
   }
 
   // ➤ Optional: Get tasks by employeeId
   getTasksByEmployeeId(empId: number): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.baseUrl}/tasks/employee/${empId}`, {
+    return this.http.get<Task[]>(`${NAV_URL}/tasks/employee/${empId}`, {
       headers: this.getHeaders()
     });
   }

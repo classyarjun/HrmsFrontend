@@ -1,13 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../environment/environment';
+
+const NAV_URL = environment.apiUrl;
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
 
-  private apiUrl = 'http://localhost:8080/api/tasks';
+  // private apiUrl = 'http://localhost:8080/api/tasks';
 
   constructor(private http: HttpClient) {}
 
@@ -35,7 +39,7 @@ export class TaskService {
     }
     formData.append('employeeId', employeeId?.toString() || '');
 
-    return this.http.post(`${this.apiUrl}`, formData, {
+    return this.http.post(`${NAV_URL}/tasks`, formData, {
       headers: this.getHeaders()
     });
   }
@@ -44,27 +48,27 @@ export class TaskService {
 
 
   updateTask(id: number, task: any) {
-    return this.http.put(`${this.apiUrl}/${id}`, task, { headers: this.getHeaders() });
+    return this.http.put(`${NAV_URL}/tasks/${id}`, task, { headers: this.getHeaders() });
   }
 
 
   // ✅ Get all tasks (for manager)
   getAllTasks(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl, {
+    return this.http.get<any[]>(`${NAV_URL}/tasks`, {
       headers: this.getHeaders()
     });
   }
 
   // ✅ Get tasks for a specific employee
   getTasksByEmployeeId(employeeId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/employee/${employeeId}`, {
+    return this.http.get<any[]>(`${NAV_URL}/tasks/employee/${employeeId}`, {
       headers: this.getHeaders()
     });
   }
 
   // ✅ Get single task by ID
   getTaskById(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`, {
+    return this.http.get(`${NAV_URL}/tasks/${id}`, {
       headers: this.getHeaders()
     });
   }
@@ -75,7 +79,7 @@ export class TaskService {
 // ✅ Update Task Status By Task ID
 updateTaskStatus(taskId: number, status: string): Observable<any> {
   return this.http.put(
-    `${this.apiUrl}/${taskId}/status?status=${status}`,
+    `${NAV_URL}/tasks/${taskId}/status?status=${status}`,
     {},
     {
       headers: this.getJsonHeaders(),
@@ -84,10 +88,9 @@ updateTaskStatus(taskId: number, status: string): Observable<any> {
   );
 }
 
-
   // ✅ Delete a task
   deleteTask(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, {
+    return this.http.delete(`${NAV_URL}/tasks/${id}`, {
       headers: this.getHeaders()
     });
   }

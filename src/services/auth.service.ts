@@ -1,24 +1,27 @@
 
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../environment/environment';
+
+const NAV_URL = environment.apiUrl;
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseUrl = 'http://localhost:8080/Employee';
+  // private baseUrl = 'http://localhost:8080/api/Employee';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   register(payload: any) {
-    return this.http.post(`${this.baseUrl}/register`, payload);
+    return this.http.post(`${NAV_URL}/Employee/register`, payload);
   }
 
   login(credentials: any) {
-    return this.http.post(`${this.baseUrl}/login`, credentials,
+    return this.http.post(`${NAV_URL}/Employee/login`, credentials,
      );
   }
 

@@ -1,49 +1,49 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../environment/environment';
+
+const NAV_URL = environment.apiUrl;
+
 
 @Injectable({ providedIn: 'root' })
 export class LeavestatusService {
 
-
-  private apiUrl = 'http://localhost:8080/api/leaves';
+  // private apiUrl = 'http://localhost:8080/api/leaves';
 
   constructor(private http: HttpClient) {}
 
   getLeaveBalance(employeeId: number) {
-    return this.http.get(`${this.apiUrl}/leaveBalance/${employeeId}`);
+    return this.http.get(`${NAV_URL}/leaves/leaveBalance/${employeeId}`);
   }
 
-  // getAllLeaves() {
-  //   return this.http.get(`${this.apiUrl}/getAllLeaves`);
-  // }
 
   getAllLeaves(): Observable<any[]> {
-  return this.http.get<any[]>(`${this.apiUrl}/getAllLeaves`);
+  return this.http.get<any[]>(`${NAV_URL}/leaves/getAllLeaves`);
 }
 
   createLeave(formData: FormData) {
-    return this.http.post(`${this.apiUrl}/createLeave`, formData);
+    return this.http.post(`${NAV_URL}/leaves/createLeave`, formData);
   }
 
   deleteLeave(id: number) {
-    return this.http.delete(`${this.apiUrl}/DeleteLeaveById/${id}`, {
+    return this.http.delete(`${NAV_URL}/leaves/DeleteLeaveById/${id}`, {
       responseType: 'text',
     });
   }
 
   updateLeaveStatus(id: number, status: string) {
     return this.http.put(
-      `${this.apiUrl}/updateStatusById/${id}/status?status=${status}`,
+      `${NAV_URL}/leaves/updateStatusById/${id}/status?status=${status}`,
       null
     );
   }
 
   getApplyingToEmail() {
-    return this.http.get(`${this.apiUrl}/applyingTo`);
+    return this.http.get(`${NAV_URL}/leaves/applyingTo`);
   }
 
   getCcToEmails() {
-    return this.http.get(`${this.apiUrl}/ccToEmployees`);
+    return this.http.get(`${NAV_URL}/leaves/ccToEmployees`);
   }
 }

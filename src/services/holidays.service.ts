@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environment/environment';
+
+
+const NAV_URL = environment.apiUrl;
+
 
 @Injectable({
   providedIn: 'root'
@@ -25,14 +30,14 @@ export class HolidayService {
 
   // Create a new holiday
   createHoliday(holiday: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, holiday, {
+    return this.http.post<any>(`${NAV_URL}/holidays`, holiday, {
       headers: this.getHeaders()
     });
   }
 
   // Get all holidays
   getHolidays(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl, {
+    return this.http.get<any[]>(`${NAV_URL}/holidays`, {
       headers: this.getHeaders()
     });
   }
@@ -43,7 +48,7 @@ export class HolidayService {
     Authorization: `Bearer ${token}`
   });
 
-  return this.http.delete(`${this.apiUrl}/id/${id}`, { headers });
+  return this.http.delete(`${NAV_URL}/holidays/id/${id}`, { headers });
 }
 
 }

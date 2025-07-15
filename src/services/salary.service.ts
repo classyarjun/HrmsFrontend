@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environment/environment';
+
+
+const NAV_URL = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root',
 })
 export class SalaryService {
-  private apiUrl3 = 'http://localhost:8080/api/salary/upload';
+
 
   constructor(private http: HttpClient) {}
 
@@ -23,7 +27,7 @@ console.log(token)
 
 
   uploadSalary(formData: FormData): Observable<any> {
-    return this.http.post(this.apiUrl3, formData, {
+    return this.http.post(`${NAV_URL}/salary/upload`, formData, {
       headers: this.getHeaders(),
     });
   }

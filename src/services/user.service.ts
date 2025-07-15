@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environment/environment';
+
+
+const NAV_URL = environment.apiUrl;
+
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class UserService {
-  private apiUrl = 'http://localhost:8080/Employee';
+
+  // private apiUrl = 'http://localhost:8080/api/Employee';
 
   constructor(private http: HttpClient) {}
 
@@ -24,7 +31,7 @@ export class UserService {
     const params = new HttpParams()
       .set('userId', userId.toString())
       .set('newPassword', newPassword);
-    return this.http.put(`${this.apiUrl}/update-password`, null, {
+    return this.http.put(`${NAV_URL}/Employee/update-password`, null, {
       headers,
       params,
       responseType: 'text',
@@ -35,7 +42,7 @@ export class UserService {
     const formData = new FormData();
     formData.append('userId', userId.toString());
     formData.append('profilePicture', profilePicture);
-    return this.http.put(`${this.apiUrl}/update-profile-picture`, formData, {
+    return this.http.put(`${NAV_URL}/Employee/update-profile-picture`, formData, {
       responseType: 'text',
       headers: this.getHeaders(),
     });
@@ -43,7 +50,7 @@ export class UserService {
 
   getProfilePicture(userId: number): Observable<Blob> {
     const params = new HttpParams().set('userId', userId.toString());
-    return this.http.get(`${this.apiUrl}/profile-picture`, {
+    return this.http.get(`${NAV_URL}/Employee/profile-picture`, {
       params,
       responseType: 'blob',
       headers: this.getHeaders(),
@@ -51,7 +58,7 @@ export class UserService {
   }
 
   getUserById(userId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${userId}`, {
+    return this.http.get(`${NAV_URL}/Employee/${userId}`, {
       headers: this.getHeaders(),
     });
   }
