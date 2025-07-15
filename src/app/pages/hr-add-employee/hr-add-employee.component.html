@@ -84,18 +84,18 @@
  
          <div class="col-md-6">
   <label class="form-label">Email</label>
-  <input
-    type="email"
-    formControlName="email"
-    class="form-control"
-    [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-  />
-  <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['required']">
-    Email is required.
-  </div>
-  <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['pattern']">
-    Email must start with a letter and be in valid format .
-  </div>
+ <input
+  type="email"
+  formControlName="email"
+  class="form-control"
+  [class.is-invalid]="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched"
+/>
+<div class="invalid-feedback" *ngIf="employeeForm.get('email')?.errors?.['required']">
+  Email is required.
+</div>
+<div class="invalid-feedback" *ngIf="employeeForm.get('email')?.errors?.['pattern']">
+  Email must start with a letter and be in valid format.
+</div>
 </div>
  
           <!-- Phone -->
@@ -186,8 +186,8 @@
               [class.is-invalid]="employeeForm.get('status')?.invalid && employeeForm.get('status')?.touched">
               <option value="" disabled>Select Status</option>
               <option value="Active">Active</option>
-              <option value="On Notice">On Notice</option>
-              <option value="Resigned">Resigned</option>
+              <!-- <option value="On Notice">On Notice</option>
+              <option value="Resigned">Resigned</option> -->
             </select>
             <div class="invalid-feedback" *ngIf="employeeForm.get('status')?.errors?.['required']">
               Status is required.
@@ -285,8 +285,8 @@
             <label>Status</label>
             <select formControlName="status" class="form-select">
               <option value="Active">Active</option>
-              <option value="On Notice">On Notice</option>
-              <option value="Resigned">Resigned</option>
+              <!-- <option value="On Notice">On Notice</option>
+              <option value="Resigned">Resigned</option> -->
             </select>
           </div>
           <div class="col-md-6">

@@ -64,7 +64,7 @@
               <div *ngIf="managerReview.invalid && managerReview.touched" class="text-danger">Review is required</div>
             </div>
 
-            <!-- Review Date -->
+            <!-- Review Date (Fixed to today) -->
             <div class="mb-3">
               <label class="form-label">Review Date</label>
               <input
@@ -72,10 +72,10 @@
                 class="form-control"
                 [(ngModel)]="review.reviewDate"
                 name="reviewDate"
-                [min]="minDate"
-                required
-                #reviewDate="ngModel" />
-              <div *ngIf="reviewDate.invalid && reviewDate.touched" class="text-danger">Review Date is required</div>
+                [min]="review.reviewDate"
+                [max]="review.reviewDate"
+                readonly />
+              <small class="text-muted">This date is auto-filled and cannot be changed.</small>
             </div>
           </div>
 
