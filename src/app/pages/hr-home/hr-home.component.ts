@@ -121,6 +121,7 @@ export class HrHomeComponent implements OnInit, OnDestroy {
     });
   }
 
+
   getHolidays() {
     this.holidayService.getHolidays().subscribe({
       next: (data) => {
