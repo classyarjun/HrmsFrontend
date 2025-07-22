@@ -5,35 +5,43 @@ import { AttendanceService } from './../../../services/attendance.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HolidayService } from './../../../services/holidays.service';
+import { ApplyLeavesService } from '../../../services/apply-leaves.service';
+import { TaskService } from '../../../services/task.service';
 
 @Component({
   selector: 'app-user-home',
   standalone: true,
   imports: [ReactiveFormsModule, FormsModule, CommonModule, HttpClientModule],
   templateUrl: './user-home.component.html',
-  styleUrl: './user-home.component.css'
+  styleUrl: './user-home.component.css',
 })
 export class UserHomeComponent implements OnInit, OnDestroy {
   timeString: string = '';
   currentDate: string = '';
-  holidays: any[] = [];
   isSignedIn: boolean = false;
-  signInTime: string = ''; // ✅ Stores sign-in time for display
+  signInTime: string = '';
+  leaveInfo: any = {};
+  holidays: any[] = [];
+  userTasks: any[] = [];
+  private intervalId: any;
 
   attendanceData = {
-    employeeId: JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '',
+    employeeId:
+      JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '',
     location: '',
     remarks: '',
-    time: ''
+    time: '',
   };
 
-  private intervalId: any;
+  employeeId = JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '';
 
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
     private AttendanceService: AttendanceService,
-    private holidayService: HolidayService
+    private holidayService: HolidayService,
+    private applyLeaveService: ApplyLeavesService,
+    private taskService: TaskService
   ) {}
 
   ngOnInit(): void {
@@ -43,6 +51,27 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     this.getHolidays();
     this.getStatus();
     this.signInTime = localStorage.getItem('signInTime') || '-'; // ✅ Load saved time
+
+    this.applyLeaveService
+      .getLeaveStatusDetailsByEmployeeId(this.employeeId)
+      .subscribe({
+        next: (data) => {
+          this.leaveInfo = data;
+          console.log('Leave Info:', this.leaveInfo);
+        },
+        error: (err) => console.error('Leave status error:', err),
+      });
+
+     this.taskService.getTasksByEmployeeId(this.employeeId).subscribe(tasks => {
+    this.userTasks = tasks;
+    console.log('User Tasks:', this.userTasks);
+
+    this.taskService.setTasks(tasks);  // optional, if syncing across app
+  });
+
+
+
+
   }
 
   ngOnDestroy(): void {
@@ -59,7 +88,11 @@ export class UserHomeComponent implements OnInit, OnDestroy {
 
   updateDate(): void {
     const now = new Date();
-    const options = { day: '2-digit', month: 'short', year: 'numeric' } as const;
+    const options = {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    } as const;
     this.currentDate = now.toLocaleDateString('en-GB', options);
   }
 
@@ -86,8 +119,6 @@ export class UserHomeComponent implements OnInit, OnDestroy {
         //   const modal = new (window as any).bootstrap.Modal(modalElement);
         //   modal.hide();
         // }
-
-
       },
       error: (err) => {
         let errorMessage = 'An error occurred';
@@ -99,7 +130,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
           }
         }
         this.toastr.error(errorMessage, 'Error');
-      }
+      },
     });
   }
 
@@ -113,7 +144,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.toastr.error(err.error || 'Error during sign-out');
-      }
+      },
     });
   }
 
@@ -125,7 +156,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.isSignedIn = false;
-      }
+      },
     });
   }
 
@@ -136,7 +167,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error fetching holidays', err);
-      }
+      },
     });
   }
 

@@ -29,20 +29,21 @@ export class TaskComponent implements OnInit {
   }
 
   loadTasks(): void {
-    this.loading = true;
-    this.taskService.getTasksByEmployeeId(this.employeeId).subscribe({
-      next: (res: any[]) => {
-        this.tasks = res;
-        this.loading = false;
-        
-      },
-      error: (err) => {
-        this.loading = false;
-        this.toastr.error('Failed to load tasks');
-        console.error('Error loading tasks:', err);
-      }
-    });
-  }
+  this.loading = true;
+  this.taskService.getTasksByEmployeeId(this.employeeId).subscribe({
+    next: (res: any[]) => {
+      this.tasks = res;
+      this.taskService.setTasks(res);  // 👈 Push to global observable
+      this.loading = false;
+    },
+    error: (err) => {
+      this.loading = false;
+      this.toastr.error('Failed to load tasks');
+      console.error('Error loading tasks:', err);
+    }
+  });
+}
+
 
   updateStatus(taskId: number, newStatus: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED'): void {
     this.taskService.updateTaskStatus(taskId, newStatus).subscribe({

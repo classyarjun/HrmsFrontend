@@ -50,3 +50,14 @@
             height: 1.2em;
             line-height: 1;
         }
+
+
+
+        .card-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 10px;
+}

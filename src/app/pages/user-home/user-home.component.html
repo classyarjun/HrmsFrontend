@@ -224,49 +224,107 @@
     <!-- Third Row -->
     <div class="row g-4">
       <!-- Track Card -->
-      <div class="col-lg-8 col-md-12">
-        <div class="card h-100">
-          <div class="card-header pb-2">
-            <h6 class="card-title text-muted mb-0">Track</h6>
+      <div class="col-lg-6 col-md-12">
+        <div class="card h-100 shadow rounded-4">
+          <div class="card-header bg-light border-0 rounded-top-4">
+            <h5 class="card-title text-primary fw-bold mb-0">📊 Leave Summary</h5>
           </div>
-          <div class="card-body text-center py-4">
-            <div class="d-flex justify-content-center mb-3">
-              <div class="position-relative">
-                <!-- Illustration placeholder -->
-                <div class="track-illustration rounded-circle d-flex align-items-center justify-content-center">
-                  <div class="position-relative">
-                    <div class="person-figure rounded-pill"></div>
-                    <i class="bi bi-flag-fill text-danger position-absolute top-0 end-0"></i>
-                  </div>
-                </div>
-                <!-- Progress dots -->
-                <div class="position-absolute top-50 start-0 translate-middle-y d-flex" style="left: -32px;">
-                  <span class="progress-dot bg-success me-1"></span>
-                  <span class="progress-dot bg-warning me-1"></span>
-                  <span class="progress-dot bg-primary"></span>
-                </div>
-              </div>
+          <div class="card-body p-4 overflow-auto" style="max-height: 400px;">
+            <!-- ✅ Latest Leave Status -->
+            <div *ngIf="leaveInfo.latestStatus" class="alert mb-4 text-center" [ngClass]="{
+        'alert-success': leaveInfo.latestStatus === 'APPROVED',
+        'alert-danger': leaveInfo.latestStatus === 'REJECTED',
+        'alert-warning': leaveInfo.latestStatus === 'PENDING'
+      }">
+              <strong>Leave Status:</strong> Your last leave
+              <span class="fw-semibold">({{ leaveInfo.latestDate | date: 'dd MMM yyyy' }})</span> was
+              <strong class="text-uppercase">{{ leaveInfo.latestStatus }}</strong>.
             </div>
-            <p class="text-muted small mb-0">All good! You've nothing new to track.</p>
+
+            <!-- ✅ Leave Details Summary -->
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Total Approved Leaves</span>
+                <span class="fw-bold text-success">{{ leaveInfo.totalApproved }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Sick Leaves Used</span>
+                <span class="fw-bold">{{ leaveInfo.sickLeave }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Casual Leaves Used</span>
+                <span class="fw-bold">{{ leaveInfo.casualLeave }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Sample Leaves Used</span>
+                <span class="fw-bold">{{ leaveInfo.sampleLeave }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Paid Leaves Used</span>
+                <span class="fw-bold">{{ leaveInfo.paidLeave }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Unpaid Leaves Used</span>
+                <span class="fw-bold">{{ leaveInfo.unpaidLeave }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Maternity Leaves Used</span>
+                <span class="fw-bold">{{ leaveInfo.maternityLeave }}</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
-      <!-- POI Card -->
-      <div class="col-lg-4 col-md-12">
-        <div class="card h-100">
-          <div class="card-header pb-2">
-            <h6 class="card-title text-muted mb-0">POI</h6>
+
+      <!-- Task Card -->
+      <div class="col-lg-6 col-md-12">
+        <div class="card h-100 shadow-sm border-0 rounded-4">
+          <!-- Header -->
+          <div
+            class="card-header bg-white border-bottom rounded-top-4 d-flex align-items-center justify-content-between">
+            <h5 class="card-title text-primary fw-bold mb-0">
+              <i class="bi bi-check2-square me-2"></i>Task Summary
+            </h5>
           </div>
-          <div class="card-body py-4">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-file-text display-6 text-primary me-3 mt-1"></i>
-              <div>
-                <p class="text-muted small mb-0">
-                  Hold on! You can submit your Proof of Investments (POI) once released.
-                </p>
-              </div>
+
+          <!-- Body -->
+          <div class="card-body px-4 py-3 overflow-auto" style="max-height: 400px;">
+            <div *ngIf="userTasks.length > 0; else noTasks">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-light mb-3 rounded shadow-sm border-0" *ngFor="let task of userTasks">
+                  <div class="d-flex flex-column">
+                    <div class="fw-semibold text-dark">
+                      <i class="bi bi-clipboard-check me-2 text-success"></i>{{ task.taskName }}
+                    </div>
+
+                    <div class="mt-2">
+                      <span class="badge rounded-pill bg-secondary me-2">
+                        <i class="bi bi-calendar-check me-1"></i> Assigned: {{ task.taskAssignDate | date:'dd MMM' }}
+                      </span>
+                      <span class="badge rounded-pill bg-warning text-dark me-2">
+                        <i class="bi bi-hourglass-split me-1"></i> Due: {{ task.dueDate | date:'dd MMM' }}
+                      </span>
+                      <span class="badge rounded-pill" [ngClass]="{
+                    'bg-primary': task.status === 'PENDING',
+                    'bg-info text-dark': task.status === 'IN_PROGRESS',
+                    'bg-success': task.status === 'COMPLETED'
+                  }">
+                        <i class="bi bi-check2-circle me-1"></i> {{ task.status }}
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </div>
+
+            <!-- No Tasks Template -->
+            <ng-template #noTasks>
+              <div class="text-center text-muted py-3">
+                <i class="bi bi-emoji-neutral fs-4 d-block mb-2"></i>
+                <p class="mb-0">No tasks assigned yet.</p>
+              </div>
+            </ng-template>
           </div>
         </div>
       </div>
