@@ -24,7 +24,7 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('userData') || '{}');
-    this.employeeId = user.id;
+    this.employeeId = user.EmployeeId;
     this.loadTasks();
   }
 
@@ -35,6 +35,8 @@ export class TaskComponent implements OnInit {
       this.tasks = res;
       this.taskService.setTasks(res);  // 👈 Push to global observable
       this.loading = false;
+      console.log('Tasks loaded:', this.tasks);
+
     },
     error: (err) => {
       this.loading = false;

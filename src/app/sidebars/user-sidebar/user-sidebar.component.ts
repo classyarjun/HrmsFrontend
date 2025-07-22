@@ -57,8 +57,6 @@ export class UserSidebarComponent {
       next: (blob) => {
         const objectURL = URL.createObjectURL(blob);
         this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        console.log(" profileImageUrl from tsss",this.profileImageUrl);
-
       },
       error: (err) => {
         console.error('Error loading profile picture', err);

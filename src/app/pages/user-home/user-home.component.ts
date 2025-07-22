@@ -57,14 +57,12 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.leaveInfo = data;
-          console.log('Leave Info:', this.leaveInfo);
         },
         error: (err) => console.error('Leave status error:', err),
       });
 
      this.taskService.getTasksByEmployeeId(this.employeeId).subscribe(tasks => {
     this.userTasks = tasks;
-    console.log('User Tasks:', this.userTasks);
 
     this.taskService.setTasks(tasks);  // optional, if syncing across app
   });
