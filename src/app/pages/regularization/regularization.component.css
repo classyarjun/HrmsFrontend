@@ -1,0 +1,15 @@
+.form-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+form div {
+  margin-bottom: 12px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+}

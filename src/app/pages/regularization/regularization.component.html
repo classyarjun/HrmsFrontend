@@ -1,1 +1,24 @@
-<p>regularization works!</p>
+<h2>{{ requestType }} Request</h2>
+
+<label>Request Type:</label>
+<select [(ngModel)]="requestType" (change)="form.requestType = requestType">
+  <option value="REGULARIZATION">Regularization</option>
+  <option value="PERMISSION">Permission</option>
+</select>
+
+<form (ngSubmit)="submit()" #formRef="ngForm">
+  <label>Date:</label>
+  <input type="date" [(ngModel)]="form.date" name="date" required />
+
+  <div *ngIf="requestType === 'REGULARIZATION'">
+    <label>Clock In:</label>
+    <input type="time" [(ngModel)]="form.clockIn" name="clockIn" required />
+    <label>Clock Out:</label>
+    <input type="time" [(ngModel)]="form.clockOut" name="clockOut" required />
+  </div>
+
+  <label>Reason:</label>
+  <textarea [(ngModel)]="form.reason" name="reason" required></textarea>
+
+  <button type="submit">Submit</button>
+</form>

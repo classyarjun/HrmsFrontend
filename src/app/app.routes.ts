@@ -45,6 +45,8 @@ import { ManagerPyslipComponent } from './pages/manager-pyslip/manager-pyslip.co
 import { HelpDeskComponent } from './pages/helpdesk/helpdesk.component';
 import { UserCalenderComponent } from './pages/user-calender/user-calender.component'
 import { RegularizationComponent } from './pages/regularization/regularization.component';
+import { HrRegularizationComponent } from './pages/hr-regularization/hr-regularization.component';
+// import { HrRegularizationComponent } from './pages/hr-regularization/hr-regularization.component';
 
 
 
@@ -104,6 +106,7 @@ export const routes: Routes = [
       { path: 'hr/helpdesk', component: HrHelpdeskComponent, canActivate: [AuthGuard] },
       { path: 'hr/all-leave-request', component: ManagerAllLeaveRequestComponent, canActivate: [AuthGuard] },
       { path: 'hr/holiday', component: HolidayComponent, canActivate: [AuthGuard] },
+      { path: 'hr/regular', component: HrRegularizationComponent, canActivate: [AuthGuard] },
     
 
     ]
