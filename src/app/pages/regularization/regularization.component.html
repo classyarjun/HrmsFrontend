@@ -1,24 +1,65 @@
-<h2>{{ requestType }} Request</h2>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6"> <!-- Wider column -->
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4 bg-light rounded-4">
 
-<label>Request Type:</label>
-<select [(ngModel)]="requestType" (change)="form.requestType = requestType">
-  <option value="REGULARIZATION">Regularization</option>
-  <option value="PERMISSION">Permission</option>
-</select>
+          <h4 class="text-center mb-4 text-primary fw-bold">
+            <i class="bi bi-pencil-square me-2"></i>{{ requestType }} REQUEAST
+          </h4>
 
-<form (ngSubmit)="submit()" #formRef="ngForm">
-  <label>Date:</label>
-  <input type="date" [(ngModel)]="form.date" name="date" required />
+          <!-- Request Type -->
+          <div class="mb-3">
+            <label for="requestType" class="form-label fw-semibold">Request Type</label>
+            <select class="form-select" [(ngModel)]="requestType" (change)="form.requestType = requestType" id="requestType">
+              <option value="REGULARIZATION">Regularization</option>
+              <option value="PERMISSION">Permission</option>
+            </select>
+          </div>
 
-  <div *ngIf="requestType === 'REGULARIZATION'">
-    <label>Clock In:</label>
-    <input type="time" [(ngModel)]="form.clockIn" name="clockIn" required />
-    <label>Clock Out:</label>
-    <input type="time" [(ngModel)]="form.clockOut" name="clockOut" required />
+          <form (ngSubmit)="submit()" #formRef="ngForm">
+
+            <!-- Date -->
+            <div class="form-floating mb-3">
+              <input type="date" class="form-control" id="date" name="date" [(ngModel)]="form.date" required>
+              <label for="date"><i class="bi bi-calendar-date me-1"></i> Select Date</label>
+            </div>
+
+            <!-- Clock In & Out -->
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Clock In</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-alarm"></i></span>
+                  <input type="time" class="form-control" id="clockIn" name="clockIn" [(ngModel)]="form.clockIn" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Clock Out</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-alarm-fill"></i></span>
+                  <input type="time" class="form-control" id="clockOut" name="clockOut" [(ngModel)]="form.clockOut" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reason -->
+            <div class="form-floating mb-3">
+              <textarea class="form-control" placeholder="Reason" id="reason" name="reason" style="height: 100px" [(ngModel)]="form.reason" required></textarea>
+              <label for="reason"><i class="bi bi-chat-left-text me-1"></i> Reason</label>
+            </div>
+
+            <!-- Submit -->
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">
+                <i class="bi bi-send-fill me-1"></i> Submit Request
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
   </div>
-
-  <label>Reason:</label>
-  <textarea [(ngModel)]="form.reason" name="reason" required></textarea>
-
-  <button type="submit">Submit</button>
-</form>
+</div>
