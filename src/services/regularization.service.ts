@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 // Base API endpoint
 const API_URL = 'http://localhost:8080/api/regularization-and-permission';
 
-// Allowed values
+// Allowed types
 export type RequestType = 'REGULARIZATION' | 'PERMISSION';
 export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
-// Request format sent by employee
+// Payload from employee
 export interface RequestPayload {
   requestType: RequestType;
   reason: string;
@@ -18,14 +18,14 @@ export interface RequestPayload {
   clockOut?: string;
 }
 
-// Response for submit request
+// Server response for request submission
 export interface RegularizationResponse {
   message?: string;
   status: ApprovalStatus;
   reason: string;
 }
 
-// Complete structure of any request
+// Full structure of a saved request
 export interface RegularizationAndPermission {
   id: number;
   requestType: RequestType;
@@ -47,65 +47,47 @@ export interface RegularizationAndPermission {
 export class RegularizationService {
   constructor(private http: HttpClient) {}
 
-  /**
-   * ✅ Get all requests (regularization + permission) for HR/Manager
-   */
+  // ✅ Fetch all requests for HR
   getAllRequests(): Observable<RegularizationAndPermission[]> {
     return this.http.get<RegularizationAndPermission[]>(`${API_URL}`);
   }
 
-  /**
-   * Submit a regularization request
-   */
-  requestRegularization(empId: number, data: RequestPayload): Observable<RegularizationResponse> {
-    return this.http.post<RegularizationResponse>(`${API_URL}/request-regularization/${empId}`, data);
-  }
-
-  /**
-   * Submit a permission request
-   */
-  requestPermission(empId: number, data: RequestPayload): Observable<RegularizationResponse> {
-    return this.http.post<RegularizationResponse>(`${API_URL}/request-permission/${empId}`, data);
-  }
-
-  /**
-   * Get all pending requests (for HR/Manager)
-   */
+  // ✅ Fetch only pending requests
   getAllPendingRequests(): Observable<RegularizationAndPermission[]> {
     return this.http.get<RegularizationAndPermission[]>(`${API_URL}/pending-requests`);
   }
 
-  /**
-   * Approve a request by ID
-   */
+  // ✅ Submit regularization request
+  requestRegularization(empId: number, data: RequestPayload): Observable<RegularizationResponse> {
+    return this.http.post<RegularizationResponse>(`${API_URL}/request-regularization/${empId}`, data);
+  }
+
+  // ✅ Submit permission request
+  requestPermission(empId: number, data: RequestPayload): Observable<RegularizationResponse> {
+    return this.http.post<RegularizationResponse>(`${API_URL}/request-permission/${empId}`, data);
+  }
+
+  // ✅ Approve a request
   approveRequest(id: number): Observable<RegularizationAndPermission> {
     return this.http.put<RegularizationAndPermission>(`${API_URL}/approve/${id}`, {});
   }
 
-  /**
-   * Reject a request by ID
-   */
+  // ✅ Reject a request
   rejectRequest(id: number): Observable<RegularizationAndPermission> {
     return this.http.put<RegularizationAndPermission>(`${API_URL}/reject/${id}`, {});
   }
 
-  /**
-   * Delete a request by ID
-   */
+  // ✅ Delete a request
   deleteRequest(id: number): Observable<string> {
     return this.http.delete(`${API_URL}/delete/${id}`, { responseType: 'text' });
   }
 
-  /**
-   * Get all permission requests by employee ID
-   */
+  // ✅ Get permissions by employee
   getPermissionsByEmployeeId(empId: number): Observable<RegularizationAndPermission[]> {
     return this.http.get<RegularizationAndPermission[]>(`${API_URL}/permissions/${empId}`);
   }
 
-  /**
-   * Get all regularization requests by employee ID
-   */
+  // ✅ Get regularizations by employee
   getRegularizationsByEmployeeId(empId: number): Observable<RegularizationAndPermission[]> {
     return this.http.get<RegularizationAndPermission[]>(`${API_URL}/regularizations/${empId}`);
   }

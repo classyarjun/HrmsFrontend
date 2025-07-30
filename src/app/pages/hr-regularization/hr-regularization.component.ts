@@ -9,22 +9,29 @@ import { RegularizationService, RegularizationAndPermission } from '../../../ser
   templateUrl: './hr-regularization.component.html',
 })
 export class HrRegularizationComponent implements OnInit {
+  allRequests: RegularizationAndPermission[] = [];
   pendingRequests: RegularizationAndPermission[] = [];
+  processedRequests: RegularizationAndPermission[] = [];
 
   constructor(private regularizationService: RegularizationService) {}
 
   ngOnInit(): void {
-    this.loadPendingRequests();
+    this.loadAndCategorizeRequests();
   }
 
-  loadPendingRequests(): void {
-    this.regularizationService.getAllPendingRequests().subscribe({
+  loadAndCategorizeRequests(): void {
+    this.regularizationService.getAllRequests().subscribe({
       next: (data) => {
-        this.pendingRequests = [...data]; // Ensure UI update
-        console.log('Loaded pending requests:', data);
+        this.allRequests = data;
+        this.pendingRequests = data.filter(r => r.approvalStatus === 'PENDING');
+        this.processedRequests = data.filter(r =>
+          r.approvalStatus === 'APPROVED' || r.approvalStatus === 'REJECTED'
+        );
+        console.log("Pending:", this.pendingRequests);
+        console.log("Processed:", this.processedRequests);
       },
       error: (error) => {
-        console.error('Failed to load pending requests:', error);
+        console.error('Failed to load requests:', error);
       }
     });
   }
@@ -32,9 +39,11 @@ export class HrRegularizationComponent implements OnInit {
   approve(id: number): void {
     this.regularizationService.approveRequest(id).subscribe({
       next: () => {
-        console.log(`Approved request with id ${id}`);
         const req = this.pendingRequests.find(r => r.id === id);
-        if (req) req.approvalStatus = 'APPROVED';
+        if (req) {
+          req.approvalStatus = 'APPROVED';
+          this.moveToProcessed(req);
+        }
       },
       error: (err) => console.error('Error approving request:', err)
     });
@@ -43,9 +52,11 @@ export class HrRegularizationComponent implements OnInit {
   reject(id: number): void {
     this.regularizationService.rejectRequest(id).subscribe({
       next: () => {
-        console.log(`Rejected request with id ${id}`);
         const req = this.pendingRequests.find(r => r.id === id);
-        if (req) req.approvalStatus = 'REJECTED';
+        if (req) {
+          req.approvalStatus = 'REJECTED';
+          this.moveToProcessed(req);
+        }
       },
       error: (err) => console.error('Error rejecting request:', err)
     });
@@ -54,10 +65,16 @@ export class HrRegularizationComponent implements OnInit {
   deleteRequest(id: number): void {
     this.regularizationService.deleteRequest(id).subscribe({
       next: () => {
-        console.log(`Deleted request with id ${id}`);
         this.pendingRequests = this.pendingRequests.filter(r => r.id !== id);
+        this.processedRequests = this.processedRequests.filter(r => r.id !== id);
+        console.log(`Deleted request with id ${id}`);
       },
       error: (err) => console.error('Error deleting request:', err)
     });
+  }
+
+  private moveToProcessed(request: RegularizationAndPermission): void {
+    this.pendingRequests = this.pendingRequests.filter(r => r.id !== request.id);
+    this.processedRequests.push(request);
   }
 }

@@ -1,65 +1,96 @@
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6"> <!-- Wider column -->
-      <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-body p-4 bg-light rounded-4">
-
-          <h4 class="text-center mb-4 text-primary fw-bold">
-            <i class="bi bi-pencil-square me-2"></i>{{ requestType }} REQUEAST
-          </h4>
-
-          <!-- Request Type -->
-          <div class="mb-3">
-            <label for="requestType" class="form-label fw-semibold">Request Type</label>
-            <select class="form-select" [(ngModel)]="requestType" (change)="form.requestType = requestType" id="requestType">
-              <option value="REGULARIZATION">Regularization</option>
-              <option value="PERMISSION">Permission</option>
-            </select>
+<div class="container mt-4">
+  <!-- Button to open modal -->
+  <div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-outline-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#regularizationModal">
+      + Create Request
+    </button>
+  </div>
+ 
+  <!-- Modal for Regularization Form -->
+  <div class="modal fade" id="regularizationModal" tabindex="-1" aria-labelledby="regularizationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <form (ngSubmit)="submit()" #formRef="ngForm">
+          <div class="modal-header bg-white border-bottom-0 pb-2">
+            <h5 class="modal-title fw-semibold text-dark" id="regularizationModalLabel">New Regularization / Permission</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-
-          <form (ngSubmit)="submit()" #formRef="ngForm">
-
-            <!-- Date -->
-            <div class="form-floating mb-3">
-              <input type="date" class="form-control" id="date" name="date" [(ngModel)]="form.date" required>
-              <label for="date"><i class="bi bi-calendar-date me-1"></i> Select Date</label>
+ 
+          <div class="modal-body px-4 pt-0">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Request Type</label>
+              <select class="form-select" [(ngModel)]="requestType" name="requestType" (change)="form.requestType = requestType; loadEmployeeRequests()">
+                <option value="REGULARIZATION">Regularization</option>
+                <option value="PERMISSION">Permission</option>
+              </select>
             </div>
-
-            <!-- Clock In & Out -->
+ 
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Date</label>
+              <input type="date" class="form-control" [(ngModel)]="form.date" name="date" required />
+            </div>
+ 
             <div class="row g-3 mb-3">
               <div class="col-md-6">
-                <label class="form-label">Clock In</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-alarm"></i></span>
-                  <input type="time" class="form-control" id="clockIn" name="clockIn" [(ngModel)]="form.clockIn" required>
-                </div>
+                <label class="form-label fw-semibold">Clock In</label>
+                <input type="time" class="form-control" [(ngModel)]="form.clockIn" name="clockIn" required />
               </div>
               <div class="col-md-6">
-                <label class="form-label">Clock Out</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-alarm-fill"></i></span>
-                  <input type="time" class="form-control" id="clockOut" name="clockOut" [(ngModel)]="form.clockOut" required>
-                </div>
+                <label class="form-label fw-semibold">Clock Out</label>
+                <input type="time" class="form-control" [(ngModel)]="form.clockOut" name="clockOut" required />
               </div>
             </div>
-
-            <!-- Reason -->
-            <div class="form-floating mb-3">
-              <textarea class="form-control" placeholder="Reason" id="reason" name="reason" style="height: 100px" [(ngModel)]="form.reason" required></textarea>
-              <label for="reason"><i class="bi bi-chat-left-text me-1"></i> Reason</label>
+ 
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Reason</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="form.reason" name="reason" required></textarea>
             </div>
-
-            <!-- Submit -->
-            <div class="text-center">
-              <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">
-                <i class="bi bi-send-fill me-1"></i> Submit Request
-              </button>
-            </div>
-
-          </form>
-
-        </div>
+          </div>
+ 
+          <div class="modal-footer bg-white border-top-0 pb-4 px-4">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary px-4">Submit</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+ 
+  <!-- Table for Previous Requests -->
+  <div class="mt-4">
+    <h4 class="mb-3">Your Previous Requests</h4>
+    <table class="table table-bordered table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Date</th>
+          <th>Clock In</th>
+          <th>Clock Out</th>
+          <th>Reason</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let req of pendingRequests">
+          <td>{{ req.date }}</td>
+          <td>{{ req.clockIn }}</td>
+          <td>{{ req.clockOut }}</td>
+          <td>{{ req.reason }}</td>
+          <td>
+            <span [ngClass]="{
+              'text-warning': req.approvalStatus === 'PENDING',
+              'text-success': req.approvalStatus === 'APPROVED',
+              'text-danger': req.approvalStatus === 'REJECTED'
+            }">
+              {{ req.approvalStatus }}
+            </span>
+          </td>
+        </tr>
+        <tr *ngIf="pendingRequests.length === 0">
+          <td colspan="5" class="text-center text-muted">No requests submitted yet.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+ 
+ 
