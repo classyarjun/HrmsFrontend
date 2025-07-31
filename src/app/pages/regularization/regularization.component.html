@@ -25,18 +25,23 @@
               </select>
             </div>
  
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Date</label>
-              <input type="date" class="form-control" [(ngModel)]="form.date" name="date" required />
-            </div>
+        <input
+  type="date"
+  class="form-control"
+  [(ngModel)]="form.date"
+  name="date"
+  required
+  [min]="getMinDate()"
+  [max]="getMaxDate()" />
+
  
             <div class="row g-3 mb-3">
               <div class="col-md-6">
-                <label class="form-label fw-semibold">Clock In</label>
+                <label class="form-label fw-semibold">Clock Out</label>
                 <input type="time" class="form-control" [(ngModel)]="form.clockIn" name="clockIn" required />
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-semibold">Clock Out</label>
+                <label class="form-label fw-semibold">Clock In</label>
                 <input type="time" class="form-control" [(ngModel)]="form.clockOut" name="clockOut" required />
               </div>
             </div>

@@ -7,7 +7,7 @@ import {
   RequestType,
   RegularizationAndPermission
 } from '../../../services/regularization.service';
- 
+
 @Component({
   selector: 'app-regularization',
   standalone: true,
@@ -15,10 +15,10 @@ import {
   templateUrl: './regularization.component.html',
 })
 export class RegularizationComponent implements OnInit {
-  employeeId: number = 1; // Replace this with actual logged-in employee ID
+  employeeId: number = 1;
   requestType: RequestType = 'REGULARIZATION';
   pendingRequests: RegularizationAndPermission[] = [];
- 
+
   form: RequestPayload = {
     requestType: this.requestType,
     reason: '',
@@ -26,13 +26,13 @@ export class RegularizationComponent implements OnInit {
     clockIn: '',
     clockOut: '',
   };
- 
+
   constructor(private service: RegularizationService) {}
- 
+
   ngOnInit() {
     this.loadEmployeeRequests();
   }
- 
+
   loadEmployeeRequests(): void {
     if (this.requestType === 'REGULARIZATION') {
       this.service.getRegularizationsByEmployeeId(this.employeeId).subscribe({
@@ -54,20 +54,20 @@ export class RegularizationComponent implements OnInit {
       });
     }
   }
- 
+
   submit() {
     if (!this.form.reason || !this.form.date || !this.form.clockIn || !this.form.clockOut) {
       alert('All fields are required.');
       return;
     }
- 
+
     this.form.requestType = this.requestType;
- 
+
     const request$ =
       this.requestType === 'REGULARIZATION'
         ? this.service.requestRegularization(this.employeeId, this.form)
         : this.service.requestPermission(this.employeeId, this.form);
- 
+
     request$.subscribe({
       next: (res) => {
         alert(`${this.requestType} request submitted. Status: ${res.status}`);
@@ -79,7 +79,7 @@ export class RegularizationComponent implements OnInit {
       }
     });
   }
- 
+
   resetForm() {
     this.form = {
       requestType: this.requestType,
@@ -89,6 +89,20 @@ export class RegularizationComponent implements OnInit {
       clockOut: '',
     };
   }
+
+  getTodayDateString(): string {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  getMinDate(): string {
+    return this.requestType === 'PERMISSION' ? this.getTodayDateString() : '1900-01-01';
+  }
+
+  getMaxDate(): string {
+    return this.requestType === 'PERMISSION' ? this.getTodayDateString() : '9999-12-31';
+  }
 }
- 
- 

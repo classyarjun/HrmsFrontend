@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { SalaryService } from '../../../services/salary.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { error } from 'console';
 
 @Component({
   selector: 'app-hr-generate-salary',
@@ -13,50 +12,46 @@ import { error } from 'console';
   styleUrl: './hr-generate-salary.component.css',
 })
 export class HrGenerateSalaryComponent {
-getAllSlips() {
-throw new Error('Method not implemented.');
-}
-month: any;
-email: any;
-getSlipByMonth() {
-throw new Error('Method not implemented.');
-}
-downloadSlip(arg0: any,arg1: any) {
-throw new Error('Method not implemented.');
-}
-slips: any;
-onFileSelected($event: Event) {
-throw new Error('Method not implemented.');
-}
   uploadForm: FormGroup;
   selectedFile: File | null = null;
+  fileError: string = '';
 
   constructor(
     private fb: FormBuilder,
     private salaryService: SalaryService
   ) {
-    // Initialize the form with validation
+    // Initialize form
     this.uploadForm = this.fb.group({
       uploadedBy: ['', [Validators.required, Validators.email]],
       userEmail: ['', [Validators.required, Validators.email]],
-       role: ['HR'],
+      role: ['HR'],
     });
   }
 
-  // Handle file selection
+  // Validate and select only PDF file
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+      const file = input.files[0];
+
+      if (file.type !== 'application/pdf') {
+        this.fileError = 'Only PDF files are allowed.';
+        this.selectedFile = null;
+        input.value = ''; // clear input
+        return;
+      }
+
+      this.selectedFile = file;
+      this.fileError = '';
       console.log('Selected file:', this.selectedFile);
     }
   }
 
-  // Submit form data
+  // Submit form
   onSubmit(): void {
-    
     if (this.uploadForm.invalid || !this.selectedFile) {
-      alert('Please fill all fields and select a file.');
+      this.fileError = this.selectedFile ? '' : 'Please select a PDF file.';
+      alert('Please fill all fields and upload a valid PDF file.');
       return;
     }
 
@@ -68,13 +63,13 @@ throw new Error('Method not implemented.');
 
     this.salaryService.uploadSalary(formData).subscribe({
       next: (response) => {
-       
         alert('File uploaded successfully!');
         this.uploadForm.reset();
         this.selectedFile = null;
+        this.fileError = '';
       },
       error: (err: any) => {
-        console.log(err)
+        console.error('Upload error:', err);
       },
     });
   }
