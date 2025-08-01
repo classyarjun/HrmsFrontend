@@ -8,6 +8,14 @@ import { HolidayService } from './../../../services/holidays.service';
 import { ApplyLeavesService } from '../../../services/apply-leaves.service';
 import { TaskService } from '../../../services/task.service';
 
+import {
+  RegularizationService,
+
+  RequestType,
+  RegularizationAndPermission,
+} from '../../../services/regularization.service';
+
+
 @Component({
   selector: 'app-user-home',
   standalone: true,
@@ -33,6 +41,13 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     time: '',
   };
 
+
+
+
+    requestType: RequestType = 'REGULARIZATION';
+    pendingRequests: RegularizationAndPermission[] = [];
+
+
   employeeId = JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '';
 
   constructor(
@@ -41,7 +56,8 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     private AttendanceService: AttendanceService,
     private holidayService: HolidayService,
     private applyLeaveService: ApplyLeavesService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private regularizationService: RegularizationService
   ) {}
 
   ngOnInit(): void {
@@ -65,6 +81,8 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     this.userTasks = tasks;
 
     this.taskService.setTasks(tasks);  // optional, if syncing across app
+
+    this.loadEmployeeRequests();
   });
 
 
@@ -99,25 +117,25 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     this.toastr.warning('Please enter location');
     return;
   }
- 
+
   const now = new Date();
   const formattedTime = now.toLocaleTimeString('en-GB', { hour12: false });
- 
+
   this.attendanceData.time = formattedTime;
- 
+
   this.AttendanceService.signIn(this.attendanceData).subscribe({
     next: () => {
       this.isSignedIn = true;
       this.signInTime = formattedTime;
       localStorage.setItem('signInTime', formattedTime);
       this.toastr.success('Sign-in successful!', 'Success');
- 
+
       const modalElement = document.getElementById('workLocationModal');
       if (modalElement) {
         const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
         modal?.hide();
       }
- 
+
       // Clear input for next time
       this.attendanceData.location = '';
     },
@@ -134,8 +152,8 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     },
   });
 }
- 
- 
+
+
   signOut() {
     this.AttendanceService.signOut(this.attendanceData.employeeId).subscribe({
       next: () => {
@@ -149,7 +167,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       },
     });
   }
- 
+
   getStatus() {
     this.AttendanceService.getStatus(this.attendanceData.employeeId).subscribe({
       next: (res: any[]) => {
@@ -161,7 +179,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       },
     });
   }
- 
+
  getHolidays() {
   this.holidayService.getHolidays().subscribe({
     next: (data) => {
@@ -186,4 +204,25 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       modal.show();
     }
   }
+
+
+
+
+
+
+
+loadEmployeeRequests(): void {
+    this.regularizationService.getAllRequestByEmployeeId(this.employeeId).subscribe({
+      next: (data) => {
+        this.pendingRequests = data;
+        console.log('Requeststss:', data);
+      },
+      error: (err) => {
+        console.error('Error fetching requests:', err);
+      }
+    });
+  }
+
+
+
 }

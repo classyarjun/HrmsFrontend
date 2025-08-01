@@ -36,6 +36,41 @@ export class HrRegularizationComponent implements OnInit {
     });
   }
 
+<<<<<<<<< Temporary merge branch 1
+  approve(id: number): void {
+    this.regularizationService.approveRequest(id).subscribe({
+      next: () => {
+        const req = this.pendingRequests.find(r => r.id === id);
+        if (req) {
+          req.approvalStatus = 'APPROVED';
+          this.moveToProcessed(req);
+          this.toastr.success('Request approved successfully');
+        }
+      },
+      error: (err) => {
+        console.error('Error approving request:', err);
+        this.toastr.error('Failed to approve request');
+      }
+    });
+  }
+
+  reject(id: number): void {
+    this.regularizationService.rejectRequest(id).subscribe({
+      next: () => {
+        const req = this.pendingRequests.find(r => r.id === id);
+        if (req) {
+          req.approvalStatus = 'REJECTED';
+          this.moveToProcessed(req);
+          this.toastr.success('Request rejected successfully');
+        }
+      },
+      error: (err) => {
+        console.error('Error rejecting request:', err);
+        this.toastr.error('Failed to reject request');
+      }
+    });
+  }
+=========
 approve(id: number): void {
   this.regularizationService.approveRequest(id).subscribe({
     next: () => {
@@ -62,6 +97,7 @@ reject(id: number): void {
   });
 }
 
+>>>>>>>>> Temporary merge branch 2
 
   deleteRequest(id: number): void {
     this.regularizationService.deleteRequest(id).subscribe({
