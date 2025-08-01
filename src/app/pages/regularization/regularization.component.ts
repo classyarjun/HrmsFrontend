@@ -7,7 +7,7 @@ import {
   RequestType,
   RegularizationAndPermission
 } from '../../../services/regularization.service';
- 
+
 @Component({
   selector: 'app-regularization',
   standalone: true,
@@ -15,24 +15,25 @@ import {
   templateUrl: './regularization.component.html',
 })
 export class RegularizationComponent implements OnInit {
-  employeeId: number = 1; // Replace this with actual logged-in employee ID
+  employeeId: number = 1; // Replace with actual logged-in employee ID
   requestType: RequestType = 'REGULARIZATION';
   pendingRequests: RegularizationAndPermission[] = [];
- 
+
   form: RequestPayload = {
     requestType: this.requestType,
     reason: '',
     date: '',
     clockIn: '',
     clockOut: '',
+    email: '' // ✅ Added email field
   };
- 
+
   constructor(private service: RegularizationService) {}
- 
+
   ngOnInit() {
     this.loadEmployeeRequests();
   }
- 
+
   loadEmployeeRequests(): void {
     if (this.requestType === 'REGULARIZATION') {
       this.service.getRegularizationsByEmployeeId(this.employeeId).subscribe({
@@ -54,20 +55,20 @@ export class RegularizationComponent implements OnInit {
       });
     }
   }
- 
+
   submit() {
-    if (!this.form.reason || !this.form.date || !this.form.clockIn || !this.form.clockOut) {
+    if (!this.form.reason || !this.form.date || !this.form.clockIn || !this.form.clockOut || !this.form.email) {
       alert('All fields are required.');
       return;
     }
- 
+
     this.form.requestType = this.requestType;
- 
+
     const request$ =
       this.requestType === 'REGULARIZATION'
         ? this.service.requestRegularization(this.employeeId, this.form)
         : this.service.requestPermission(this.employeeId, this.form);
- 
+
     request$.subscribe({
       next: (res) => {
         alert(`${this.requestType} request submitted. Status: ${res.status}`);
@@ -79,7 +80,7 @@ export class RegularizationComponent implements OnInit {
       }
     });
   }
- 
+
   resetForm() {
     this.form = {
       requestType: this.requestType,
@@ -87,8 +88,7 @@ export class RegularizationComponent implements OnInit {
       date: '',
       clockIn: '',
       clockOut: '',
+      email: '' // ✅ Reset email field
     };
   }
 }
- 
- 
