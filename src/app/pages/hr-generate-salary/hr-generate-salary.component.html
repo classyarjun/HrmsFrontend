@@ -31,18 +31,23 @@
               </small>
             </div>
 
-           <!-- Role -->
-<div class="mb-3">
-  <label for="role" class="form-label">Role</label>
-  <input type="text" id="role" class="form-control shadow-sm" formControlName="role" readonly />
-</div>
-
-
+            <!-- Role -->
+            <div class="mb-3">
+              <label for="role" class="form-label">Role</label>
+              <input type="text" id="role" class="form-control shadow-sm" formControlName="role" readonly />
+            </div>
 
             <!-- File Upload -->
             <div class="mb-4">
-              <label for="file" class="form-label">Upload File</label>
-              <input type="file" id="file" class="form-control shadow-sm" (change)="onFileChange($event)" />
+              <label for="file" class="form-label">Upload PDF File</label>
+              <input
+                type="file"
+                id="file"
+                class="form-control shadow-sm"
+                (change)="onFileChange($event)"
+                accept="application/pdf"
+              />
+              <small class="text-danger" *ngIf="fileError">{{ fileError }}</small>
             </div>
 
             <!-- Submit -->
