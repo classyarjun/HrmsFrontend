@@ -63,17 +63,17 @@
   </div>
 
  <table class="table table-bordered table-striped table-hover">
-  <thead class="table-dark">
+  <thead class="table-dark text-center"> <!-- Centered table headers -->
     <tr>
       <th>Request Type</th>
       <th>Date</th>
       <th>Clock In</th>
       <th>Clock Out</th>
       <th>Reason</th>
-      <th>Status</th> <!-- ✅ Email column removed -->
+      <th>Status</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="text-center"> <!-- Centered all table body cells -->
     <tr *ngFor="let req of pendingRequests">
       <td>
         <span class="badge bg-info text-dark">
@@ -97,8 +97,7 @@
       </td>
     </tr>
     <tr *ngIf="pendingRequests.length === 0">
-      <td colspan="6" class="text-center text-muted">No requests submitted yet.</td> <!-- Updated colspan -->
+      <td colspan="6" class="text-center text-muted">No requests submitted yet.</td>
     </tr>
   </tbody>
 </table>
-
