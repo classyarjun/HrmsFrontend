@@ -70,3 +70,8 @@
   cursor: not-allowed;
 }
 
+/* Optional: Add this if table text alignment looks off in some browsers */
+table th,
+table td {
+  vertical-align: middle;
+}

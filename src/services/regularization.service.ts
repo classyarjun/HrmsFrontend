@@ -23,6 +23,8 @@ export interface RegularizationResponse {
 }
 
 export interface RegularizationAndPermission {
+status: any;
+fromDate: any;
 email: any;
   id: number;
   requestType: RequestType;
