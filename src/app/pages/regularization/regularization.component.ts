@@ -18,6 +18,7 @@ export class RegularizationComponent implements OnInit {
   employeeId: number = 1; // Replace with actual logged-in employee ID
   requestType: RequestType = 'REGULARIZATION';
   pendingRequests: RegularizationAndPermission[] = [];
+  today: string = ''; // ✅ Store today's date
 
   form: RequestPayload = {
     requestType: this.requestType,
@@ -25,12 +26,24 @@ export class RegularizationComponent implements OnInit {
     date: '',
     clockIn: '',
     clockOut: '',
-    email: '' // ✅ Added email field
+    email: ''
   };
 
   constructor(private service: RegularizationService) {}
 
   ngOnInit() {
+    // ✅ Get today's date in YYYY-MM-DD format
+    this.today = new Date().toISOString().split('T')[0];
+    this.loadEmployeeRequests();
+  }
+
+  // ✅ Called when request type changes
+  onRequestTypeChange() {
+    if (this.requestType === 'PERMISSION') {
+      this.form.date = this.today; // Auto-set to today's date
+    } else {
+      this.form.date = ''; // Allow choosing date for Regularization
+    }
     this.loadEmployeeRequests();
   }
 
@@ -85,10 +98,10 @@ export class RegularizationComponent implements OnInit {
     this.form = {
       requestType: this.requestType,
       reason: '',
-      date: '',
+      date: this.requestType === 'PERMISSION' ? this.today : '',
       clockIn: '',
       clockOut: '',
-      email: '' // ✅ Reset email field
+      email: ''
     };
   }
 }
