@@ -71,7 +71,7 @@ export class AddEmployeeComponent implements OnInit {
       jobTitle: ['', alphaOnlyValidator],
       role: ['', Validators.required],
       status: ['', Validators.required],
-      joiningDate: ['', [Validators.required, this.futureOrTodayDateValidator]],
+      joiningDate: [''],
       exitDate: ['']
     });
 

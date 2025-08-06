@@ -71,7 +71,7 @@ export class HrAddEmployeeComponent implements OnInit {
       jobTitle: ['', textOnlyValidator],
       role: ['', Validators.required],
       status: ['', Validators.required],
-      joiningDate: ['', [Validators.required, this.futureOrTodayDateValidator]],
+      joiningDate: [''],
       exitDate: ['']
     });
 
