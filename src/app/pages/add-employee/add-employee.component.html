@@ -110,20 +110,18 @@
           </div>
 
         <!-- Department -->
-  <!-- Role -->
+
           <div class="col-md-6">
             <label for="role">Department</label>
-            <select class="form-select" id="role" formControlName="role"
-              [class.is-invalid]="employeeForm.get('role')?.invalid && employeeForm.get('role')?.touched">
+            <select class="form-select" id="department" formControlName="department"
+              [class.is-invalid]="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched">
               <option value="" disabled>Select department</option>
               <option value="USER">IT</option>
               <option value="HR">HR</option>
               
               <option value="MANAGER">Admin</option>
             </select>
-            <div class="invalid-feedback" *ngIf="employeeForm.get('role')?.errors?.['required']">
-              Role is required.
-            </div>
+           
           
   <div
     class="invalid-feedback"

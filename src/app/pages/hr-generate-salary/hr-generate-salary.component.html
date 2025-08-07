@@ -14,8 +14,13 @@
             <!-- User Email -->
             <div class="mb-3">
               <label for="userEmail" class="form-label">User Email</label>
-              <input type="email" id="userEmail" class="form-control shadow-sm" placeholder="Enter employee email"
-                formControlName="userEmail" />
+              <input
+                type="email"
+                id="userEmail"
+                class="form-control shadow-sm"
+                placeholder="Enter employee email"
+                formControlName="userEmail"
+              />
               <small class="text-danger" *ngIf="uploadForm.get('userEmail')?.invalid && uploadForm.get('userEmail')?.touched">
                 Please enter a valid email.
               </small>
@@ -24,17 +29,27 @@
             <!-- Uploaded By -->
             <div class="mb-3">
               <label for="uploadedBy" class="form-label">Uploaded By</label>
-              <input type="email" id="uploadedBy" class="form-control shadow-sm" placeholder="Uploader's email"
-                formControlName="uploadedBy" />
-              <small class="text-danger" *ngIf="uploadForm.get('uploadedBy')?.invalid && uploadForm.get('uploadedBy')?.touched">
-                Please enter a valid uploader email.
-              </small>
+              <input
+                type="email"
+                id="uploadedBy"
+                class="form-control shadow-sm"
+                placeholder="Uploader's email"
+                formControlName="uploadedBy"
+               readonly
+              />
+              <!-- Validation message not needed because field is disabled -->
             </div>
 
             <!-- Role -->
             <div class="mb-3">
               <label for="role" class="form-label">Role</label>
-              <input type="text" id="role" class="form-control shadow-sm" formControlName="role" readonly />
+              <input
+                type="text"
+                id="role"
+                class="form-control shadow-sm"
+                formControlName="role"
+                readonly
+              />
             </div>
 
             <!-- File Upload -->

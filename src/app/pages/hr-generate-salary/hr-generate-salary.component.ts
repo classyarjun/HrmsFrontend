@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SalaryService } from '../../../services/salary.service';
+import { AuthService } from '../../../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
@@ -11,21 +12,28 @@ import { CommonModule } from '@angular/common';
   templateUrl: './hr-generate-salary.component.html',
   styleUrl: './hr-generate-salary.component.css',
 })
-export class HrGenerateSalaryComponent {
+export class HrGenerateSalaryComponent implements OnInit {
   uploadForm: FormGroup;
   selectedFile: File | null = null;
   fileError: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private salaryService: SalaryService
+    private salaryService: SalaryService,
+    private authService: AuthService
   ) {
-    // Initialize form
+    // Initialize form with 'uploadedBy' as disabled (readonly)
     this.uploadForm = this.fb.group({
-      uploadedBy: ['', [Validators.required, Validators.email]],
+      uploadedBy: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       userEmail: ['', [Validators.required, Validators.email]],
       role: ['HR'],
     });
+  }
+
+  ngOnInit(): void {
+    // Set logged in user's email into uploadedBy
+    const email = this.authService.getLoggedInEmail();
+    this.uploadForm.patchValue({ uploadedBy: email });
   }
 
   // Validate and select only PDF file
@@ -56,10 +64,12 @@ export class HrGenerateSalaryComponent {
     }
 
     const formData = new FormData();
+    const formValue = this.uploadForm.getRawValue(); // includes disabled fields
+
     formData.append('file', this.selectedFile);
-    formData.append('uploadedBy', this.uploadForm.get('uploadedBy')?.value);
-    formData.append('userEmail', this.uploadForm.get('userEmail')?.value);
-    formData.append('role', this.uploadForm.get('role')?.value);
+    formData.append('uploadedBy', formValue.uploadedBy);
+    formData.append('userEmail', formValue.userEmail);
+    formData.append('role', formValue.role);
 
     this.salaryService.uploadSalary(formData).subscribe({
       next: (response) => {
@@ -67,6 +77,9 @@ export class HrGenerateSalaryComponent {
         this.uploadForm.reset();
         this.selectedFile = null;
         this.fileError = '';
+        // Reset uploadedBy after reset
+        const email = this.authService.getLoggedInEmail();
+        this.uploadForm.patchValue({ uploadedBy: email });
       },
       error: (err: any) => {
         console.error('Upload error:', err);

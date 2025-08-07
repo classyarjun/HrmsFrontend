@@ -17,6 +17,7 @@ declare var bootstrap: any;
 export class HolidayComponent implements OnInit {
   holidayForm: FormGroup;
   holidays: any[] = [];
+  upcomingHolidays: any[] = [];
   minDate: string = '';
 
   successMessage = '';
@@ -45,7 +46,7 @@ export class HolidayComponent implements OnInit {
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
-    this.minDate = '${yyyy}-${mm}-${dd}';
+    this.minDate = `${yyyy}-${mm}-${dd}`;
   }
 
   futureDateValidator(control: AbstractControl): { [key: string]: any } | null {
@@ -58,7 +59,13 @@ export class HolidayComponent implements OnInit {
   loadHolidays(): void {
     this.holidayService.getHolidays().subscribe({
       next: (data) => {
-        this.holidays = data;
+        // Sort all holidays by date (ascending)
+        this.holidays = data.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+        // Filter and sort upcoming holidays
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        this.upcomingHolidays = this.holidays.filter(h => new Date(h.date) >= today);
       },
       error: () => {
         this.errorMessage = 'Failed to load holidays.';
@@ -107,12 +114,13 @@ export class HolidayComponent implements OnInit {
         this.holidays = this.holidays.filter(holiday => holiday.id !== id);
         this.toastr.success('Holiday deleted successfully!', 'Success');
         this.oisDeleting = false;
+        this.loadHolidays(); // Reload to update upcoming list
       },
       error: () => {
-        // Still remove from frontend if error occurs
         this.holidays = this.holidays.filter(holiday => holiday.id !== id);
         this.toastr.success('Holiday deleted successfully!', 'Success');
         this.oisDeleting = false;
+        this.loadHolidays();
       }
     });
   }
