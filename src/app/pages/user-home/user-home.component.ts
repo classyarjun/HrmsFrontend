@@ -158,16 +158,22 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  getHolidays() {
-    this.holidayService.getHolidays().subscribe({
-      next: (data) => {
-        this.holidays = data;
-      },
-      error: (err) => {
-        console.error('Error fetching holidays', err);
-      },
-    });
-  }
+ getHolidays() {
+  this.holidayService.getHolidays().subscribe({
+    next: (data) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Remove time
+
+      // Filter and sort upcoming holidays
+      this.holidays = data
+        .filter((holiday: any) => new Date(holiday.date) >= today)
+        .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    },
+    error: (err) => {
+      console.error('Failed to fetch holidays:', err);
+    }
+  });
+}
 
   openSwipeModal() {
     const modalElement = document.getElementById('swipeModal');

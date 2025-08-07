@@ -146,6 +146,18 @@ export class AddEmployeeComponent implements OnInit {
     }
   }
 
+  closeModal(modalId: string) {
+    const modalEl = document.getElementById(modalId);
+    if (modalEl) {
+      const modalInstance = bootstrap.Modal.getInstance(modalEl);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+    // remove backdrops if lingering
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+  }
+
   onSubmit() {
     if (this.employeeForm.invalid) {
       this.toastr.error('Please fill all required fields correctly.');
@@ -160,7 +172,7 @@ export class AddEmployeeComponent implements OnInit {
 
     this.addEmployeeService.addEmployeeWithImage(formData).subscribe({
       next: () => {
-        (document.getElementById('closeModalBtn') as HTMLElement)?.click();
+        this.closeModal('addEmployeeModal');
         this.toastr.success('Employee added successfully!');
         this.employeeForm.reset();
         this.selectedFile = null;
@@ -202,7 +214,7 @@ export class AddEmployeeComponent implements OnInit {
 
     this.addEmployeeService.updateEmployeeWithImage(this.selectedEmployeeId, this.editForm.value).subscribe({
       next: () => {
-        (document.getElementById('closeEditModalBtn') as HTMLElement)?.click();
+        this.closeModal('editEmployeeModal');
         this.getEmployees();
         this.toastr.success('Employee updated successfully!');
       },
@@ -256,7 +268,7 @@ export class AddEmployeeComponent implements OnInit {
 
     this.addEmployeeService.registerEmployee(formData).subscribe({
       next: () => {
-        (document.getElementById('closeRegisterModalBtn') as HTMLElement)?.click();
+        this.closeModal('registerModal');
         this.selectedImage = null;
         this.toastr.success('Employee registered successfully!');
         this.getEmployees();
