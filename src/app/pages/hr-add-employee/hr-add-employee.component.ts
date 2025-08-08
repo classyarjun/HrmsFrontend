@@ -147,6 +147,30 @@ export class HrAddEmployeeComponent implements OnInit {
     }
   }
 
+closeAllModals() {
+  // Smooth fade-out transition
+  document.querySelectorAll('.modal.show').forEach((modalEl: any) => {
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      modalEl.classList.add('fade');
+      setTimeout(() => {
+        modalInstance.hide();
+
+        // 🆕 Backdrop manually remove
+        document.querySelectorAll('.modal-backdrop').forEach((backdrop: any) => {
+          backdrop.remove();
+        });
+
+        // 🆕 Body reset
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+      }, 200); // 0.2s delay for smooth fade
+    }
+  });
+}
+
+
   onSubmit() {
     if (this.employeeForm.invalid) {
       this.toastr.error('Please fill all required fields correctly.');
@@ -162,7 +186,7 @@ export class HrAddEmployeeComponent implements OnInit {
 
     this.addEmployeeService.addEmployeeWithImage(formData).subscribe({
       next: () => {
-        (document.getElementById('closeModalBtn') as HTMLElement)?.click();
+        this.closeAllModals();
         this.toastr.success('Employee added successfully!');
         alert('✅ Employee added successfully!');
         this.employeeForm.reset();
@@ -179,6 +203,8 @@ export class HrAddEmployeeComponent implements OnInit {
 
   openEditModal(emp: any) {
     if (!emp) return;
+
+    this.closeAllModals();
 
     this.selectedEmployeeId = emp.id;
     this.editForm.patchValue(emp);
@@ -198,7 +224,7 @@ export class HrAddEmployeeComponent implements OnInit {
 
     this.addEmployeeService.updateEmployeeWithImage(this.selectedEmployeeId, this.editForm.value).subscribe({
       next: () => {
-        (document.getElementById('closeEditModalBtn') as HTMLElement)?.click();
+        this.closeAllModals();
         this.getEmployees();
         this.toastr.success('Employee updated successfully!');
         alert('✅ Employee updated successfully!');
@@ -213,6 +239,8 @@ export class HrAddEmployeeComponent implements OnInit {
 
   openRegisterModal(emp: any) {
     if (!emp) return;
+
+    this.closeAllModals();
 
     this.selectedEmployeeId = emp.id;
     this.registerForm.patchValue({
@@ -255,7 +283,7 @@ export class HrAddEmployeeComponent implements OnInit {
 
     this.addEmployeeService.registerEmployee(formData).subscribe({
       next: () => {
-        (document.getElementById('closeRegisterModalBtn') as HTMLElement)?.click();
+        this.closeAllModals();
         this.selectedImage = null;
         this.toastr.success('Employee registered successfully!');
         alert('✅ Employee registered successfully!');
