@@ -109,18 +109,19 @@
           </div>
  
         <!-- Department -->
-<div class="col-md-6">
-  <label for="department">Department</label>
-  <input
-    id="department"
-    formControlName="department"
-    class="form-control"
-    (keypress)="allowLettersOnly($event)"
-    [class.is-invalid]="
-      employeeForm.get('department')?.invalid &&
-      employeeForm.get('department')?.touched
-    "
-  />
+
+          <div class="col-md-6">
+            <label for="role">Department</label>
+            <select class="form-select" id="department" formControlName="department"
+              [class.is-invalid]="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched">
+              <option value="" disabled>Select department</option>
+              <option value="USER">IT</option>
+              <option value="HR">HR</option>
+              
+              <option value="MANAGER">Admin</option>
+            </select>
+           
+          
   <div
     class="invalid-feedback"
     *ngIf="employeeForm.get('department')?.errors?.['required']"
@@ -134,6 +135,7 @@
     Only alphabets and spaces are allowed.
   </div>
 </div>
+
  
 <!-- Job Title -->
 <div class="col-md-6">
@@ -264,10 +266,34 @@
             <label>Phone</label>
             <input formControlName="phone" class="form-control" />
           </div>
+         <!-- Department -->
+
           <div class="col-md-6">
-            <label>Department</label>
-            <input formControlName="department" class="form-control" />
-          </div>
+            <label for="role">Department</label>
+            <select class="form-select" id="department" formControlName="department"
+              [class.is-invalid]="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched">
+              <option value="" disabled>Select department</option>
+              <option value="USER">IT</option>
+              <option value="HR">HR</option>
+              
+              <option value="MANAGER">Admin</option>
+            </select>
+           
+          
+  <div
+    class="invalid-feedback"
+    *ngIf="employeeForm.get('department')?.errors?.['required']"
+  >
+    Department is required.
+  </div>
+  <div
+    class="invalid-feedback"
+    *ngIf="employeeForm.get('department')?.errors?.['pattern']"
+  >
+    Only alphabets and spaces are allowed.
+  </div>
+</div>
+
           <div class="col-md-6">
             <label>Job Title</label>
             <input formControlName="jobTitle" class="form-control" />

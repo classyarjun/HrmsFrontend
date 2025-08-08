@@ -294,13 +294,33 @@
           </div>
 
           <!-- Department -->
+
           <div class="col-md-6">
-            <label>Department</label>
-            <input formControlName="department" class="form-control" />
-            <div class="text-danger" *ngIf="editForm.get('department')?.touched && editForm.get('department')?.invalid">
-              <small *ngIf="editForm.get('department')?.errors?.['required']">Department is required.</small>
-            </div>
-          </div>
+            <label for="role">Department</label>
+            <select class="form-select" id="department" formControlName="department"
+              [class.is-invalid]="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched">
+              <option value="" disabled>Select department</option>
+              <option value="USER">IT</option>
+              <option value="HR">HR</option>
+              
+              <option value="MANAGER">Admin</option>
+            </select>
+           
+          
+  <div
+    class="invalid-feedback"
+    *ngIf="employeeForm.get('department')?.errors?.['required']"
+  >
+    Department is required.
+  </div>
+  <div
+    class="invalid-feedback"
+    *ngIf="employeeForm.get('department')?.errors?.['pattern']"
+  >
+    Only alphabets and spaces are allowed.
+  </div>
+</div>
+
 
           <!-- Job Title -->
           <div class="col-md-6">

@@ -28,7 +28,7 @@ leaveForm: FormGroup;
   ) {
     this.leaveForm = this.fb.group({
       fromDate: ['', [Validators.required, this.noPastDateValidator]],
-      toDate: ['', Validators.required],
+       toDate: ['', [Validators.required, this.noPastDateValidator]],  // 👈 Add here
       reason: ['', Validators.required],
       applyingTo: ['', [Validators.required, Validators.email]],
       ccTo: [''],

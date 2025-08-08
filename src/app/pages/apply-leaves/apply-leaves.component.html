@@ -22,7 +22,7 @@
           <label class="form-label fw-semibold">To Date</label>
           <input type="date" class="form-control" formControlName="toDate" />
           <div class="text-danger" *ngIf="leaveForm.get('toDate')?.touched && leaveForm.get('toDate')?.invalid">
-            To Date is required.
+           To date cannot be in the past.
           </div>
         </div>
 

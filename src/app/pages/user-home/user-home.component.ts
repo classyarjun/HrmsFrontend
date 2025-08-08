@@ -94,44 +94,48 @@ export class UserHomeComponent implements OnInit, OnDestroy {
     this.currentDate = now.toLocaleDateString('en-GB', options);
   }
 
-  signIn() {
-    if (!this.attendanceData.location) {
-      this.toastr.warning('Please enter location');
-      return;
-    }
-
-    const now = new Date();
-    const formattedTime = now.toLocaleTimeString('en-GB', { hour12: false });
-
-    this.attendanceData.time = formattedTime;
-
-    this.AttendanceService.signIn(this.attendanceData).subscribe({
-      next: () => {
-        this.isSignedIn = true;
-        this.signInTime = formattedTime; // ✅ Update and store time
-        localStorage.setItem('signInTime', formattedTime);
-        this.toastr.success('Sign-in successful!', 'Success');
-        // close bootrsp model
-        // const modalElement = document.getElementById('workLocationModal');
-        // if (modalElement) {
-        //   const modal = new (window as any).bootstrap.Modal(modalElement);
-        //   modal.hide();
-        // }
-      },
-      error: (err) => {
-        let errorMessage = 'An error occurred';
-        if (err.error) {
-          if (typeof err.error === 'string') {
-            errorMessage = err.error;
-          } else if (err.error.message) {
-            errorMessage = err.error.message;
-          }
-        }
-        this.toastr.error(errorMessage, 'Error');
-      },
-    });
+ signIn() {
+  if (!this.attendanceData.location) {
+    this.toastr.warning('Please enter location');
+    return;
   }
-
+ 
+  const now = new Date();
+  const formattedTime = now.toLocaleTimeString('en-GB', { hour12: false });
+ 
+  this.attendanceData.time = formattedTime;
+ 
+  this.AttendanceService.signIn(this.attendanceData).subscribe({
+    next: () => {
+      this.isSignedIn = true;
+      this.signInTime = formattedTime;
+      localStorage.setItem('signInTime', formattedTime);
+      this.toastr.success('Sign-in successful!', 'Success');
+ 
+      const modalElement = document.getElementById('workLocationModal');
+      if (modalElement) {
+        const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
+        modal?.hide();
+      }
+ 
+      // Clear input for next time
+      this.attendanceData.location = '';
+    },
+    error: (err) => {
+      let errorMessage = 'An error occurred';
+      if (err.error) {
+        if (typeof err.error === 'string') {
+          errorMessage = err.error;
+        } else if (err.error.message) {
+          errorMessage = err.error.message;
+        }
+      }
+      this.toastr.error(errorMessage, 'Error');
+    },
+  });
+}
+ 
+ 
   signOut() {
     this.AttendanceService.signOut(this.attendanceData.employeeId).subscribe({
       next: () => {
@@ -145,7 +149,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       },
     });
   }
-
+ 
   getStatus() {
     this.AttendanceService.getStatus(this.attendanceData.employeeId).subscribe({
       next: (res: any[]) => {
@@ -157,7 +161,7 @@ export class UserHomeComponent implements OnInit, OnDestroy {
       },
     });
   }
-
+ 
  getHolidays() {
   this.holidayService.getHolidays().subscribe({
     next: (data) => {
