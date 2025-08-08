@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-hr-generate-salary',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [ CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './hr-generate-salary.component.html',
   styleUrl: './hr-generate-salary.component.css',
 })
@@ -26,7 +26,7 @@ export class HrGenerateSalaryComponent implements OnInit {
     this.uploadForm = this.fb.group({
       uploadedBy: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       userEmail: ['', [Validators.required, Validators.email]],
-      role: ['HR'],
+       role: ['HR'],
     });
   }
 

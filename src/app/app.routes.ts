@@ -46,6 +46,8 @@ import { HelpDeskComponent } from './pages/helpdesk/helpdesk.component';
 import { UserCalenderComponent } from './pages/user-calender/user-calender.component'
 import { RegularizationComponent } from './pages/regularization/regularization.component';
 import { HrRegularizationComponent } from './pages/hr-regularization/hr-regularization.component';
+import { ManagerApplyleaveComponent } from './pages/manager-applyleave/manager-applyleave.component';
+import { ManagerLeaveStatusComponent } from './pages/manager-leave-status/manager-leave-status.component';
 // import { HrRegularizationComponent } from './pages/hr-regularization/hr-regularization.component';
 
 
@@ -85,6 +87,8 @@ export const routes: Routes = [
       { path: 'manager/all-leave-request', component: ManagerAllLeaveRequestComponent, canActivate: [AuthGuard] },
       { path: 'manager/create-holiday', component: HolidayComponent, canActivate: [AuthGuard] },
        { path: 'manager/pay-slip', component: ManagerPyslipComponent, canActivate: [AuthGuard] },
+       { path: 'manager/manager-applyleave', component: ManagerApplyleaveComponent, canActivate: [AuthGuard] },
+        { path: 'manager/manager-leave-status', component: ManagerLeaveStatusComponent, canActivate: [AuthGuard] },
     ]
   },
   // 📌 Hr Layout Route
