@@ -30,9 +30,17 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label">Task Title</label>
-              <input type="text" class="form-control" placeholder="e.g., Complete report" formControlName="taskName" />
-            </div>
+  <label class="form-label">Task Title</label>
+  <input type="text" 
+         class="form-control" 
+         placeholder="e.g., Complete report" 
+         formControlName="taskName" />
+
+  <div *ngIf="taskForm.get('taskName')?.hasError('pattern') && taskForm.get('taskName')?.touched" class="text-danger">
+    Special characters are not allowed. Use only letters and numbers.
+  </div>
+</div>
+
 
             <div class="mb-3">
               <label class="form-label">Description</label>

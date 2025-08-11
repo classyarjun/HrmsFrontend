@@ -27,14 +27,14 @@ export class ApplyLeavesComponent {
     private toastr: ToastrService
   ) {
     this.leaveForm = this.fb.group({
-      fromDate: ['', [Validators.required, this.noPastDateValidator]],
-      toDate: ['', [Validators.required, this.noPastDateValidator]],  // 👈 Add here
-      reason: ['', Validators.required],
-      applyingTo: ['', [Validators.required, Validators.email]],
-      ccTo: [''],
-      contactDetails: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      leaveType: ['', Validators.required]
-    }, { validators: this.dateRangeValidator });
+  fromDate: ['', [Validators.required]], // 👈 फक्त required
+  toDate: ['', [Validators.required, this.noPastDateValidator]], // जर फक्त toDate साठी restriction हवी असेल तर
+  reason: ['', Validators.required],
+  applyingTo: ['', [Validators.required, Validators.email]],
+  ccTo: [''],
+  contactDetails: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+  leaveType: ['', Validators.required]
+}, { validators: this.dateRangeValidator });
   }
 
   ngOnInit(): void {

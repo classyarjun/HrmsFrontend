@@ -130,6 +130,12 @@ export class ManagerHelpdeskComponent {
       }
     });
   }
+  
+  resetFilters(): void {
+  this.selectedStatus = ''; // Dropdown reset
+  this.loadTickets();       // All tickets reload
+}
+
 
   
   updateStatus(id: number, newStatus: string): void {
