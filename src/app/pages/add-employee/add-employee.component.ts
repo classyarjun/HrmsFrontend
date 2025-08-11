@@ -147,16 +147,28 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   closeModal(modalId: string) {
-    const modalEl = document.getElementById(modalId);
-    if (modalEl) {
-      const modalInstance = bootstrap.Modal.getInstance(modalEl);
-      if (modalInstance) {
+  const modalEl = document.getElementById(modalId);
+
+  if (modalEl) {
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+      // smooth fade-out
+      modalEl.classList.add('fade');
+      setTimeout(() => {
         modalInstance.hide();
-      }
+
+        // backdrop remove
+        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
+        // body reset
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+      }, 200); // 0.2s smooth close delay
     }
-    // remove backdrops if lingering
-    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
   }
+}
+
 
   onSubmit() {
     if (this.employeeForm.invalid) {
