@@ -31,15 +31,22 @@ export class ManagerTaskComponent implements OnInit {
     private addEmployeeService: AddEmployeeService,
     private toastr: ToastrService
   ) {
-    this.taskForm = this.fb.group({
-      taskName: ['', Validators.required],
-      description: ['', Validators.required],
-      priority: ['', Validators.required],
-      status: ['PENDING'],
-      dueDate: ['', Validators.required],
-      taskAssignDate: ['', Validators.required],
-      employeeId: ['', Validators.required],
-    });
+   this.taskForm = this.fb.group({
+  taskName: [
+    '',
+    [
+      Validators.required,
+      Validators.pattern(/^[a-zA-Z0-9 ]+$/) // फक्त letters, numbers, space allow
+    ]
+  ],
+  description: ['', Validators.required],
+  priority: ['', Validators.required],
+  status: ['PENDING'],
+  dueDate: ['', Validators.required],
+  taskAssignDate: ['', Validators.required],
+  employeeId: ['', Validators.required],
+});
+
   }
 
   ngOnInit(): void {

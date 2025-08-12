@@ -11,7 +11,7 @@
         <div class="card-body bg-white rounded-bottom-4">
           <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" novalidate>
 
-            <!-- User Email -->
+
 <div class="mb-3">
   <label for="userEmail" class="form-label">User Email</label>
   <input
@@ -20,8 +20,9 @@
     class="form-control shadow-sm"
     placeholder="Enter employee email"
     formControlName="userEmail"
-    (input)="onUserEmailInput($event)"
   />
+
+  <!-- Validation Messages -->
   <small class="text-danger"
     *ngIf="uploadForm.get('userEmail')?.hasError('email') && uploadForm.get('userEmail')?.touched">
     Please enter a valid email.
@@ -29,6 +30,10 @@
   <small class="text-danger"
     *ngIf="uploadForm.get('userEmail')?.hasError('notLowercase') && uploadForm.get('userEmail')?.touched">
     Email must be in lowercase only.
+  </small>
+  <small class="text-danger"
+    *ngIf="uploadForm.get('userEmail')?.hasError('notFound')">
+    Email does not exist in database.
   </small>
 </div>
 
@@ -46,18 +51,6 @@
               />
               <!-- Validation message not needed because field is disabled -->
             </div>
-
-            <!-- Role -->
-            <!-- <div class="mb-3">
-              <label for="role" class="form-label">Role</label>
-              <input
-                type="text"
-                id="role"
-                class="form-control shadow-sm"
-                formControlName="role"
-                readonly
-              />
-            </div> -->
 
             <!-- File Upload -->
             <div class="mb-4">
