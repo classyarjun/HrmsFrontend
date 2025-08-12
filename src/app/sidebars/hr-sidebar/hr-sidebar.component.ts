@@ -54,7 +54,7 @@ export class HrSidebarComponent  {
       next: (blob) => {
         const objectURL = URL.createObjectURL(blob);
         this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        console.log(" profileImageUrl from tsss",this.profileImageUrl);
+        // console.log(" profileImageUrl from tsss",this.profileImageUrl);
 
       },
       error: (err) => {
