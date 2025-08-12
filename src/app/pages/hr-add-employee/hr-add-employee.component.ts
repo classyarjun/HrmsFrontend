@@ -23,6 +23,7 @@ declare var bootstrap: any;
   styleUrl: './hr-add-employee.component.css'
 })
 export class HrAddEmployeeComponent implements OnInit {
+
   employees: any[] = [];
   employeeForm!: FormGroup;
   editForm!: FormGroup;
@@ -59,7 +60,9 @@ export class HrAddEmployeeComponent implements OnInit {
 
     const textOnlyValidator = [
       Validators.required,
-      Validators.pattern(/^[A-Za-z\s]+$/)
+      Validators.pattern(/^[A-Za-z\s]+$/),
+      this.capitalizeValidator,
+
     ];
 
     this.employeeForm = this.fb.group({
@@ -134,7 +137,6 @@ export class HrAddEmployeeComponent implements OnInit {
       error: (err) => {
         console.error('❌ Error fetching employees:', err);
         this.toastr.error('Failed to load employee list');
-        alert('❌ Failed to load employee list');
       }
     });
   }
@@ -174,7 +176,6 @@ closeAllModals() {
   onSubmit() {
     if (this.employeeForm.invalid) {
       this.toastr.error('Please fill all required fields correctly.');
-      alert('⚠️ Please fill all required fields correctly.');
       return;
     }
 
@@ -188,7 +189,6 @@ closeAllModals() {
       next: () => {
         this.closeAllModals();
         this.toastr.success('Employee added successfully!');
-        alert('✅ Employee added successfully!');
         this.employeeForm.reset();
         this.selectedFile = null;
         this.getEmployees();
@@ -196,12 +196,15 @@ closeAllModals() {
       error: (err) => {
         console.error(err);
         this.toastr.error('Failed to add employee.');
-        alert('❌ Failed to add employee.');
       }
     });
   }
 
   openEditModal(emp: any) {
+
+
+
+
     if (!emp) return;
 
     this.closeAllModals();
@@ -216,23 +219,22 @@ closeAllModals() {
   }
 
   onEditSubmit() {
+
     if (this.editForm.invalid) {
-      this.toastr.error('Please fix the errors in the form.');
-      alert('⚠️ Please fix the errors in the form.');
-      return;
-    }
+  this.editForm.markAllAsTouched();
+  return;
+}
+
 
     this.addEmployeeService.updateEmployeeWithImage(this.selectedEmployeeId, this.editForm.value).subscribe({
       next: () => {
         this.closeAllModals();
         this.getEmployees();
         this.toastr.success('Employee updated successfully!');
-        alert('✅ Employee updated successfully!');
       },
       error: (err) => {
         console.error(err);
         this.toastr.error('Failed to update employee.');
-        alert('❌ Failed to update employee.');
       }
     });
   }
@@ -260,7 +262,6 @@ closeAllModals() {
   onRegister() {
     if (!this.selectedEmployeeId || this.registerForm.invalid) {
       this.toastr.error('Please complete registration form correctly.');
-      alert('⚠️ Please complete registration form correctly.');
       return;
     }
 
@@ -286,13 +287,11 @@ closeAllModals() {
         this.closeAllModals();
         this.selectedImage = null;
         this.toastr.success('Employee registered successfully!');
-        alert('✅ Employee registered successfully!');
         this.getEmployees();
       },
       error: (err) => {
         console.error(err);
         this.toastr.error('Failed to register employee.');
-        alert('❌ Failed to register employee.');
       }
     });
   }
@@ -302,12 +301,10 @@ closeAllModals() {
       this.addEmployeeService.deleteEmployee(id).subscribe({
         next: () => {
           this.toastr.success('Employee deleted successfully!');
-          alert('🗑️ Employee deleted successfully!');
           this.getEmployees();
         },
         error: () => {
           this.toastr.error('Failed to delete employee.');
-          alert('❌ Failed to delete employee.');
         }
       });
     }
