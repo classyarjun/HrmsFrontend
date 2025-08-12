@@ -48,6 +48,7 @@ import { RegularizationComponent } from './pages/regularization/regularization.c
 import { HrRegularizationComponent } from './pages/hr-regularization/hr-regularization.component';
 import { ManagerApplyleaveComponent } from './pages/manager-applyleave/manager-applyleave.component';
 import { ManagerLeaveStatusComponent } from './pages/manager-leave-status/manager-leave-status.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 // import { HrRegularizationComponent } from './pages/hr-regularization/hr-regularization.component';
 
 
@@ -62,6 +63,8 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'privacy-policy', component:PrivacyPolicyComponent },
   { path: 'terms-and-conditions', component:TermsAndConditionComponent },
+  { path: 'forgot-password', component:ForgotPasswordComponent },
+
 
   // 🔐 Dashboard routes with AuthGuard
   { path: 'dashboard/manager', component: ManagerLayoutComponent, canActivate: [AuthGuard], data: { role: 'MANAGER' } },
@@ -136,6 +139,8 @@ export const routes: Routes = [
       { path: 'user/leaves/leaves-status', component: LeaveStatusComponent, canActivate: [AuthGuard] },
       { path: 'user/attendece/attendence-info', component: UserCalenderComponent, canActivate: [AuthGuard] },
        { path: 'user/attendance/report', component: RegularizationComponent, canActivate: [AuthGuard] },
+       
+
 
 
     ]
