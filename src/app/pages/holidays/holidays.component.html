@@ -62,6 +62,10 @@
             <div *ngIf="holidayForm.get('name')?.invalid && holidayForm.get('name')?.touched" class="text-danger">
            Only letters are allowed.
             </div>
+            <div *ngIf="holidayForm.get('date')?.errors?.['duplicateDate']" class="text-danger">
+  This date is already added.
+</div>
+
           </div>
          <input type="date" class="form-control" formControlName="date" [min]="minDate" required />
 <div *ngIf="holidayForm.get('date')?.errors?.['pastDate'] && holidayForm.get('date')?.touched" class="text-danger">

@@ -177,7 +177,7 @@
             </div>
           </div>
 
-          <div *ngFor="let holiday of holidays" class="d-flex justify-content-between align-items-center mb-3">
+           <div *ngFor="let holiday of holidays" class="holiday-item">
   <div>
     <span class="fw-semibold small">{{ holiday.date | date:'dd MMM' }}</span>
     <span class="badge bg-primary ms-2 small">{{ holiday.date | date:'EEEE' }}</span>

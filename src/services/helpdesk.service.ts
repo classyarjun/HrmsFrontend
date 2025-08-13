@@ -11,6 +11,10 @@ const NAV_URL = environment.apiUrl;
   providedIn: 'root',
 })
 export class HelpdeskService {
+  deleteHelpDesk(id: number) {
+    throw new Error('Method not implemented.');
+  }
+  apiUrl: any;
 
   //baseUrl = "http://localhost:8080/api"
   // private apiUrl = 'http://localhost:8080/api/helpdesk';
@@ -60,10 +64,11 @@ export class HelpdeskService {
   }
 
   deleteTicket(id: number): Observable<any> {
-    return this.http.delete(`${NAV_URL}/helpdesk/${id}`, {
+     return this.http.delete(`${this.apiUrl}/tickets/${id}`, {
       headers: this.getHeaders(),
     });
   }
+  
 
  updateTicketStatus(id: number, status: string): Observable<any> {
   return this.http.put(

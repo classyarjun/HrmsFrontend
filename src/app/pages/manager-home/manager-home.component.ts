@@ -34,6 +34,7 @@ export class ManagerHomeComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private AttendanceService: AttendanceService,
     private holidayService: HolidayService
+    
   ) {}
 
   ngOnInit(): void {

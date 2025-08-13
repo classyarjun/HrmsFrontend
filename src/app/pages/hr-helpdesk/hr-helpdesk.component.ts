@@ -60,12 +60,13 @@ export class HrHelpdeskComponent {
 
 
   deleteTicket(id: number): void {
-    if (confirm('Are you sure you want to delete this ticket?')) {
-      this.helpDeskService.deleteTicket(id).subscribe(() => {
-        this.loadTickets();
-      });
-    }
+  if (confirm('Are you sure you want to delete this ticket?')) {
+    this.helpDeskService.deleteTicket(id).subscribe(() => {
+      // Backend वरून delete झाल्यानंतर UI मध्ये tickets array मधून ती ticket काढा
+      this.tickets = this.tickets.filter(ticket => ticket.id !== id);
+    });
   }
+}
 
   downloadFile(id: number): void {
     this.helpDeskService.downloadFile(id).subscribe((blob) => {

@@ -27,7 +27,7 @@ leaveForm: FormGroup;
     private toastr: ToastrService
   ) {
     this.leaveForm = this.fb.group({
-      fromDate: ['', [Validators.required, this.noPastDateValidator]],
+      fromDate: ['', [Validators.required, ]],
        toDate: ['', [Validators.required, this.noPastDateValidator]],  // 👈 Add here
       reason: ['', Validators.required],
       applyingTo: ['', [Validators.required, Validators.email]],
