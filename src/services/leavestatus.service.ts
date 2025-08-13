@@ -5,45 +5,71 @@ import { environment } from '../environment/environment';
 
 const NAV_URL = environment.apiUrl;
 
+export interface Leave {
+  id: number;
+  employeeId: number;
+  leaveType: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+  reason: string;
+}
+
+export interface LeaveBalance {
+  annual: number;
+  casual: number;
+  sick: number;
+}
 
 @Injectable({ providedIn: 'root' })
 export class LeavestatusService {
-
-  // private apiUrl = 'http://localhost:8080/api/leaves';
-
+  CancelLeaveById(leaveId: number) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private http: HttpClient) {}
 
-  getLeaveBalance(employeeId: number) {
-    return this.http.get(`${NAV_URL}/leaves/leaveBalance/${employeeId}`);
+  /** 🆕 Get Leave Balance by Employee ID */
+  getLeaveBalance(employeeId: number): Observable<LeaveBalance> {
+    return this.http.get<LeaveBalance>(`${NAV_URL}/leaves/leaveBalance/${employeeId}`);
   }
 
-
-  getAllLeaves(): Observable<any[]> {
-  return this.http.get<any[]>(`${NAV_URL}/leaves/getAllLeaves`);
-}
-
-  createLeave(formData: FormData) {
-    return this.http.post(`${NAV_URL}/leaves/createLeave`, formData);
+  /** 🆕 Get All Leaves */
+  getAllLeaves(): Observable<Leave[]> {
+    return this.http.get<Leave[]>(`${NAV_URL}/leaves/getAllLeaves`);
   }
 
-  deleteLeave(id: number) {
+  /** 🆕 Create Leave Request */
+  createLeave(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${NAV_URL}/leaves/createLeave`, formData);
+  }
+
+  /** 🆕 Delete Leave by ID */
+  deleteLeave(id: number): Observable<string> {
     return this.http.delete(`${NAV_URL}/leaves/DeleteLeaveById/${id}`, {
       responseType: 'text',
     });
   }
 
-  updateLeaveStatus(id: number, status: string) {
+  /** 🆕 Update Leave Status */
+  updateLeaveStatus(id: number, status: string): Observable<any> {
     return this.http.put(
       `${NAV_URL}/leaves/updateStatusById/${id}/status?status=${status}`,
       null
     );
   }
 
-  getApplyingToEmail() {
-    return this.http.get(`${NAV_URL}/leaves/applyingTo`);
+  /** 🆕 Get Applying To Email List */
+  getApplyingToEmail(): Observable<string[]> {
+    return this.http.get<string[]>(`${NAV_URL}/leaves/applyingTo`);
   }
 
-  getCcToEmails() {
-    return this.http.get(`${NAV_URL}/leaves/ccToEmployees`);
+  /** 🆕 Get CC To Email List */
+  getCcToEmails(): Observable<string[]> {
+    return this.http.get<string[]>(`${NAV_URL}/leaves/ccToEmployees`);
   }
+
+  /** 🆕 Withdraw (Cancel) Leave Request */
+  cancelLeaveById(leaveId: number): Observable<any> {
+  return this.http.put(`${NAV_URL}/leaves/CancelLeaveById/${leaveId}`, {});
+}
 }
