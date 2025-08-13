@@ -1,55 +1,54 @@
-<table class="table table-bordered table-striped">
-  <thead class="table-dark text-center">
-    <tr>
-      <th>Sr. No</th>
-      <th>Employee Name</th>
-      <th>From</th>
-      <th>To</th>
-      <th>Reason</th>
-      <th>Type</th>
-      <th>Document</th>
-      <th>Status</th>
-      <th>Update Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let leave of leaveRequests; let i = index">
-      <td>{{ i + 1 }}</td>
-      <td>{{ leave.employeeName }}</td>
-      <td>{{ leave.fromDate | date: 'dd-MM-yyyy' }}</td>
-      <td>{{ leave.toDate | date: 'dd-MM-yyyy' }}</td>
-      <td>{{ leave.reason }}</td>
-      <td>{{ leave.leaveType }}</td>
-      <td>
-        <a *ngIf="leave.documentUrl"
-           [href]="leave.documentUrl"
-           [attr.download]="leave.fileName"
-           target="_blank">
-          {{ leave.fileName }}
-        </a>
-        <span *ngIf="!leave.documentUrl">N/A</span>
-      </td>
-      <td>
-        <span class="badge"
-          [ngClass]="{
-            'bg-success': leave.status === 'APPROVED',
-            'bg-danger': leave.status === 'REJECTED',
-            'bg-warning text-dark': !leave.status || leave.status === 'PENDING'
-          }">
-          {{ leave.status || 'PENDING' }}
-        </span>
-      </td>
-      <td>
-        <select #statusSelect
-                class="form-select"
-                [value]="leave.status || 'PENDING'"
-                (change)="updateLeaveStatus(leave.leaveId!, statusSelect.value)">
-          <option value="" disabled>Update status</option>
-          <option *ngFor="let status of leaveStatuses" [value]="status">
-            {{ status }}
-          </option>
-        </select>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="container mt-4">
+  <h4 class="text-center">All Leave Requests</h4>
+
+  <table class="table table-bordered table-striped mt-3">
+    <thead class="table-dark">
+      <tr>
+        <th>Leave ID</th>
+        <th>Employee Name</th>
+        <th>From Date</th>
+        <th>To Date</th>
+        <th>Reason</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let leave of leaveRequests">
+        <td>{{ leave.leaveId }}</td>
+        <td>{{ leave.employeeName }}</td>
+        <td>{{ leave.fromDate | date: 'dd-MM-yyyy' }}</td>
+        <td>{{ leave.toDate | date: 'dd-MM-yyyy' }}</td>
+        <td>{{ leave.reason }}</td>
+
+        <!-- Status -->
+        <td>
+          <span 
+            class="badge"
+            [ngClass]="{
+              'bg-warning': leave.status === 'PENDING',
+              'bg-success': leave.status === 'APPROVED',
+              'bg-danger': leave.status === 'REJECTED',
+              'bg-secondary': leave.status === 'CANCELLED'
+            }">
+            {{ leave.status }}
+          </span>
+        </td>
+
+        <!-- Action -->
+        <td>
+          <select
+  class="form-select"
+  [value]="leave.status || 'PENDING'"
+  (change)="onStatusChange($event, leave.leaveId)"
+  [disabled]="leave.status === 'CANCELLED'">
+  <option value="" disabled>Update status</option>
+  <option *ngFor="let status of leaveStatuses" [value]="status">
+    {{ status }}
+  </option>
+</select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

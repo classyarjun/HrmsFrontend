@@ -39,39 +39,68 @@ export class HrRegularizationComponent implements OnInit {
     });
   }
 
-  approve(id: number): void {
-    this.regularizationService.approveRequest(id).subscribe({
-      next: () => {
-        const req = this.pendingRequests.find(r => r.id === id);
-        if (req) {
-          req.approvalStatus = 'APPROVED';
-          this.moveToProcessed(req);
-          this.toastr.success('Request approved successfully');
-        }
-      },
-      error: (err) => {
-        console.error('Error approving request:', err);
-        this.toastr.error('Failed to approve request');
-      }
-    });
-  }
+// <<<<<<< HEAD
+//   approve(id: number): void {
+//     this.regularizationService.approveRequest(id).subscribe({
+//       next: () => {
+//         const req = this.pendingRequests.find(r => r.id === id);
+//         if (req) {
+//           req.approvalStatus = 'APPROVED';
+//           this.moveToProcessed(req);
+//           this.toastr.success('Request approved successfully');
+//         }
+//       },
+//       error: (err) => {
+//         console.error('Error approving request:', err);
+//         this.toastr.error('Failed to approve request');
+//       }
+//     });
+//   }
 
-  reject(id: number): void {
-    this.regularizationService.rejectRequest(id).subscribe({
-      next: () => {
-        const req = this.pendingRequests.find(r => r.id === id);
-        if (req) {
-          req.approvalStatus = 'REJECTED';
-          this.moveToProcessed(req);
-          this.toastr.success('Request rejected successfully');
-        }
-      },
-      error: (err) => {
-        console.error('Error rejecting request:', err);
-        this.toastr.error('Failed to reject request');
+//   reject(id: number): void {
+//     this.regularizationService.rejectRequest(id).subscribe({
+//       next: () => {
+//         const req = this.pendingRequests.find(r => r.id === id);
+//         if (req) {
+//           req.approvalStatus = 'REJECTED';
+//           this.moveToProcessed(req);
+//           this.toastr.success('Request rejected successfully');
+//         }
+//       },
+//       error: (err) => {
+//         console.error('Error rejecting request:', err);
+//         this.toastr.error('Failed to reject request');
+//       }
+//     });
+//   }
+// =======
+approve(id: number): void {
+  this.regularizationService.approveRequest(id).subscribe({
+    next: () => {
+      const req = this.pendingRequests.find(r => r.id === id);
+      if (req) {
+        req.approvalStatus = 'APPROVED';
+        this.moveToProcessed(req);
       }
-    });
-  }
+    },
+    error: (err) => console.error('Error approving request:', err)
+  });
+}
+
+reject(id: number): void {
+  this.regularizationService.rejectRequest(id).subscribe({
+    next: () => {
+      const req = this.pendingRequests.find(r => r.id === id);
+      if (req) {
+        req.approvalStatus = 'REJECTED';
+        this.moveToProcessed(req);
+      }
+    },
+    error: (err) => console.error('Error rejecting request:', err)
+  });
+}
+
+// >>>>>>> a449b97163edcf6953ffc36fc6cba42f161be8b3
 
   deleteRequest(id: number): void {
     this.regularizationService.deleteRequest(id).subscribe({
