@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegularizationService, RegularizationAndPermission } from '../../../services/regularization.service';
-
+ 
 @Component({
   selector: 'app-hr-regularization',
   standalone: true,
@@ -12,13 +12,13 @@ export class HrRegularizationComponent implements OnInit {
   allRequests: RegularizationAndPermission[] = [];
   pendingRequests: RegularizationAndPermission[] = [];
   processedRequests: RegularizationAndPermission[] = [];
-
+ 
   constructor(private regularizationService: RegularizationService) {}
-
+ 
   ngOnInit(): void {
     this.loadAndCategorizeRequests();
   }
-
+ 
   loadAndCategorizeRequests(): void {
     this.regularizationService.getAllRequests().subscribe({
       next: (data) => {
@@ -35,42 +35,7 @@ export class HrRegularizationComponent implements OnInit {
       }
     });
   }
-
-<<<<<<<<< Temporary merge branch 1
-  approve(id: number): void {
-    this.regularizationService.approveRequest(id).subscribe({
-      next: () => {
-        const req = this.pendingRequests.find(r => r.id === id);
-        if (req) {
-          req.approvalStatus = 'APPROVED';
-          this.moveToProcessed(req);
-          this.toastr.success('Request approved successfully');
-        }
-      },
-      error: (err) => {
-        console.error('Error approving request:', err);
-        this.toastr.error('Failed to approve request');
-      }
-    });
-  }
-
-  reject(id: number): void {
-    this.regularizationService.rejectRequest(id).subscribe({
-      next: () => {
-        const req = this.pendingRequests.find(r => r.id === id);
-        if (req) {
-          req.approvalStatus = 'REJECTED';
-          this.moveToProcessed(req);
-          this.toastr.success('Request rejected successfully');
-        }
-      },
-      error: (err) => {
-        console.error('Error rejecting request:', err);
-        this.toastr.error('Failed to reject request');
-      }
-    });
-  }
-=========
+ 
 approve(id: number): void {
   this.regularizationService.approveRequest(id).subscribe({
     next: () => {
@@ -83,7 +48,7 @@ approve(id: number): void {
     error: (err) => console.error('Error approving request:', err)
   });
 }
-
+ 
 reject(id: number): void {
   this.regularizationService.rejectRequest(id).subscribe({
     next: () => {
@@ -96,9 +61,8 @@ reject(id: number): void {
     error: (err) => console.error('Error rejecting request:', err)
   });
 }
-
->>>>>>>>> Temporary merge branch 2
-
+ 
+ 
   deleteRequest(id: number): void {
     this.regularizationService.deleteRequest(id).subscribe({
       next: () => {
@@ -109,9 +73,11 @@ reject(id: number): void {
       error: (err) => console.error('Error deleting request:', err)
     });
   }
-
+ 
   private moveToProcessed(request: RegularizationAndPermission): void {
     this.pendingRequests = this.pendingRequests.filter(r => r.id !== request.id);
     this.processedRequests.push(request);
   }
 }
+ 
+ 
