@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
   RegularizationService,
@@ -15,10 +15,11 @@ import {
   templateUrl: './regularization.component.html',
 })
 export class RegularizationComponent implements OnInit {
-  employeeId: number = 1; // Replace with actual logged-in employee ID
+  employeeId: number = 1; // replace with actual logged-in id
   requestType: RequestType = 'REGULARIZATION';
   pendingRequests: RegularizationAndPermission[] = [];
-  today: string = ''; // ✅ Store today's date
+  today: string = '';
+  timeError: boolean = false;
 
   form: RequestPayload = {
     requestType: this.requestType,
@@ -32,46 +33,81 @@ export class RegularizationComponent implements OnInit {
   constructor(private service: RegularizationService) {}
 
   ngOnInit() {
-    // ✅ Get today's date in YYYY-MM-DD format
     this.today = new Date().toISOString().split('T')[0];
+    // if default is PERMISSION then set date
+    if (this.requestType === 'PERMISSION') {
+      this.form.date = this.today;
+    }
     this.loadEmployeeRequests();
   }
 
-  // ✅ Called when request type changes
   onRequestTypeChange() {
     if (this.requestType === 'PERMISSION') {
-      this.form.date = this.today; // Auto-set to today's date
+      this.form.date = this.today;
     } else {
-      this.form.date = ''; // Allow choosing date for Regularization
+      this.form.date = '';
     }
+    // clear times & validation when changing type
+    this.form.clockIn = '';
+    this.form.clockOut = '';
+    this.timeError = false;
     this.loadEmployeeRequests();
+  }
+
+  /** convert "HH:MM" -> minutes so numeric compare is correct */
+  private toMinutes(time: string) {
+    const parts = (time || '').split(':');
+    if (parts.length !== 2) return NaN;
+    const hh = Number(parts[0]);
+    const mm = Number(parts[1]);
+    return hh * 60 + mm;
+  }
+
+  validateTime() {
+    const inTime = this.form.clockIn;
+    const outTime = this.form.clockOut;
+    if (!inTime || !outTime) {
+      this.timeError = false;
+      return;
+    }
+    const inMin = this.toMinutes(inTime);
+    const outMin = this.toMinutes(outTime);
+    // if parsing failed, treat as invalid
+    if (isNaN(inMin) || isNaN(outMin)) {
+      this.timeError = true;
+      return;
+    }
+    this.timeError = inMin > outMin;
   }
 
   loadEmployeeRequests(): void {
-    if (this.requestType === 'REGULARIZATION') {
-      this.service.getRegularizationsByEmployeeId(this.employeeId).subscribe({
-        next: (res) => {
-          this.pendingRequests = res;
-        },
-        error: (err) => {
-          console.error('Error fetching regularizations:', err);
-        }
-      });
-    } else {
-      this.service.getPermissionsByEmployeeId(this.employeeId).subscribe({
-        next: (res) => {
-          this.pendingRequests = res;
-        },
-        error: (err) => {
-          console.error('Error fetching permissions:', err);
-        }
-      });
-    }
+    const request$ =
+      this.requestType === 'REGULARIZATION'
+        ? this.service.getRegularizationsByEmployeeId(this.employeeId)
+        : this.service.getPermissionsByEmployeeId(this.employeeId);
+
+    request$.subscribe({
+      next: (res) => {
+        this.pendingRequests = res;
+      },
+      error: (err) => {
+        console.error('Error fetching requests:', err);
+      }
+    });
   }
 
-  submit() {
-    if (!this.form.reason || !this.form.date || !this.form.clockIn || !this.form.clockOut || !this.form.email) {
-      alert('All fields are required.');
+  submit(formRef: NgForm) {
+    // re-validate times immediately
+    this.validateTime();
+
+    // template-driven form validity
+    if (!formRef || !formRef.valid) {
+      alert('Please fill all required fields correctly.');
+      return;
+    }
+
+    if (this.timeError) {
+      alert('Clock-in time cannot be later than Clock-out time.');
       return;
     }
 
@@ -84,9 +120,17 @@ export class RegularizationComponent implements OnInit {
 
     request$.subscribe({
       next: (res) => {
-        alert(`${this.requestType} request submitted. Status: ${res.status}`);
-        this.resetForm();
+        alert(`${this.requestType} request submitted successfully!`);
+        // reset the template form state
+        try {
+          formRef.resetForm();
+        } catch (e) {
+          // ignore if resetForm not available
+        }
+        // restore model defaults
+        this.resetFormModel();
         this.loadEmployeeRequests();
+        this.closeModal();
       },
       error: (err) => {
         alert('Submission failed: ' + (err?.error?.message || err.message));
@@ -94,7 +138,7 @@ export class RegularizationComponent implements OnInit {
     });
   }
 
-  resetForm() {
+  resetFormModel() {
     this.form = {
       requestType: this.requestType,
       reason: '',
@@ -103,5 +147,25 @@ export class RegularizationComponent implements OnInit {
       clockOut: '',
       email: ''
     };
+    this.timeError = false;
+  }
+
+  /** hides bootstrap modal (works if bootstrap JS is loaded) */
+  closeModal() {
+    const modalEl = document.getElementById('regularizationModal');
+    if (!modalEl) return;
+    const win = window as any;
+    if (win.bootstrap && win.bootstrap.Modal) {
+      // get instance or create one then hide
+      const instance = win.bootstrap.Modal.getInstance(modalEl) || new win.bootstrap.Modal(modalEl);
+      instance.hide();
+    } else {
+      // fallback: toggle classes (best-effort)
+      modalEl.classList.remove('show');
+      modalEl.style.display = 'none';
+      document.body.classList.remove('modal-open');
+      const backdrop = document.querySelector('.modal-backdrop');
+      if (backdrop) backdrop.remove();
+    }
   }
 }

@@ -134,21 +134,18 @@ upcomingHolidays: any;
  
 
  getHolidays() {
-  this.holidayService.getHolidays().subscribe({
-    next: (data) => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Remove time
-
-      // Filter and sort upcoming holidays
-      this.holidays = data
-        .filter((holiday: any) => new Date(holiday.date) >= today)
-        .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    },
-    error: (err) => {
-      console.error('Failed to fetch holidays:', err);
-    }
-  });
-}
+ this.holidayService.getHolidays().subscribe({
+      next: (data) => {
+        const today = new Date();
+        this.holidays = data
+          .filter((h: any) => new Date(h.date) >= today) // फक्त upcoming
+          .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      },
+      error: (err) => {
+        console.error('Failed to load holidays', err);
+      }
+    });
+  }
 
 
   openSwipeModal() {

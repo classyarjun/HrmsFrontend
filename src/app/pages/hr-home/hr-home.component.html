@@ -176,11 +176,12 @@
             </div>
           </div>
 
-          <div *ngFor="let holiday of holidays" class="d-flex justify-content-between align-items-center mb-3">
+          <div *ngFor="let holiday of holidays" class="holiday-item">
   <div>
     <span class="fw-semibold small">{{ holiday.date | date:'dd MMM' }}</span>
     <span class="badge bg-primary ms-2 small">{{ holiday.date | date:'EEEE' }}</span>
     <p class="text-muted small mb-0">{{ holiday.name }}</p>
+     <p class="text-secondary small mb-0">{{ holiday.description }}</p> <!-- Description -->
   </div>
 </div>
 
@@ -227,7 +228,7 @@
                   <a href="#" class="text-decoration-none small">Reimbursement Payslip</a>
                 </div>
                 <div class="mb-2">
-                  <a href="#" class="text-decoration-none small">IT Statement</a>
+                  <a href="it-statement" class="text-decoration-none small">IT Statement</a>
                 </div>
               </div>
               <div class="col-6">

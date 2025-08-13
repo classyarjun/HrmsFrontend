@@ -37,9 +37,24 @@ export class HolidayComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setMinDate();
-    this.loadHolidays();
-  }
+  this.setMinDate();
+  this.loadHolidays();
+
+  // Holidays load झाल्यावर validator reset कर
+  this.holidayForm.get('date')?.setValidators([
+    Validators.required,
+    this.futureDateValidator,
+    this.duplicateDateValidator.bind(this)
+  ]);
+}
+
+duplicateDateValidator(control: AbstractControl): { [key: string]: any } | null {
+  if (!control.value) return null;
+  const selectedDate = new Date(control.value).toDateString();
+  const isDuplicate = this.holidays.some(h => new Date(h.date).toDateString() === selectedDate);
+  return isDuplicate ? { duplicateDate: true } : null;
+}
+
 
   setMinDate(): void {
     const today = new Date();
@@ -56,22 +71,21 @@ export class HolidayComponent implements OnInit {
     return inputDate >= today ? null : { pastDate: true };
   }
 
-  loadHolidays(): void {
-    this.holidayService.getHolidays().subscribe({
-      next: (data) => {
-        // Sort all holidays by date (ascending)
-        this.holidays = data.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+loadHolidays(): void {
+  this.holidayService.getHolidays().subscribe({
+    next: (data) => {
+      console.log("API Response:", data); // इथे description येते का बघ
+      this.holidays = data.sort((a: any, b: any) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime()
+      );
+    },
+    error: () => {
+      this.errorMessage = 'Failed to load holidays.';
+    }
+  });
+}
 
-        // Filter and sort upcoming holidays
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        this.upcomingHolidays = this.holidays.filter(h => new Date(h.date) >= today);
-      },
-      error: () => {
-        this.errorMessage = 'Failed to load holidays.';
-      }
-    });
-  }
+
 
   openModal(): void {
     const modal = new bootstrap.Modal(document.getElementById('holidayModal'));
@@ -83,25 +97,37 @@ export class HolidayComponent implements OnInit {
     const modal = bootstrap.Modal.getInstance(modalEl);
     modal.hide();
   }
+onSubmit(): void {
+  if (this.holidayForm.valid) {
+    const holidayData = this.holidayForm.value;
 
-  onSubmit(): void {
-    if (this.holidayForm.valid) {
-      const holidayData = this.holidayForm.value;
-      this.holidayService.createHoliday(holidayData).subscribe({
-        next: () => {
-          this.toastr.success('Holiday added successfully!', 'Success');
-          this.resetForm();
-          this.loadHolidays();
-          this.closeModal();
-        },
-        error: () => {
-          this.errorMessage = 'Failed to create holiday.';
-        }
-      });
-    } else {
-      this.errorMessage = 'Please fill all required fields.';
+    // Duplicate date check
+    const isDuplicate = this.holidays.some(
+      h => new Date(h.date).toDateString() === new Date(holidayData.date).toDateString()
+    );
+
+    if (isDuplicate) {
+      this.toastr.error('This date is already added as a holiday!', 'Error');
+      return;
     }
+
+    // If not duplicate, then save
+    this.holidayService.createHoliday(holidayData).subscribe({
+      next: () => {
+        this.toastr.success('Holiday added successfully!', 'Success');
+        this.resetForm();
+        this.loadHolidays();
+        this.closeModal();
+      },
+      error: () => {
+        this.errorMessage = 'Failed to create holiday.';
+      }
+    });
+  } else {
+    this.errorMessage = 'Please fill all required fields.';
   }
+}
+
 
   resetForm(): void {
     this.holidayForm.reset();

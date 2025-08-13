@@ -23,9 +23,13 @@
                 [(ngModel)]="review.employee.id"
                 name="employeeId"
                 required
+                min="1"
+                (input)="preventNegative($event)"
                 (change)="onEmployeeIdEntered(review.employee.id)"
                 #empId="ngModel" />
-              <div *ngIf="empId.invalid && empId.touched" class="text-danger">Employee ID is required</div>
+              <div *ngIf="empId.invalid && empId.touched" class="text-danger">
+                Employee ID must be greater than 0
+              </div>
             </div>
 
             <!-- Task Dropdown -->
@@ -64,7 +68,7 @@
               <div *ngIf="managerReview.invalid && managerReview.touched" class="text-danger">Review is required</div>
             </div>
 
-            <!-- Review Date (Fixed to today) -->
+            <!-- Review Date -->
             <div class="mb-3">
               <label class="form-label">Review Date</label>
               <input

@@ -27,7 +27,7 @@ leaveForm: FormGroup;
     private toastr: ToastrService
   ) {
     this.leaveForm = this.fb.group({
-      fromDate: ['', [Validators.required, this.noPastDateValidator]],
+      fromDate: ['', [Validators.required, ]],
        toDate: ['', [Validators.required, this.noPastDateValidator]],  // 👈 Add here
       reason: ['', Validators.required],
       applyingTo: ['', [Validators.required, Validators.email]],
@@ -62,80 +62,119 @@ leaveForm: FormGroup;
     this.selectedFile = event.target.files[0];
   }
 
- submitForm(): void {
-  if (this.leaveForm.invalid) {
-    this.toastr.error('Please fill all required fields correctly.', 'Invalid Form');
-    return;
-  }
+submitForm(): void {
+    if (this.leaveForm.invalid) {
+      // 🔹 Field-specific error handling
+      if (this.leaveForm.get('contactDetails')?.hasError('required')) {
+        this.toastr.error('Contact Details are required.', 'Missing Field');
+        return;
+      }
+      if (this.leaveForm.get('contactDetails')?.hasError('pattern')) {
+        this.toastr.error('Contact number must be exactly 10 digits.', 'Invalid Field');
+        return;
+      }
+      if (this.leaveForm.get('fromDate')?.hasError('required')) {
+        this.toastr.error('From Date is required.', 'Missing Field');
+        return;
+      }
+      if (this.leaveForm.get('fromDate')?.hasError('pastDate')) {
+        this.toastr.error('From Date cannot be in the past.', 'Invalid Date');
+        return;
+      }
+      if (this.leaveForm.get('toDate')?.hasError('required')) {
+        this.toastr.error('To Date is required.', 'Missing Field');
+        return;
+      }
+      if (this.leaveForm.get('toDate')?.hasError('pastDate')) {
+        this.toastr.error('To Date cannot be in the past.', 'Invalid Date');
+        return;
+      }
+      if (this.leaveForm.errors?.['invalidRange']) {
+        this.toastr.error('To Date must be same or after From Date.', 'Invalid Date Range');
+        return;
+      }
+      if (this.leaveForm.get('applyingTo')?.hasError('required')) {
+        this.toastr.error('Manager Email is required.', 'Missing Field');
+        return;
+      }
+      if (this.leaveForm.get('applyingTo')?.hasError('email')) {
+        this.toastr.error('Invalid Manager Email format.', 'Invalid Field');
+        return;
+      }
+      if (this.leaveForm.get('leaveType')?.hasError('required')) {
+        this.toastr.error('Leave Type is required.', 'Missing Field');
+        return;
+      }
+      if (this.leaveForm.get('reason')?.hasError('required')) {
+        this.toastr.error('Reason is required.', 'Missing Field');
+        return;
+      }
 
-  const formVal = this.leaveForm.value;
-  let userCCs: string[] = [];
-
-  // ✅ Fix here
-  if (formVal.ccTo && Array.isArray(formVal.ccTo)) {
-    userCCs = formVal.ccTo.map((e: any) => e.email).filter(Boolean);
-  }
-
-  if (userCCs.length > 2) {
-    this.toastr.error('You can enter only up to 2 CC emails.', 'Too Many CCs');
-    return;
-  }
-
-  const manualCCs = ['hr@gmail.com', 'manager@gmail.com'];
-  const remainingSlots = 2 - userCCs.length;
-  const manualToAdd = manualCCs.slice(0, remainingSlots);
-  const finalCC = [...userCCs, ...manualToAdd];
-
-  const jsonPart = JSON.stringify({
-    employeeId: this.employeeId,
-    fromDate: formVal.fromDate,
-    toDate: formVal.toDate,
-    reason: formVal.reason,
-    applyingTo: formVal.applyingTo,
-    ccTo: finalCC.join(','), // backend expects comma-separated
-    contactDetails: formVal.contactDetails,
-    leaveType: formVal.leaveType
-  });
-
-  const formData = new FormData();
-  formData.append('request', new Blob([jsonPart], { type: 'application/json' }));
-
-  if (this.selectedFile) {
-    formData.append('file', this.selectedFile);
-  }
-
-  this.applyLeavesService.applyLeave(formData).subscribe({
-    next: () => {
-      this.toastr.success('Leave applied successfully.', 'Success ✅');
-      this.leaveForm.reset();
-      this.selectedFile = null;
-    },
-    error: (err) => {
-      console.error('Error applying leave:', err);
-      this.toastr.error(err?.error || 'Failed to apply leave.', 'Error ❌');
+      // Fallback generic error
+      this.toastr.error('Please fill all required fields correctly.', 'Invalid Form');
+      return;
     }
-  });
-}
 
+    const formVal = this.leaveForm.value;
+    let userCCs: string[] = [];
 
+    if (formVal.ccTo && Array.isArray(formVal.ccTo)) {
+      userCCs = formVal.ccTo.map((e: any) => e.email).filter(Boolean);
+    }
 
- fetchEmailList(): void {
+    if (userCCs.length > 2) {
+      this.toastr.error('You can enter only up to 2 CC emails.', 'Too Many CCs');
+      return;
+    }
+
+    const manualCCs = ['hr@gmail.com', 'manager@gmail.com'];
+    const remainingSlots = 2 - userCCs.length;
+    const manualToAdd = manualCCs.slice(0, remainingSlots);
+    const finalCC = [...userCCs, ...manualToAdd];
+
+    const jsonPart = JSON.stringify({
+      employeeId: this.employeeId,
+      fromDate: formVal.fromDate,
+      toDate: formVal.toDate,
+      reason: formVal.reason,
+      applyingTo: formVal.applyingTo,
+      ccTo: finalCC.join(','), // backend expects comma-separated
+      contactDetails: formVal.contactDetails,
+      leaveType: formVal.leaveType
+    });
+
+    const formData = new FormData();
+    formData.append('request', new Blob([jsonPart], { type: 'application/json' }));
+
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
+    }
+
+    this.applyLeavesService.applyLeave(formData).subscribe({
+      next: () => {
+        this.toastr.success('Leave applied successfully.', 'Success ✅');
+        this.leaveForm.reset();
+        this.selectedFile = null;
+      },
+      error: (err) => {
+        console.error('Error applying leave:', err);
+        this.toastr.error(err?.error || 'Failed to apply leave.', 'Error ❌');
+      }
+    });
+  }
+
+  fetchEmailList(): void {
     this.applyLeavesService.getCcToEmployees().subscribe({
       next: (data: any[]) => {
         this.emailList = data;
-        console.log('Email list loaded:', this.emailList );
+        console.log('Email list loaded:', this.emailList);
       },
       error: (err) => {
         console.error('Failed to load email list', err);
       }
     });
   }
-
-
 }
-
-
-
 
 
 

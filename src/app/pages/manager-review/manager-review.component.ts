@@ -25,12 +25,12 @@ export class ManagerReviewComponent implements OnInit {
   isEdit = false;
   originalReview: PerformanceReview | null = null;
 
-  today: string = new Date().toISOString().split('T')[0]; // ✅ today's date
+  today: string = new Date().toISOString().split('T')[0];
 
   review: PerformanceReview = {
     taskName: '',
     managerReview: '',
-    reviewDate: this.today, // ✅ initialize to today
+    reviewDate: this.today,
     employee: { id: 0 },
     task: { id: 0 },
     description: ''
@@ -50,8 +50,17 @@ export class ManagerReviewComponent implements OnInit {
     });
   }
 
+  preventNegative(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (+input.value < 1) {
+      input.value = '';
+      this.review.employee.id = 0;
+      this.tasks = []; // reset tasks if invalid ID entered
+    }
+  }
+
   onEmployeeIdEntered(empId: number) {
-    if (empId) {
+    if (empId && empId > 0) {
       this.review.employee.id = empId;
       this.service.getTasksByEmployeeId(empId).subscribe((res: Task[]) => {
         this.tasks = res;
@@ -80,7 +89,7 @@ export class ManagerReviewComponent implements OnInit {
       reviewId: this.review.reviewId,
       taskName: this.review.taskName,
       managerReview: this.review.managerReview,
-      reviewDate: this.today, // ✅ always use today
+      reviewDate: this.today,
       employee: { id: this.review.employee.id },
       task: { id: this.review.task.id }
     };
@@ -131,7 +140,7 @@ export class ManagerReviewComponent implements OnInit {
     this.review.task.id = r.task?.id ?? 0;
     this.review.taskName = r.taskName;
     this.review.managerReview = r.managerReview;
-    this.review.reviewDate = this.today; // ✅ force today even in edit
+    this.review.reviewDate = this.today;
 
     this.originalReview = JSON.parse(JSON.stringify(this.review));
 
@@ -157,7 +166,7 @@ export class ManagerReviewComponent implements OnInit {
     this.review = {
       taskName: '',
       managerReview: '',
-      reviewDate: this.today, // ✅ reset to today
+      reviewDate: this.today,
       employee: { id: 0 },
       task: { id: 0 },
       description: ''
