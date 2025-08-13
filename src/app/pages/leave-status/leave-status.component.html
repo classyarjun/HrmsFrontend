@@ -2,14 +2,25 @@
   <h4 class="text-center">Leave Summary</h4>
 
   <!-- ✅ Latest Leave Status -->
-  <div *ngIf="latestLeaveStatus" class="alert mt-3" [ngClass]="{
-         'alert-success': latestLeaveStatus === 'APPROVED',
-         'alert-danger': latestLeaveStatus === 'REJECTED',
-         'alert-warning': latestLeaveStatus === 'PENDING'
-       }">
-    <strong>Leave Status:</strong> Your last leave ({{ latestLeaveDate | date:'dd MMM yyyy' }}) was
-    <strong>{{ latestLeaveStatus }}</strong>.
-  </div>
+<div *ngIf="latestLeaveStatus" class="alert mt-3" 
+     [ngClass]="{
+       'alert-success': latestLeaveStatus === 'APPROVED',
+       'alert-danger': latestLeaveStatus === 'REJECTED',
+       'alert-warning': latestLeaveStatus === 'PENDING'
+     }">
+  
+  <strong>Leave Status:</strong> Your last leave 
+  (From: {{ latestLeaveFromDate | date:'dd MMM yyyy' }} 
+   To: {{ latestLeaveToDate | date:'dd MMM yyyy' }}) 
+  was <strong>{{ latestLeaveStatus }}</strong>.
+
+  <button *ngIf="latestLeaveStatus === 'PENDING'"
+          class="btn btn-sm btn-outline-danger ms-2"
+          (click)="withdrawLeave(latestLeaveId!)">
+    Withdraw
+  </button>
+</div>
+
 
   <!-- 🧾 Total Approved Leaves -->
   <div class="alert alert-info text-center mt-3">

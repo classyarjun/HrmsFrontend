@@ -46,13 +46,9 @@ export class HrRegularizationComponent implements OnInit {
         if (req) {
           req.approvalStatus = 'APPROVED';
           this.moveToProcessed(req);
-          this.toastr.success('Request approved successfully');
         }
       },
-      error: (err) => {
-        console.error('Error approving request:', err);
-        this.toastr.error('Failed to approve request');
-      }
+      error: (err) => console.error('Error approving request:', err)
     });
   }
 
@@ -63,13 +59,9 @@ export class HrRegularizationComponent implements OnInit {
         if (req) {
           req.approvalStatus = 'REJECTED';
           this.moveToProcessed(req);
-          this.toastr.success('Request rejected successfully');
         }
       },
-      error: (err) => {
-        console.error('Error rejecting request:', err);
-        this.toastr.error('Failed to reject request');
-      }
+      error: (err) => console.error('Error rejecting request:', err)
     });
   }
 
