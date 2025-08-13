@@ -44,11 +44,11 @@
               </a>
             </li>
 
-            <li>
+            <!-- <li>
               <a class="dropdown-item d-flex align-items-center" routerLink="/settings">
                 <i class="bi bi-gear-fill me-2 fs-5 text-secondary"></i> Settings
               </a>
-            </li>
+            </li> -->
 
             <li>
               <hr class="dropdown-divider">
@@ -82,10 +82,10 @@
           <div class="mb-3">
             <label for="newPassword" class="form-label">New Password</label>
 <div class="input-group">
-  <input [type]="showPassword ? 'text' : 'password'" 
-         id="newPassword" 
-         class="form-control" 
-         formControlName="newPassword" 
+  <input [type]="showPassword ? 'text' : 'password'"
+         id="newPassword"
+         class="form-control"
+         formControlName="newPassword"
          required>
   <span class="input-group-text" (click)="togglePasswordVisibility()" style="cursor: pointer;">
     <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>

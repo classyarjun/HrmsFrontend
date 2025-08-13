@@ -23,14 +23,15 @@ declare var bootstrap: any;
   styleUrl: './add-employee.component.css',
 })
 export class AddEmployeeComponent implements OnInit {
+
   employees: any[] = [];
   employeeForm!: FormGroup;
   editForm!: FormGroup;
   registerForm!: FormGroup;
+
   selectedImage: File | null = null;
   selectedFile: File | null = null;
   selectedEmployeeId!: number;
-
   showPassword: boolean = false;
   minDate: any;
 
@@ -57,9 +58,11 @@ export class AddEmployeeComponent implements OnInit {
       Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
     ];
 
-    const alphaOnlyValidator = [
+    const textOnlyValidator = [
       Validators.required,
-      Validators.pattern(/^[A-Za-z\s]+$/)
+      Validators.pattern(/^[A-Za-z\s]+$/),
+      this.capitalizeValidator,
+
     ];
 
     this.employeeForm = this.fb.group({
@@ -67,8 +70,8 @@ export class AddEmployeeComponent implements OnInit {
       lastName: ['', nameValidators],
       email: ['', emailValidator],
       phone: ['', [Validators.pattern(/^\d{10}$/)]],
-      department: ['', alphaOnlyValidator],
-      jobTitle: ['', alphaOnlyValidator],
+      department: ['', textOnlyValidator],
+      jobTitle: ['', textOnlyValidator],
       role: ['', Validators.required],
       status: ['', Validators.required],
       joiningDate: [''],
@@ -80,8 +83,8 @@ export class AddEmployeeComponent implements OnInit {
       lastName: ['', nameValidators],
       email: ['', emailValidator],
       phone: ['', [Validators.pattern(/^\d{10}$/)]],
-      department: ['', alphaOnlyValidator],
-      jobTitle: ['', alphaOnlyValidator],
+      department: ['', textOnlyValidator],
+      jobTitle: ['', textOnlyValidator],
       role: ['', Validators.required],
       status: ['', Validators.required],
       joiningDate: ['', [Validators.required, this.futureOrTodayDateValidator]],
@@ -146,27 +149,27 @@ export class AddEmployeeComponent implements OnInit {
     }
   }
 
-  closeModal(modalId: string) {
-  const modalEl = document.getElementById(modalId);
-
-  if (modalEl) {
+closeAllModals() {
+  // Smooth fade-out transition
+  document.querySelectorAll('.modal.show').forEach((modalEl: any) => {
     const modalInstance = bootstrap.Modal.getInstance(modalEl);
     if (modalInstance) {
-      // smooth fade-out
       modalEl.classList.add('fade');
       setTimeout(() => {
         modalInstance.hide();
 
-        // backdrop remove
-        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        // 🆕 Backdrop manually remove
+        document.querySelectorAll('.modal-backdrop').forEach((backdrop: any) => {
+          backdrop.remove();
+        });
 
-        // body reset
+        // 🆕 Body reset
         document.body.classList.remove('modal-open');
         document.body.style.removeProperty('overflow');
         document.body.style.removeProperty('padding-right');
-      }, 200); // 0.2s smooth close delay
+      }, 200); // 0.2s delay for smooth fade
     }
-  }
+  });
 }
 
 
@@ -184,7 +187,7 @@ export class AddEmployeeComponent implements OnInit {
 
     this.addEmployeeService.addEmployeeWithImage(formData).subscribe({
       next: () => {
-        this.closeModal('addEmployeeModal');
+        this.closeAllModals();
         this.toastr.success('Employee added successfully!');
         this.employeeForm.reset();
         this.selectedFile = null;
@@ -198,7 +201,13 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   openEditModal(emp: any) {
+
+
+
+
     if (!emp) return;
+
+    this.closeAllModals();
 
     this.selectedEmployeeId = emp.id;
     this.editForm.patchValue(emp);
@@ -210,23 +219,16 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   onEditSubmit() {
-    if (this.editForm.invalid) {
-      const deptControl = this.editForm.get('department');
-      const jobTitleControl = this.editForm.get('jobTitle');
 
-      if (deptControl?.errors?.['pattern']) {
-        this.toastr.error('Department should contain only letters.');
-      } else if (jobTitleControl?.errors?.['pattern']) {
-        this.toastr.error('Job Title should contain only letters.');
-      } else {
-        this.toastr.error('Please fix the errors in the form.');
-      }
-      return;
-    }
+    if (this.editForm.invalid) {
+  this.editForm.markAllAsTouched();
+  return;
+}
+
 
     this.addEmployeeService.updateEmployeeWithImage(this.selectedEmployeeId, this.editForm.value).subscribe({
       next: () => {
-        this.closeModal('editEmployeeModal');
+        this.closeAllModals();
         this.getEmployees();
         this.toastr.success('Employee updated successfully!');
       },
@@ -239,6 +241,8 @@ export class AddEmployeeComponent implements OnInit {
 
   openRegisterModal(emp: any) {
     if (!emp) return;
+
+    this.closeAllModals();
 
     this.selectedEmployeeId = emp.id;
     this.registerForm.patchValue({
@@ -280,7 +284,7 @@ export class AddEmployeeComponent implements OnInit {
 
     this.addEmployeeService.registerEmployee(formData).subscribe({
       next: () => {
-        this.closeModal('registerModal');
+        this.closeAllModals();
         this.selectedImage = null;
         this.toastr.success('Employee registered successfully!');
         this.getEmployees();
