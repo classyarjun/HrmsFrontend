@@ -14,7 +14,8 @@ export class HrRegularizationComponent implements OnInit {
   pendingRequests: RegularizationAndPermission[] = [];
   processedRequests: RegularizationAndPermission[] = [];
 
-  constructor(private regularizationService: RegularizationService,
+  constructor(
+    private regularizationService: RegularizationService,
     private toastr: ToastrService
   ) {}
 
@@ -30,11 +31,10 @@ export class HrRegularizationComponent implements OnInit {
         this.processedRequests = data.filter(r =>
           r.approvalStatus === 'APPROVED' || r.approvalStatus === 'REJECTED'
         );
-        console.log("Pending:", this.pendingRequests);
-        console.log("Processed:", this.processedRequests);
       },
       error: (error) => {
         console.error('Failed to load requests:', error);
+        this.toastr.error('Failed to load requests');
       }
     });
   }
@@ -46,9 +46,13 @@ export class HrRegularizationComponent implements OnInit {
         if (req) {
           req.approvalStatus = 'APPROVED';
           this.moveToProcessed(req);
+          this.toastr.success('Request approved successfully');
         }
       },
-      error: (err) => console.error('Error approving request:', err)
+      error: (err) => {
+        console.error('Error approving request:', err);
+        this.toastr.error('Failed to approve request');
+      }
     });
   }
 
@@ -59,9 +63,13 @@ export class HrRegularizationComponent implements OnInit {
         if (req) {
           req.approvalStatus = 'REJECTED';
           this.moveToProcessed(req);
+          this.toastr.success('Request rejected successfully');
         }
       },
-      error: (err) => console.error('Error rejecting request:', err)
+      error: (err) => {
+        console.error('Error rejecting request:', err);
+        this.toastr.error('Failed to reject request');
+      }
     });
   }
 
@@ -70,7 +78,6 @@ export class HrRegularizationComponent implements OnInit {
       next: () => {
         this.pendingRequests = this.pendingRequests.filter(r => r.id !== id);
         this.processedRequests = this.processedRequests.filter(r => r.id !== id);
-        // console.log(`Deleted request with id ${id}`);
         this.toastr.success('Request deleted successfully');
       },
       error: (err) => {

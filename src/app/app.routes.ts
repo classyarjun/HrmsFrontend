@@ -50,6 +50,9 @@ import { ManagerApplyleaveComponent } from './pages/manager-applyleave/manager-a
 import { ManagerLeaveStatusComponent } from './pages/manager-leave-status/manager-leave-status.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ItStatementComponent } from './pages/it-statement/it-statement.component';
+import { YtdReportsComponent } from './pages/ytd-reports/ytd-reports.component';
+import { ReimbursementPayslipComponent } from './pages/reimbursement-payslip/reimbursement-payslip.component';
+import { LoanStatementComponent } from './pages/loan-statement/loan-statement.component';
 // import { HrRegularizationComponent } from './pages/hr-regularization/hr-regularization.component';
 
 
@@ -98,6 +101,13 @@ export const routes: Routes = [
        { path: 'manager/pay-slip', component: ManagerPyslipComponent, canActivate: [AuthGuard] },
        { path: 'manager/manager-applyleave', component: ManagerApplyleaveComponent, canActivate: [AuthGuard] },
         { path: 'manager/manager-leave-status', component: ManagerLeaveStatusComponent, canActivate: [AuthGuard] },
+        { path: 'it-statement', component: ItStatementComponent, canActivate: [AuthGuard] },
+        { path: 'ytd-reports', component: YtdReportsComponent, canActivate: [AuthGuard] },
+       { path: 'reimbursement-payslip', component: ReimbursementPayslipComponent, canActivate: [AuthGuard] },
+        { path: 'loan-statment', component: LoanStatementComponent, canActivate: [AuthGuard] },
+
+
+        
     ]
   },
   // 📌 Hr Layout Route

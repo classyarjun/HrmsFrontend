@@ -1,35 +1,29 @@
-<div class="ytd-reports container-fluid p-4">
-  <!-- Page Title -->
-  <h5 class="mb-4">YTD Reports</h5>
+<div class="ytd-container">
+  <h2 class="page-title">YTD Reports</h2>
 
-  <!-- Tabs -->
-  <div class="btn-group mb-3">
-    <button class="btn btn-primary">YTD Statement</button>
-    <button class="btn btn-outline-secondary">PF YTD Statement</button>
-  </div>
+  <div class="tabs-header">
+    <div class="tabs">
+      <button class="tab active">YTD Statement</button>
+      <button class="tab">PF YTD Statement</button>
+    </div>
 
-  <!-- Dropdown -->
-  <div class="mb-4">
-    <select class="form-select w-auto">
+    <select class="date-select">
       <option>Apr 2025 - Mar 2026</option>
       <option>Apr 2024 - Mar 2025</option>
-      <option>Apr 2023 - Mar 2024</option>
     </select>
   </div>
 
-  <!-- Card for No Data -->
-  <div class="card p-4 text-center">
-    <div class="empty-illustration mb-3">
-      <img src="assets/no-data.png" alt="No Data" style="width: 150px; opacity: 0.6;">
+  <div class="content-box">
+    <div class="empty-state">
+      <img src="https://cdn-icons-png.flaticon.com/512/747/747086.png" alt="Empty">
+      <p>
+        Hi Janvi Wankhede, looks like your YTD Statement has not been generated yet, 
+        Drop by later and we'll have it ready for you.
+      </p>
     </div>
-    <p class="text-muted">
-      Hi Janvi Wankhede, looks like your YTD Statement has not been generated yet.
-      Drop by later and we'll have it ready for you.
-    </p>
   </div>
 
-  <!-- Footer -->
-  <div class="text-center mt-4 small text-muted">
+  <footer>
     v6.3.0-prod-1164 | <a href="#">Privacy Policy</a> | <a href="#">Terms Of Service</a>
-  </div>
+  </footer>
 </div>
