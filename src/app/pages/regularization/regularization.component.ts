@@ -5,7 +5,7 @@ import {
   RegularizationService,
   RequestPayload,
   RequestType,
-  RegularizationAndPermission
+  RegularizationAndPermission,
 } from '../../../services/regularization.service';
 
 @Component({
@@ -15,7 +15,9 @@ import {
   templateUrl: './regularization.component.html',
 })
 export class RegularizationComponent implements OnInit {
-  employeeId: number = 1; // replace with actual logged-in id
+  employeeId =
+    JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '';
+
   requestType: RequestType = 'REGULARIZATION';
   pendingRequests: RegularizationAndPermission[] = [];
   today: string = '';
@@ -27,7 +29,7 @@ export class RegularizationComponent implements OnInit {
     date: '',
     clockIn: '',
     clockOut: '',
-    email: ''
+    email: '',
   };
 
   constructor(private service: RegularizationService) {}
@@ -39,6 +41,7 @@ export class RegularizationComponent implements OnInit {
       this.form.date = this.today;
     }
     this.loadEmployeeRequests();
+    console.log('from regularization', this.employeeId);
   }
 
   onRequestTypeChange() {
@@ -89,10 +92,11 @@ export class RegularizationComponent implements OnInit {
     request$.subscribe({
       next: (res) => {
         this.pendingRequests = res;
+        console.log(this.pendingRequests);
       },
       error: (err) => {
         console.error('Error fetching requests:', err);
-      }
+      },
     });
   }
 
@@ -134,7 +138,7 @@ export class RegularizationComponent implements OnInit {
       },
       error: (err) => {
         alert('Submission failed: ' + (err?.error?.message || err.message));
-      }
+      },
     });
   }
 
@@ -145,7 +149,7 @@ export class RegularizationComponent implements OnInit {
       date: this.requestType === 'PERMISSION' ? this.today : '',
       clockIn: '',
       clockOut: '',
-      email: ''
+      email: '',
     };
     this.timeError = false;
   }
@@ -157,7 +161,9 @@ export class RegularizationComponent implements OnInit {
     const win = window as any;
     if (win.bootstrap && win.bootstrap.Modal) {
       // get instance or create one then hide
-      const instance = win.bootstrap.Modal.getInstance(modalEl) || new win.bootstrap.Modal(modalEl);
+      const instance =
+        win.bootstrap.Modal.getInstance(modalEl) ||
+        new win.bootstrap.Modal(modalEl);
       instance.hide();
     } else {
       // fallback: toggle classes (best-effort)
