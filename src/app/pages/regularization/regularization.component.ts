@@ -15,8 +15,7 @@ import {
   templateUrl: './regularization.component.html',
 })
 export class RegularizationComponent implements OnInit {
-  employeeId =
-    JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '';
+  employeeId = JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '';
 
   requestType: RequestType = 'REGULARIZATION';
   pendingRequests: RegularizationAndPermission[] = [];
@@ -92,7 +91,7 @@ export class RegularizationComponent implements OnInit {
     request$.subscribe({
       next: (res) => {
         this.pendingRequests = res;
-        console.log(this.pendingRequests);
+        console.log("from regularizationn user",  this.pendingRequests);
       },
       error: (err) => {
         console.error('Error fetching requests:', err);
