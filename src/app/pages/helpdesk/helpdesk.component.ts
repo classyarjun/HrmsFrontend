@@ -1,3 +1,4 @@
+import { Employee } from './../../../services/performance-review.service';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -24,7 +25,8 @@ export class HelpDeskComponent implements OnInit {
   isLoading = false;
   fileUploadProgress: number | null = null;
   priorities = ['LOW', 'MEDIUM', 'HIGH'];
-  // logdinUserId =// Default to 2 if not set
+  // loggedInUserId =// Default to 2 if not set
+  employeeId = JSON.parse(localStorage.getItem('userData') || '{}').EmployeeId || '';
 
   constructor(
     private fb: FormBuilder,
@@ -86,7 +88,7 @@ export class HelpDeskComponent implements OnInit {
     priority: formValue.priority,
     helpDeskStatus: 'IN_PROGRESS', // ✅ Always default
     employee: {
-      id: 2 // ✅ Hardcoded employee ID (replace with dynamic employee: { id: this.loggedInUserId })
+      id: this.employeeId // ✅ Hardcoded employee ID (replace with dynamic employee: { id: this.loggedInUserId })
     }
   };
 
