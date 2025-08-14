@@ -29,146 +29,134 @@
           </div>
         </div>
       </div>
-<!-- Date/Time Card -->
-<div class="col-lg-4 col-md-6">
-  <div class="card h-100">
-    <div class="card-body text-center py-4">
- 
-      <!-- Status and Date -->
-      <div class="d-flex align-items-center justify-content-center mb-2">
-        <span class="status-dot bg-success me-2"></span>
-        <small class="text-muted">{{ currentDate }}</small>
-      </div>
- 
-      <p class="text-muted small mb-3">General Shift</p>
-      <div class="time-display text-dark mb-4">{{ timeString }}</div>
- 
-      <!-- Sign In Button -->
-      <button
-        class="btn btn-primary px-4"
-        data-bs-toggle="modal"
-        data-bs-target="#workLocationModal"
-        *ngIf="!isSignedIn"
-      >
-        Sign In
-      </button>
- 
-      <!-- Buttons when signed in -->
-      <div class="d-flex gap-3 justify-content-center mt-3" *ngIf="isSignedIn">
-        <!-- View Swipes -->
-        <button class="btn btn-outline-primary px-4" (click)="openSwipeModal()">
-          View Swipes
-        </button>
- 
-        <!-- Sign Out -->
-        <button class="btn btn-danger px-4" (click)="signOut()">
-          <i class="bi bi-box-arrow-right me-2"></i>
-          Sign Out
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
- 
-<!-- Work Location Modal -->
-<!-- Work Location Modal -->
-<div class="modal fade" id="workLocationModal" tabindex="-1" aria-labelledby="workLocationLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content shadow-sm rounded-3 border-0">
- 
-      <form (ngSubmit)="signIn()" #signInForm="ngForm">
- 
-        <div class="modal-header bg-light border-0">
-          <h5 class="modal-title fw-semibold text-secondary">Tell us your work location</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
- 
-        <div class="modal-body row g-4 px-4 py-3">
- 
-          <!-- Form Inputs -->
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label for="location" class="form-label">Enter Sign-In Location <span class="text-danger">*</span></label>
-              <select id="location" name="location" class="form-select" [(ngModel)]="attendanceData.location" required>
-                <option value="" disabled selected>Select Location</option>
-                <option>Work from Home</option>
-                <option>Client Site</option>
-                <option>Office</option>
-              </select>
+      <!-- Date/Time Card -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100">
+          <div class="card-body text-center py-4">
+
+            <!-- Status and Date -->
+            <div class="d-flex align-items-center justify-content-center mb-2">
+              <span class="status-dot bg-success me-2"></span>
+              <small class="text-muted">{{ currentDate }}</small>
             </div>
- 
-            <div class="mb-3">
-              <label for="remarks" class="form-label">Remarks</label>
-              <textarea id="remarks" name="remarks" class="form-control" rows="3"
-                [(ngModel)]="attendanceData.remarks" placeholder="Enter Reason"></textarea>
+
+            <p class="text-muted small mb-3">General Shift</p>
+            <div class="time-display text-dark mb-4">{{ timeString }}</div>
+
+            <!-- Sign In Button -->
+            <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#workLocationModal"
+              *ngIf="!isSignedIn">
+              Sign In
+            </button>
+
+            <!-- Buttons when signed in -->
+            <div class="d-flex gap-3 justify-content-center mt-3" *ngIf="isSignedIn">
+              <!-- View Swipes -->
+              <button class="btn btn-outline-primary px-4" (click)="openSwipeModal()">
+                View Swipes
+              </button>
+
+              <!-- Sign Out -->
+              <button class="btn btn-danger px-4" (click)="signOut()">
+                <i class="bi bi-box-arrow-right me-2"></i>
+                Sign Out
+              </button>
             </div>
- 
-            <button type="submit" class="btn btn-primary w-100">Sign In</button>
           </div>
- 
-          <!-- Right Side Image -->
-          <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
-            <img src="/assets/work-location.jfif" alt="Location Image" class="img-fluid rounded shadow-sm" />
-          </div>
- 
-        </div>
- 
-      </form>
-    </div>
-  </div>
-</div>
- 
-<!-- Swipes Modal -->
-<div
-  class="modal fade"
-  id="swipeModal"
-  tabindex="-1"
-  aria-labelledby="swipeModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content shadow-sm rounded border-0">
-      <div class="modal-header bg-light border-0">
-        <h5 class="modal-title fw-semibold text-secondary">Swipes</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body px-4 pt-2 pb-4">
-        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap px-1">
-          <div><strong>Date:</strong> {{ currentDate }}</div>
-          <div><strong>Shift Time:</strong> 09:30 to 18:30</div>
-          <div><strong>Shift Type:</strong> GEN</div>
-        </div>
- 
-        <div class="table-responsive">
-          <table class="table table-bordered table-sm mb-0" style="background-color: #f8f9fa;">
-            <thead class="table-light">
-              <tr class="text-center">
-                <th>Swipe Time</th>
-                <th>Door/Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center">
-                <td>{{ signInTime }}</td>
-                <td>-</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+
+      <!-- Work Location Modal -->
+      <!-- Work Location Modal -->
+      <div class="modal fade" id="workLocationModal" tabindex="-1" aria-labelledby="workLocationLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content shadow-sm rounded-3 border-0">
+
+            <form (ngSubmit)="signIn()" #signInForm="ngForm">
+
+              <div class="modal-header bg-light border-0">
+                <h5 class="modal-title fw-semibold text-secondary">Tell us your work location</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+              <div class="modal-body row g-4 px-4 py-3">
+
+                <!-- Form Inputs -->
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="location" class="form-label">Enter Sign-In Location <span
+                        class="text-danger">*</span></label>
+                    <select id="location" name="location" class="form-select" [(ngModel)]="attendanceData.location"
+                      required>
+                      <option value="" disabled selected>Select Location</option>
+                      <option>Work from Home</option>
+                      <option>Client Site</option>
+                      <option>Office</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="remarks" class="form-label">Remarks</label>
+                    <textarea id="remarks" name="remarks" class="form-control" rows="3"
+                      [(ngModel)]="attendanceData.remarks" placeholder="Enter Reason"></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                </div>
+
+                <!-- Right Side Image -->
+                <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
+                  <img src="/assets/work-location.jfif" alt="Location Image" class="img-fluid rounded shadow-sm" />
+                </div>
+
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Swipes Modal -->
+      <div class="modal fade" id="swipeModal" tabindex="-1" aria-labelledby="swipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content shadow-sm rounded border-0">
+            <div class="modal-header bg-light border-0">
+              <h5 class="modal-title fw-semibold text-secondary">Swipes</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4 pt-2 pb-4">
+              <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap px-1">
+                <div><strong>Date:</strong> {{ currentDate }}</div>
+                <div><strong>Shift Time:</strong> 09:30 to 18:30</div>
+                <div><strong>Shift Type:</strong> GEN</div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm mb-0" style="background-color: #f8f9fa;">
+                  <thead class="table-light">
+                    <tr class="text-center">
+                      <th>Swipe Time</th>
+                      <th>Door/Address</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center">
+                      <td>{{ signInTime }}</td>
+                      <td>-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!--! Upcoming Holidays Card -->
 
       <div class="col-lg-4 col-md-12">
-        <div class="card h-100"style="overflow-y: auto; max-height: 300px;">
+        <div class="card h-100" style="overflow-y: auto; max-height: 300px;">
           <div class="card-header pb-2">
             <div class="d-flex justify-content-between align-items-center">
               <h6 class="card-title text-muted mb-0">Upcoming Holidays</h6>
@@ -177,14 +165,13 @@
           </div>
 
           <div *ngFor="let holiday of holidays" class="holiday-item">
-  <div>
-    <span class="fw-semibold small">{{ holiday.date | date:'dd MMM' }}</span>
-    <span class="badge bg-primary ms-2 small">{{ holiday.date | date:'EEEE' }}</span>
-    <p class="text-muted small mb-0">{{ holiday.name }}</p>
-     <p class="text-secondary small mb-0">{{ holiday.description }}</p> <!-- Description -->
-  </div>
-</div>
-
+            <div>
+              <span class="fw-semibold small">{{ holiday.date | date:'dd MMM' }}</span>
+              <span class="badge bg-primary ms-2 small">{{ holiday.date | date:'EEEE' }}</span>
+              <p class="text-muted small mb-0">{{ holiday.name }}</p>
+              <p class="text-secondary small mb-0">{{ holiday.description }}</p> <!-- Description -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -224,7 +211,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-6">
-               
+
                 <div class="mb-2">
                   <a href="reimbursement-payslip" class="text-decoration-none small">Reimbursement Payslip</a>
                 </div>
@@ -236,20 +223,20 @@
                 <div class="mb-2">
                   <a href="it-statement" class="text-decoration-none small">IT Statement</a>
                 </div>
-              
-         
-              <div class="mb-2">
-                
+
+
+                <div class="mb-2">
+
                   <a href="loan-statment" class="text-decoration-none small">Loan Statement</a>
                 </div>
+              </div>
             </div>
-</div>
             <div class="mt-3">
               <small class="text-muted">Use quick access to view important salary details.</small>
             </div>
           </div>
         </div>
-</div>
+      </div>
 
       <!-- Payslip Card -->
       <div class="col-lg-3 col-md-6">
@@ -337,7 +324,8 @@
           Privacy Policy
         </a>
         <span class="mx-2">|</span>
-        <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" class="text-muted text-decoration-none">
+        <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer"
+          class="text-muted text-decoration-none">
           Terms Of Service
         </a>
 
@@ -377,7 +365,7 @@
             <div class="mb-3">
               <label for="remarks" class="form-label">Remarks</label>
               <textarea id="remarks" name="remarks" class="form-control" [(ngModel)]="attendanceData.remarks"
-                        placeholder="Enter Reason"></textarea>
+                placeholder="Enter Reason"></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Sign in</button>

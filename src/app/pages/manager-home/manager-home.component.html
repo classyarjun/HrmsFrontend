@@ -29,7 +29,6 @@
           </div>
         </div>
       </div>
-
       <!-- Date/Time Card -->
       <div class="col-lg-4 col-md-6">
         <div class="card h-100">
@@ -154,7 +153,6 @@
         </div>
       </div>
 
-
       <!--! Upcoming Holidays Card -->
 
       <div class="col-lg-4 col-md-12">
@@ -171,9 +169,9 @@
               <span class="fw-semibold small">{{ holiday.date | date:'dd MMM' }}</span>
               <span class="badge bg-primary ms-2 small">{{ holiday.date | date:'EEEE' }}</span>
               <p class="text-muted small mb-0">{{ holiday.name }}</p>
+              <p class="text-secondary small mb-0">{{ holiday.description }}</p> <!-- Description -->
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -218,175 +216,168 @@
                   <a href="reimbursement-payslip" class="text-decoration-none small">Reimbursement Payslip</a>
                 </div>
                 <div class="mb-2">
-                  <a href="ytd-reports" class="text-decoration-none small">YTD Reports</a>
+                  <a href="#" class="text-decoration-none small">IT Statement</a>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mb-2">
                   <a href="it-statement" class="text-decoration-none small">IT Statement</a>
-                  <<<<<<< HEAD </div>
+                </div>
 
 
-                    <div class="mb-2">
+                <div class="mb-2">
 
-                      <a href="loan-statment" class="text-decoration-none small">Loan Statement</a>
-                    </div>
-                    =======
+                  <a href="loan-statment" class="text-decoration-none small">Loan Statement</a>
                 </div>
               </div>
-              <div class="mb-2">
-                <div class="col-6"></div>
-                <a href="loan-statment" class="text-decoration-none small">Loan Statement</a>
-              </div>
-              >>>>>>> a7e75fcaa3d3fbe4a27085b95fa869f402d8837c
             </div>
-          </div>
-          <div class="mt-3">
-            <small class="text-muted">Use quick access to view important salary details.</small>
+            <div class="mt-3">
+              <small class="text-muted">Use quick access to view important salary details.</small>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Payslip Card -->
-    <div class="col-lg-3 col-md-6">
-      <div class="card h-100">
-        <div class="card-header pb-2">
-          <h6 class="card-title text-muted mb-0">Payslip</h6>
-        </div>
-        <div class="card-body text-center py-4">
-          <div class="d-flex justify-content-center mb-3">
-            <div class="position-relative">
-              <div class="payslip-icon d-flex align-items-center justify-content-center rounded">
-                <i class="bi bi-credit-card text-success"></i>
-              </div>
-              <span
-                class="position-absolute bottom-0 end-0 translate-middle badge rounded-pill bg-warning notification-badge">
-                ?
-              </span>
-            </div>
-          </div>
-          <p class="text-muted small mb-0">
-            Uh oh! Your Payslip will show up here after the release of Payroll.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Third Row -->
-  <div class="row g-4">
-    <!-- Track Card -->
-    <div class="col-lg-8 col-md-12">
-      <div class="card h-100">
-        <div class="card-header pb-2">
-          <h6 class="card-title text-muted mb-0">Track</h6>
+      <!-- Payslip Card -->
+      <div class="col-lg-3 col-md-6">
+        <div class="card h-100">
+          <div class="card-header pb-2">
+            <h6 class="card-title text-muted mb-0">Payslip</h6>
+          </div>
+          <div class="card-body text-center py-4">
+            <div class="d-flex justify-content-center mb-3">
+              <div class="position-relative">
+                <div class="payslip-icon d-flex align-items-center justify-content-center rounded">
+                  <i class="bi bi-credit-card text-success"></i>
+                </div>
+                <span
+                  class="position-absolute bottom-0 end-0 translate-middle badge rounded-pill bg-warning notification-badge">
+                  ?
+                </span>
+              </div>
+            </div>
+            <p class="text-muted small mb-0">
+              Uh oh! Your Payslip will show up here after the release of Payroll.
+            </p>
+          </div>
         </div>
-        <div class="card-body text-center py-4">
-          <div class="d-flex justify-content-center mb-3">
-            <div class="position-relative">
-              <!-- Illustration placeholder -->
-              <div class="track-illustration rounded-circle d-flex align-items-center justify-content-center">
-                <div class="position-relative">
-                  <div class="person-figure rounded-pill"></div>
-                  <i class="bi bi-flag-fill text-danger position-absolute top-0 end-0"></i>
+      </div>
+    </div>
+
+    <!-- Third Row -->
+    <div class="row g-4">
+      <!-- Track Card -->
+      <div class="col-lg-8 col-md-12">
+        <div class="card h-100">
+          <div class="card-header pb-2">
+            <h6 class="card-title text-muted mb-0">Track</h6>
+          </div>
+          <div class="card-body text-center py-4">
+            <div class="d-flex justify-content-center mb-3">
+              <div class="position-relative">
+                <!-- Illustration placeholder -->
+                <div class="track-illustration rounded-circle d-flex align-items-center justify-content-center">
+                  <div class="position-relative">
+                    <div class="person-figure rounded-pill"></div>
+                    <i class="bi bi-flag-fill text-danger position-absolute top-0 end-0"></i>
+                  </div>
+                </div>
+                <!-- Progress dots -->
+                <div class="position-absolute top-50 start-0 translate-middle-y d-flex" style="left: -32px;">
+                  <span class="progress-dot bg-success me-1"></span>
+                  <span class="progress-dot bg-warning me-1"></span>
+                  <span class="progress-dot bg-primary"></span>
                 </div>
               </div>
-              <!-- Progress dots -->
-              <div class="position-absolute top-50 start-0 translate-middle-y d-flex" style="left: -32px;">
-                <span class="progress-dot bg-success me-1"></span>
-                <span class="progress-dot bg-warning me-1"></span>
-                <span class="progress-dot bg-primary"></span>
-              </div>
             </div>
+            <p class="text-muted small mb-0">All good! You've nothing new to track.</p>
           </div>
-          <p class="text-muted small mb-0">All good! You've nothing new to track.</p>
         </div>
       </div>
-    </div>
 
-    <!-- POI Card -->
-    <div class="col-lg-4 col-md-12">
-      <div class="card h-100">
-        <div class="card-header pb-2">
-          <h6 class="card-title text-muted mb-0">POI</h6>
-        </div>
-        <div class="card-body py-4">
-          <div class="d-flex align-items-start">
-            <i class="bi bi-file-text display-6 text-primary me-3 mt-1"></i>
-            <div>
-              <p class="text-muted small mb-0">
-                Hold on! You can submit your Proof of Investments (POI) once released.
-              </p>
+      <!-- POI Card -->
+      <div class="col-lg-4 col-md-12">
+        <div class="card h-100">
+          <div class="card-header pb-2">
+            <h6 class="card-title text-muted mb-0">POI</h6>
+          </div>
+          <div class="card-body py-4">
+            <div class="d-flex align-items-start">
+              <i class="bi bi-file-text display-6 text-primary me-3 mt-1"></i>
+              <div>
+                <p class="text-muted small mb-0">
+                  Hold on! You can submit your Proof of Investments (POI) once released.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Footer -->
-  <div class="text-center mt-5">
-    <small class="text-muted">
-      <!-- <span>v6.3.0-prod-1043</span> -->
-      <!-- <span class="mx-2">|</span> -->
-      <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" class="text-muted text-decoration-none">
-        Privacy Policy
-      </a>
-      <span class="mx-2">|</span>
-      <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" class="text-muted text-decoration-none">
-        Terms Of Service
-      </a>
+    <!-- Footer -->
+    <div class="text-center mt-5">
+      <small class="text-muted">
+        <!-- <span>v6.3.0-prod-1043</span> -->
+        <!-- <span class="mx-2">|</span> -->
+        <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" class="text-muted text-decoration-none">
+          Privacy Policy
+        </a>
+        <span class="mx-2">|</span>
+        <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer"
+          class="text-muted text-decoration-none">
+          Terms Of Service
+        </a>
 
-    </small>
-  </div>
-
-
-
-
-  <!-- Modal -->
-  <div class="modal fade" id="workLocationModal" tabindex="-1" aria-labelledby="workLocationLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-
-        <form (ngSubmit)="signIn()" #signInForm="ngForm">
-
-          <div class="modal-header">
-            <h5 class="modal-title">Tell us your work location</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-
-          <div class="modal-body row">
-
-            <!-- Form Inputs -->
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label for="location" class="form-label">Enter Sign-In Location<span
-                    class="text-danger">*</span></label>
-                <select id="location" name="location" class="form-select" [(ngModel)]="attendanceData.location"
-                  required>
-                  <option value="" disabled selected>Select Location</option>
-                  <option>Work from Home</option>
-                  <option>Client Site</option>
-                  <option>Office</option>
-                </select>
-              </div>
-
-              <div class="mb-3">
-                <label for="remarks" class="form-label">Remarks</label>
-                <textarea id="remarks" name="remarks" class="form-control" [(ngModel)]="attendanceData.remarks"
-                  placeholder="Enter Reason"></textarea>
-              </div>
-
-              <button type="submit" class="btn btn-primary">Sign in</button>
-            </div>
-
-            <!-- Image -->
-            <div class="col-md-6 d-none d-md-block text-center">
-              <img src="/assets/work-location.jfif" alt="Location Image" class="img-fluid rounded" />
-            </div>
-          </div>
-
-        </form>
-      </div>
+      </small>
     </div>
   </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="workLocationModal" tabindex="-1" aria-labelledby="workLocationLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <form (ngSubmit)="signIn()" #signInForm="ngForm">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Tell us your work location</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body row">
+
+          <!-- Form Inputs -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="location" class="form-label">Enter Sign-In Location<span class="text-danger">*</span></label>
+              <select id="location" name="location" class="form-select" [(ngModel)]="attendanceData.location" required>
+                <option value="" disabled selected>Select Location</option>
+                <option>Work from Home</option>
+                <option>Client Site</option>
+                <option>Office</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="remarks" class="form-label">Remarks</label>
+              <textarea id="remarks" name="remarks" class="form-control" [(ngModel)]="attendanceData.remarks"
+                placeholder="Enter Reason"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          </div>
+
+          <!-- Image -->
+          <div class="col-md-6 d-none d-md-block text-center">
+            <img src="/assets/work-location.jfif" alt="Location Image" class="img-fluid rounded" />
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
