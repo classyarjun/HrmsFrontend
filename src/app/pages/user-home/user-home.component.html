@@ -124,17 +124,17 @@
             </div>
           </div>
 
-<<<<<<< HEAD
-          <div *ngFor="let holiday of holidays" class="d-flex justify-content-between align-items-center mb-3">
-=======
- <div *ngFor="let holiday of holidays" class="holiday-item">
->>>>>>> d13a0b5810d6a2620c709eef021b889ed3b6d20c
-  <div>
-    <span class="fw-semibold small">{{ holiday.date | date:'dd MMM' }}</span>
-    <span class="badge bg-primary ms-2 small">{{ holiday.date | date:'EEEE' }}</span>
-    <p class="text-muted small mb-0">{{ holiday.name }}</p>
-  </div>
-</div>
+          <<<<<<< HEAD <div *ngFor="let holiday of holidays"
+            class="d-flex justify-content-between align-items-center mb-3">
+            =======
+            <div *ngFor="let holiday of holidays" class="holiday-item">
+              >>>>>>> d13a0b5810d6a2620c709eef021b889ed3b6d20c
+              <div>
+                <span class="fw-semibold small">{{ holiday.date | date:'dd MMM' }}</span>
+                <span class="badge bg-primary ms-2 small">{{ holiday.date | date:'EEEE' }}</span>
+                <p class="text-muted small mb-0">{{ holiday.name }}</p>
+              </div>
+            </div>
 
         </div>
       </div>
@@ -175,11 +175,11 @@
           <div class="card-body">
             <div class="row">
               <div class="col-6">
-               
+
                 <div class="mb-2">
                   <a href="reimbursement-payslip" class="text-decoration-none small">Reimbursement Payslip</a>
                 </div>
-                 <div class="mb-2">
+                <div class="mb-2">
                   <a href="ytd-reports" class="text-decoration-none small">YTD Reports</a>
                 </div>
               </div>
@@ -187,20 +187,20 @@
                 <div class="mb-2">
                   <a href="it-statement" class="text-decoration-none small">IT Statement</a>
                 </div>
-              
-         
-              <div class="mb-2">
-                
+
+
+                <div class="mb-2">
+
                   <a href="loan-statment" class="text-decoration-none small">Loan Statement</a>
                 </div>
+              </div>
             </div>
-</div>
             <div class="mt-3">
               <small class="text-muted">Use quick access to view important salary details.</small>
             </div>
           </div>
         </div>
-</div>
+      </div>
       <!-- Payslip Card -->
       <div class="col-lg-3 col-md-6">
         <div class="card h-100">
@@ -235,7 +235,7 @@
           <div class="card-header bg-light border-0 rounded-top-4">
             <h5 class="card-title text-primary fw-bold mb-0">📊 Leave Summary</h5>
           </div>
-          <div class="card-body p-4 overflow-auto" style="max-height: 400px;">
+          <div class="card-body p-4 overflow-auto" style="max-height: 300px;">
             <!-- ✅ Latest Leave Status -->
             <div *ngIf="leaveInfo.latestStatus" class="alert mb-4 text-center" [ngClass]="{
         'alert-success': leaveInfo.latestStatus === 'APPROVED',
@@ -295,7 +295,7 @@
           </div>
 
           <!-- Body -->
-          <div class="card-body px-4 py-3 overflow-auto" style="max-height: 400px;">
+          <div class="card-body px-4 py-3 overflow-auto" style="max-height: 300px;">
             <div *ngIf="userTasks.length > 0; else noTasks">
               <ul class="list-group list-group-flush">
                 <li class="list-group-item bg-light mb-3 rounded shadow-sm border-0" *ngFor="let task of userTasks">
@@ -330,6 +330,78 @@
                 <i class="bi bi-emoji-neutral fs-4 d-block mb-2"></i>
                 <p class="mb-0">No tasks assigned yet.</p>
               </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- ! regularisation div -->
+
+      <!-- Task Card -->
+      <div class="col-lg-6 col-md-12">
+        <div class="card h-100 shadow-sm border-0 ">
+          <!-- Header -->
+          <div
+            class="card-header bg-white border-bottom rounded-top-4 d-flex align-items-center justify-content-between">
+            <h5 class="card-title text-primary fw-bold mb-0">
+              <i class="bi bi-check2-square me-2">
+
+              </i>Regularization And Permission
+            </h5>
+          </div>
+
+          <div class="card-body px-4 py-3 overflow-auto" style="max-height: 300px;">
+            <div *ngIf="pendingRequests.length > 0; else noRequests">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-light mb-3 rounded shadow-sm border-0"
+                  *ngFor="let req of pendingRequests">
+                  <div class="d-flex flex-column">
+
+                    <!-- Request Type -->
+                    <div class="fw-semibold text-dark mb-2">
+                      <i class="bi bi-file-earmark-text me-2 text-primary"></i>
+                      {{ req.requestType === 'REGULARIZATION' ? 'Regularization' : 'Permission' }}
+                    </div>
+
+                    <!-- Date & Time Info -->
+                    <div class="mt-1">
+                      <span class="badge rounded-pill bg-secondary me-2">
+                        <i class="bi bi-calendar-event me-1"></i> Date: {{ req.date | date:'dd MMM yyyy' }}
+                      </span>
+                      <span class="badge rounded-pill bg-success me-2">
+                        <i class="bi bi-clock me-1"></i> In: {{ req.clockIn }}
+                      </span>
+                      <span class="badge rounded-pill bg-danger me-2">
+                        <i class="bi bi-clock-history me-1"></i> Out: {{ req.clockOut }}
+                      </span>
+                    </div>
+
+                    <!-- Reason -->
+                    <div class="mt-2">
+                      <span class="badge rounded-pill bg-dark">
+                        <i class="bi bi-chat-left-text me-1"></i> {{ req.reason }}
+                      </span>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mt-3">
+                      <span class="badge rounded-pill" [ngClass]="{
+                    'bg-warning text-dark': req.approvalStatus === 'PENDING',
+                    'bg-success': req.approvalStatus === 'APPROVED',
+                    'bg-danger': req.approvalStatus === 'REJECTED'
+                  }">
+                        <i class="bi bi-check2-circle me-1"></i> {{ req.approvalStatus }}
+                      </span>
+                    </div>
+
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- No Data Template -->
+            <ng-template #noRequests>
+              <p class="text-center text-muted my-3">No regularization or permission requests found.</p>
             </ng-template>
           </div>
         </div>

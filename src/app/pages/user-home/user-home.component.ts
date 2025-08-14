@@ -206,11 +206,6 @@ export class UserHomeComponent implements OnInit, OnDestroy {
   }
 
 
-
-
-
-
-
 loadEmployeeRequests(): void {
     this.regularizationService.getAllRequestByEmployeeId(this.employeeId).subscribe({
       next: (data) => {
